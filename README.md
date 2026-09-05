@@ -9,6 +9,18 @@
 
 ---
 
+## Equipe
+
+Projeto desenvolvido por:
+
+| Integrante                |
+|----------------------------|
+| Ana Beatriz da Silva        |
+| Deivisson da Silva Rocha    |
+| Felipe de Almeida Silva     |
+| Wendell dos Santos          |
+
+
 ## Sumário
 
 1. [Visão Geral](#1-visão-geral)
