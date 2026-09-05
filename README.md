@@ -362,7 +362,7 @@ O dashboard administrativo deve consolidar, entre outros, os seguintes indicador
 ## 16. Roadmap
 
 - [x] Levantamento de requisitos funcionais e não funcionais
-- [x] Modelagem do banco de dados
+- [] Modelagem do banco de dados
 - [ ] Desenvolvimento do módulo de roteirização
 - [ ] Desenvolvimento do módulo de controle logístico
 - [ ] Desenvolvimento do módulo de auditoria de contratos
