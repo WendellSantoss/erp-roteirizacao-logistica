@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#0c2a20">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0c2a20"/>
+    <circle cx="600" cy="330" r="150" fill="none" stroke="#34d399" stroke-width="26"/>
+    <path d="M600 250v90l70 44" stroke="#34d399" stroke-width="26" stroke-linecap="round" fill="none"/>
+    <text x="600" y="600" font-family="Manrope, sans-serif" font-size="140" font-weight="800" fill="#ffffff" text-anchor="middle">GeniOS</text>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: 'Manrope', system-ui, sans-serif; background: #eef1f0; color: #0f1c17; -webkit-font-smoothing: antialiased; }
+  a { color: #059669; text-decoration: none; }
+  a:hover { color: #047857; }
+  input, select, button, textarea { font-family: inherit; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cdd6d2; border-radius: 6px; border: 2px solid transparent; background-clip: content-box; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  @keyframes gs-spin { to { transform: rotate(360deg); } }
+  @keyframes gs-pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+  @keyframes gs-shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+  @keyframes gs-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes gs-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes gs-ping { 0% { transform: scale(.9); opacity: .6; } 80%,100% { transform: scale(2.4); opacity: 0; } }
+  @keyframes gs-pop { from { opacity: 0; transform: scale(.94) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  @keyframes gs-bar { from { width: 0; } }
+</style>
+</helmet>
+
+<div style="display:flex; height:100vh; width:100%; overflow:hidden;">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside style="width:236px; flex:0 0 236px; background:#0c2a20; display:flex; flex-direction:column; color:#aec4bb; padding:20px 14px; z-index:40;">
+    <div style="display:flex; align-items:center; gap:11px; padding:6px 8px 20px 8px;">
+      <div style="width:38px; height:38px; border-radius:11px; background:linear-gradient(150deg,#34d399,#059669); display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(16,185,129,.35);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#04231a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+      </div>
+      <div>
+        <div style="font-size:19px; font-weight:800; color:#fff; letter-spacing:-.5px;">GeniOS</div>
+        <div style="font-size:10px; font-weight:600; color:#5f8574; letter-spacing:.14em; text-transform:uppercase;">ERP Operacional</div>
+      </div>
+    </div>
+
+    <nav style="display:flex; flex-direction:column; gap:3px; margin-top:8px;">
+      <button onClick="{{ togglePend }}" style="{{ navPend }}" style-hover="background:rgba(255,255,255,.06);">
+        <span style="{{ icoPend }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg></span>
+        <span style="flex:1; text-align:left;">Pendências</span>
+        <span style="{{ chevPend }}">›</span>
+      </button>
+      <sc-if value="{{ pendExpanded }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:2px; margin:2px 0 5px 19px; padding-left:11px; border-left:1px solid rgba(255,255,255,.09);">
+        <button onClick="{{ goPendImport }}" style="{{ subPendImport }}" style-hover="background:rgba(255,255,255,.05);"><span style="{{ dotPendImport }}"></span>Importação</button>
+        <button onClick="{{ goPendGerenciar }}" style="{{ subPendGerenciar }}" style-hover="background:rgba(255,255,255,.05);"><span style="{{ dotPendGerenciar }}"></span>Gerenciar Pendências</button>
+      </div>
+      </sc-if>
+
+      <button onClick="{{ toggleDesp }}" style="{{ navDesp }}" style-hover="background:rgba(255,255,255,.06);">
+        <span style="{{ icoDesp }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20 3 17V4l6 3 6-3 6 3v13l-6-3-6 3Z"/><path d="M9 7v13M15 4v13"/></svg></span>
+        <span style="flex:1; text-align:left;">Despacho & Rotas</span>
+        <span style="{{ chevDesp }}">›</span>
+      </button>
+      <sc-if value="{{ despExpanded }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:2px; margin:2px 0 5px 19px; padding-left:11px; border-left:1px solid rgba(255,255,255,.09);">
+        <button onClick="{{ goDespRot }}" style="{{ subDespRot }}" style-hover="background:rgba(255,255,255,.05);"><span style="{{ dotDespRot }}"></span>Roteirizador</button>
+        <button onClick="{{ goDespConfig }}" style="{{ subDespConfig }}" style-hover="background:rgba(255,255,255,.05);"><span style="{{ dotDespConfig }}"></span>Configurações (Equipes)</button>
+      </div>
+      </sc-if>
+
+      <button onClick="{{ goAlmox }}" style="{{ navAlmox }}" style-hover="background:rgba(255,255,255,.06);">
+        <span style="{{ icoAlmox }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5V8Z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg></span>
+        <span style="flex:1; text-align:left;">Almoxarifado</span>
+        <sc-if value="{{ isWarehouse }}" hint-placeholder-val="{{ false }}"><span style="width:6px; height:6px; border-radius:50%; background:#34d399; box-shadow:0 0 10px #34d399;"></span></sc-if>
+      </button>
+      <button onClick="{{ goAudit }}" style="{{ navAudit }}" style-hover="background:rgba(255,255,255,.06);">
+        <span style="{{ icoAudit }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg></span>
+        <span style="flex:1; text-align:left;">Auditoria</span>
+        <sc-if value="{{ isAudit }}" hint-placeholder-val="{{ false }}"><span style="width:6px; height:6px; border-radius:50%; background:#34d399; box-shadow:0 0 10px #34d399;"></span></sc-if>
+      </button>
+      <button onClick="{{ goGerencial }}" style="{{ navGerencial }}" style-hover="background:rgba(255,255,255,.06);">
+        <span style="{{ icoGerencial }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>
+        <span style="flex:1; text-align:left;">Gerencial</span>
+        <sc-if value="{{ isManagerial }}" hint-placeholder-val="{{ false }}"><span style="width:6px; height:6px; border-radius:50%; background:#34d399; box-shadow:0 0 10px #34d399;"></span></sc-if>
+      </button>
+    </nav>
+
+    <div style="margin-top:auto; padding:14px 12px; background:rgba(255,255,255,.04); border-radius:14px; border:1px solid rgba(255,255,255,.06);">
+      <div style="font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#5f8574; margin-bottom:9px;">Webscraper</div>
+      <div style="display:flex; align-items:center; gap:9px;">
+        <span style="position:relative; width:9px; height:9px;"><span style="position:absolute; inset:0; border-radius:50%; background:#34d399; animation:gs-ping 1.8s ease-out infinite;"></span><span style="position:absolute; inset:0; border-radius:50%; background:#34d399;"></span></span>
+        <span style="font-size:12.5px; font-weight:600; color:#d5e5de;">Capturando coords.</span>
+      </div>
+      <div style="margin-top:8px; height:5px; border-radius:3px; background:rgba(255,255,255,.1); overflow:hidden;"><div style="width:64%; height:100%; background:linear-gradient(90deg,#34d399,#10b981); border-radius:3px;"></div></div>
+      <div style="margin-top:6px; font-size:11px; font-family:'IBM Plex Mono',monospace; color:#7fa695;">77 / 120 unidades</div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <div style="flex:1; display:flex; flex-direction:column; min-width:0;">
+
+    <!-- HEADER -->
+    <header style="height:64px; flex:0 0 64px; background:#fff; border-bottom:1px solid #e4e9e7; display:flex; align-items:center; gap:16px; padding:0 24px; z-index:30;">
+      <div style="min-width:0;">
+        <div style="font-size:16.5px; font-weight:800; letter-spacing:-.3px;">{{ pageTitle }}</div>
+        <div style="font-size:12px; color:#7b8a83; font-weight:500;">{{ pageSub }}</div>
+      </div>
+      <div style="flex:1;"></div>
+
+      <div style="display:flex; align-items:center; gap:8px; padding:7px 12px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:11px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <select value="{{ hub }}" onChange="{{ onHubChange }}" style="border:none; background:transparent; font-size:13px; font-weight:700; color:#0f1c17; cursor:pointer; outline:none;">
+          <option>Polo 1 - Central</option>
+          <option>Polo 2 - Norte</option>
+          <option>Polo 3 - Sul</option>
+        </select>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:9px; padding:5px 6px 5px 12px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:11px;">
+        <div style="text-align:right; line-height:1.2;"><div style="font-size:12.5px; font-weight:700;">Ana Duarte</div><div style="font-size:10.5px; color:#7b8a83;">Gerente de Contrato</div></div>
+        <div style="width:34px; height:34px; border-radius:9px; background:linear-gradient(140deg,#0c2a20,#125c44); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px;">AD</div>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main style="flex:1; overflow:auto; position:relative;">
+
+      <!-- ========== M1 IMPORTAÇÃO ========== -->
+      <sc-if value="{{ showPendImport }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:28px 32px; max-width:1180px; margin:0 auto; animation:gs-fade .3s ease;">
+
+        <sc-if value="{{ importIdle }}" hint-placeholder-val="{{ true }}">
+        <div style="max-width:760px; margin:8px auto;">
+          <div style="text-align:center; margin-bottom:22px;">
+            <h1 style="font-size:26px; font-weight:800; letter-spacing:-.6px;">Importação da OS diária</h1>
+            <p style="color:#6b7a73; font-size:14.5px; margin-top:6px;">Envie a planilha bruta do GSAN. O sistema filtra as unidades corretas e faz o upsert — sem amnésia de registros.</p>
+          </div>
+          <div onClick="{{ startImport }}" style="border:2px dashed #b9ccc4; border-radius:20px; background:#fff; padding:52px 28px; text-align:center; cursor:pointer; transition:border-color .2s, background .2s;" style-hover="border-color:#10b981; background:#f4fbf8;">
+            <div style="width:66px; height:66px; margin:0 auto 16px; border-radius:18px; background:#e8f7f0; display:flex; align-items:center; justify-content:center;">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            </div>
+            <div style="font-size:16.5px; font-weight:700;">Arraste o arquivo GSAN aqui</div>
+            <div style="color:#8a988f; font-size:13px; margin-top:5px;">ou clique para selecionar &nbsp;·&nbsp; .xlsx até 25&nbsp;MB</div>
+            <div style="display:inline-flex; margin-top:18px; padding:11px 22px; background:#0c2a20; color:#fff; border-radius:11px; font-weight:700; font-size:14px;">Selecionar arquivo</div>
+          </div>
+          <div style="display:flex; gap:12px; margin-top:18px;">
+            <div style="flex:1; background:#fff; border:1px solid #e4e9e7; border-radius:14px; padding:15px 17px;"><div style="font-size:12px; color:#8a988f; font-weight:600;">Última importação</div><div style="font-size:15px; font-weight:700; margin-top:3px;">Ontem, 08:14</div></div>
+            <div style="flex:1; background:#fff; border:1px solid #e4e9e7; border-radius:14px; padding:15px 17px;"><div style="font-size:12px; color:#8a988f; font-weight:600;">Registros processados</div><div style="font-size:15px; font-weight:700; margin-top:3px; font-family:'IBM Plex Mono',monospace;">1.198</div></div>
+            <div style="flex:1; background:#fff; border:1px solid #e4e9e7; border-radius:14px; padding:15px 17px;"><div style="font-size:12px; color:#8a988f; font-weight:600;">Divergências</div><div style="font-size:15px; font-weight:700; margin-top:3px; color:#e0870a;">3 alertas</div></div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ importProcessing }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:720px; margin:24px auto;">
+          <div style="background:#fff; border:1px solid #e4e9e7; border-radius:20px; padding:32px;">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:44px; height:44px; border-radius:50%; border:3px solid #e2efe9; border-top-color:#10b981; animation:gs-spin .8s linear infinite;"></div>
+              <div><div style="font-size:17px; font-weight:800;">Processando planilha GSAN…</div><div style="color:#7b8a83; font-size:13px;">gsan_os_2026-07-11.xlsx · 1.324 linhas</div></div>
+              <div style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:22px; color:#059669;">{{ importPct }}%</div>
+            </div>
+            <div style="margin-top:20px; height:8px; border-radius:5px; background:#eef2f0; overflow:hidden;"><div style="{{ importBarStyle }}"></div></div>
+            <div style="margin-top:22px; display:flex; flex-direction:column; gap:11px;">
+              <sc-for list="{{ importSteps }}" as="st" hint-placeholder-count="4">
+                <div style="display:flex; align-items:center; gap:11px;">
+                  <span style="{{ st.dot }}">{{ st.mark }}</span>
+                  <span style="{{ st.text }}">{{ st.label }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:16px;">
+            <sc-for list="{{ skeletons }}" as="sk" hint-placeholder-count="4">
+              <div style="height:88px; border-radius:14px; background:linear-gradient(100deg,#f0f3f2 30%,#e6ebe9 50%,#f0f3f2 70%); background-size:800px 100%; animation:gs-shimmer 1.4s infinite;"></div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ importDone }}" hint-placeholder-val="{{ false }}">
+        <div style="animation:gs-up .4s ease;">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+            <div style="width:40px; height:40px; border-radius:12px; background:#e8f7f0; display:flex; align-items:center; justify-content:center;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <div style="flex:1;"><h1 style="font-size:22px; font-weight:800; letter-spacing:-.4px;">Importação concluída</h1><div style="color:#7b8a83; font-size:13px;">gsan_os_2026-07-11.xlsx · finalizado às 08:12</div></div>
+            <button onClick="{{ resetImport }}" style="padding:10px 18px; background:#fff; border:1px solid #d8e0dc; border-radius:11px; font-weight:700; font-size:13.5px; cursor:pointer;" style-hover="background:#f3f6f5;">Nova importação</button>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px;">
+            <div style="background:#fff; border:1px solid #e4e9e7; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;"><span style="font-size:12.5px; font-weight:700; color:#6b7a73;">Total importado</span><span style="width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:#e8f7f0; color:#0a7a55;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span></div>
+              <div style="font-size:32px; font-weight:800; letter-spacing:-1px; font-family:'IBM Plex Mono',monospace; color:#0f1c17;">1.240</div>
+              <div style="font-size:12px; color:#8a988f;">linhas válidas</div>
+            </div>
+            <div style="background:#fff; border:1px solid #e4e9e7; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;"><span style="font-size:12.5px; font-weight:700; color:#6b7a73;">Ignorados (fora de escopo)</span><span style="width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:#eef2f0; color:#6b7a73;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6"/></svg></span></div>
+              <div style="font-size:32px; font-weight:800; letter-spacing:-1px; font-family:'IBM Plex Mono',monospace; color:#6b7a73;">86</div>
+              <div style="font-size:12px; color:#8a988f;">unidades não pertinentes</div>
+            </div>
+            <div style="background:#fff; border:1px solid #e4e9e7; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;"><span style="font-size:12.5px; font-weight:700; color:#6b7a73;">Novas OSs</span><span style="width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:#e7effc; color:#2563eb;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></span></div>
+              <div style="font-size:32px; font-weight:800; letter-spacing:-1px; font-family:'IBM Plex Mono',monospace; color:#2563eb;">940</div>
+              <div style="font-size:12px; color:#8a988f;">inserções no banco</div>
+            </div>
+            <div style="background:#fff; border:1px solid #e4e9e7; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start;"><span style="font-size:12.5px; font-weight:700; color:#6b7a73;">OSs atualizadas (upsert)</span><span style="width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:#f0eafd; color:#7c3aed;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></span></div>
+              <div style="font-size:32px; font-weight:800; letter-spacing:-1px; font-family:'IBM Plex Mono',monospace; color:#7c3aed;">300</div>
+              <div style="font-size:12px; color:#8a988f;">registros mesclados</div>
+            </div>
+          </div>
+
+          <div style="margin-top:22px; background:#fff; border:1px solid #e4e9e7; border-radius:18px; overflow:hidden;">
+            <div style="padding:16px 20px; border-bottom:1px solid #eef2f0; display:flex; align-items:center; gap:10px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e0870a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+              <div style="font-weight:800; font-size:15px;">Log de alertas</div>
+              <div style="padding:2px 9px; background:#fdf0dc; color:#b9760a; border-radius:20px; font-size:12px; font-weight:800;">3 para ação</div>
+              <div style="margin-left:auto; font-size:12.5px; color:#8a988f;">clique para detalhar</div>
+            </div>
+            <sc-for list="{{ alerts }}" as="al" hint-placeholder-count="3">
+              <div style="border-bottom:1px solid #f1f4f3;">
+                <button onClick="{{ al.toggle }}" style="width:100%; display:flex; align-items:center; gap:13px; padding:14px 20px; background:none; border:none; cursor:pointer; text-align:left;" style-hover="background:#fafcfb;">
+                  <span style="{{ al.tagStyle }}">{{ al.tag }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13.5px;">{{ al.os }}</span>
+                  <span style="color:#4b5852; font-size:13.5px; flex:1;">{{ al.title }}</span>
+                  <span style="{{ al.chev }}">›</span>
+                </button>
+                <sc-if value="{{ al.open }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:2px 20px 16px 62px; animation:gs-fade .2s ease;">
+                    <div style="background:#fbfcfc; border:1px solid #eef2f0; border-radius:12px; padding:13px 15px; font-size:13px; color:#4b5852; line-height:1.6;">{{ al.detail }}</div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- ========== M1b GERENCIAR PENDÊNCIAS ========== -->
+      <sc-if value="{{ showPendGerenciar }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:26px 32px; max-width:1440px; margin:0 auto; animation:gs-fade .3s ease;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:18px;">
+          <div style="flex:1;"><h1 style="font-size:20px; font-weight:800; letter-spacing:-.4px;">Gerenciar Pendências</h1><div style="color:#7b8a83; font-size:13px;">OSs importadas que precisam de tratamento antes do despacho</div></div>
+          <div style="display:flex; align-items:center; gap:8px; padding:8px 14px; background:#fff; border:1px solid #e4e9e7; border-radius:11px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8a988f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input placeholder="Buscar OS…" style="border:none; background:none; outline:none; font-size:13px; width:130px;">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:9px; margin-bottom:16px; flex-wrap:wrap;">
+          <sc-for list="{{ pendFilterTabs }}" as="ft" hint-placeholder-count="5">
+            <button onClick="{{ ft.onClick }}" style="{{ ft.style }}">{{ ft.label }} <span style="{{ ft.countStyle }}">{{ ft.count }}</span></button>
+          </sc-for>
+        </div>
+
+        <div style="background:#fff; border:1px solid #e4e9e7; border-radius:16px; overflow:hidden;">
+          <div style="overflow-x:auto;">
+            <table style="border-collapse:collapse; width:100%; min-width:2040px; font-size:12.5px;">
+              <thead>
+                <tr style="background:#f6f8f7; border-bottom:1px solid #e4e9e7; text-transform:uppercase; letter-spacing:.04em; color:#6b7a73; font-size:11px; font-weight:800;">
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Ordem Serviço</th>
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Especificação</th>
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Tipo</th>
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Nº Imóvel</th>
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Data Geração</th>
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Unidade Atual</th>
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Cidade</th>
+                  <th style="padding:11px 12px; text-align:center; white-space:nowrap;">Setor</th>
+                  <th style="padding:11px 12px; text-align:center; white-space:nowrap;">Quadra</th>
+                  <th style="padding:11px 12px; text-align:right; white-space:nowrap;">Longitude</th>
+                  <th style="padding:11px 12px; text-align:right; white-space:nowrap;">Latitude</th>
+                  <th style="padding:11px 12px; text-align:center; white-space:nowrap;">Prazo (h)</th>
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Abertura</th>
+                  <th style="padding:11px 12px; text-align:center; white-space:nowrap;">Decorrido</th>
+                  <th style="padding:11px 12px; text-align:center; white-space:nowrap;">Atraso</th>
+                  <th style="padding:11px 12px; text-align:left; white-space:nowrap;">Tipo/Equipe</th>
+                  <th style="padding:11px 12px; text-align:center; white-space:nowrap;">Prioridade</th>
+                  <th style="padding:11px 12px; text-align:center; white-space:nowrap;">PP</th>
+                  <th style="padding:11px 12px; text-align:center; white-space:nowrap;">Desconsiderar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{ pendItems }}" as="pi" hint-placeholder-count="8">
+                  <tr style="{{ pi.trStyle }}">
+                    <td style="padding:9px 12px; font-family:'IBM Plex Mono',monospace; font-weight:600; white-space:nowrap;">{{ pi.os }}</td>
+                    <td style="padding:9px 12px; color:#4b5852; white-space:nowrap;">{{ pi.espec }}</td>
+                    <td style="padding:9px 12px;"><span style="{{ pi.tipoStyle }}">{{ pi.tipoLabel }}</span></td>
+                    <td style="padding:9px 12px; font-family:'IBM Plex Mono',monospace; white-space:nowrap;">{{ pi.imovel }}</td>
+                    <td style="padding:9px 12px; font-family:'IBM Plex Mono',monospace; color:#6b7a73; white-space:nowrap;">{{ pi.data }}</td>
+                    <td style="padding:9px 12px; color:#4b5852; white-space:nowrap;">{{ pi.unidade }}</td>
+                    <td style="padding:9px 12px; font-weight:600; white-space:nowrap;">{{ pi.cidade }}</td>
+                    <td style="padding:9px 12px; text-align:center; font-family:'IBM Plex Mono',monospace;">{{ pi.setor }}</td>
+                    <td style="padding:9px 12px; text-align:center; font-family:'IBM Plex Mono',monospace;">{{ pi.quadra }}</td>
+                    <td style="padding:9px 12px; text-align:right; font-family:'IBM Plex Mono',monospace; color:#6b7a73;">{{ pi.lon }}</td>
+                    <td style="padding:9px 12px; text-align:right; font-family:'IBM Plex Mono',monospace; color:#6b7a73;">{{ pi.lat }}</td>
+                    <td style="padding:9px 12px; text-align:center; font-family:'IBM Plex Mono',monospace;">{{ pi.prazo }}</td>
+                    <td style="padding:9px 12px; white-space:nowrap;">{{ pi.abertura }}</td>
+                    <td style="padding:9px 12px; text-align:center; font-family:'IBM Plex Mono',monospace; color:#c0392b; font-weight:700;">{{ pi.decorrido }}</td>
+                    <td style="padding:9px 12px; text-align:center; font-family:'IBM Plex Mono',monospace; color:#c0392b; font-weight:700;">{{ pi.atraso }}</td>
+                    <td style="padding:9px 12px;"><span style="{{ pi.equipeStyle }}">{{ pi.equipe }}</span></td>
+                    <td style="padding:9px 12px; text-align:center; font-family:'IBM Plex Mono',monospace; font-weight:700; color:#0a7a55;">{{ pi.prioridade }}</td>
+                    <td style="padding:9px 12px; text-align:center; font-family:'IBM Plex Mono',monospace; font-weight:700; color:#0a7a55;">{{ pi.pp }}</td>
+                    <td style="padding:9px 12px; text-align:center;"><button onClick="{{ pi.resolve }}" title="Desconsiderar OS" style="display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; background:#fdeceb; color:#c0392b; border:1px solid #f3c9c5; border-radius:8px; cursor:pointer;" style-hover="background:#c0392b; color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+          <sc-if value="{{ pendEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; padding:44px; color:#a7b3ae;"><div style="font-size:30px;">✅</div><div style="font-size:13.5px; font-weight:600; margin-top:8px;">Nenhuma pendência neste filtro</div></div>
+          </sc-if>
+        </div>
+        <div style="margin-top:10px; font-size:12.5px; color:#8a988f;">💡 Desconsiderar remove a OS da fila de importação; as demais seguem para roteirização no Despacho &amp; Rotas.</div>
+      </div>
+      </sc-if>
+
+      <!-- ========== M2 DESPACHO ========== -->
+      <sc-if value="{{ showRoteirizador }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; height:100%; animation:gs-fade .3s ease;">
+
+        <!-- routech-style toolbar -->
+        <div style="flex:0 0 auto; background:#fff; border-bottom:1px solid #e4e9e7; display:flex; align-items:center; gap:10px; padding:10px 16px; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:8px; padding:6px 11px; border:1px solid #e4e9e7; border-radius:10px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg>
+            <div style="line-height:1.1;"><div style="font-size:9px; font-weight:700; color:#8a988f; text-transform:uppercase; letter-spacing:.06em;">Operação</div><select value="{{ operacao }}" onChange="{{ onOperacao }}" style="border:none; background:none; outline:none; font-size:13px; font-weight:700; cursor:pointer;"><option>PSS</option><option>XPT Express</option><option>Litoral</option></select></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; padding:6px 11px; border:1px solid #e4e9e7; border-radius:10px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <div style="line-height:1.1;"><div style="font-size:9px; font-weight:700; color:#8a988f; text-transform:uppercase; letter-spacing:.06em;">Data da Rota</div><input type="date" value="2026-07-11" style="border:none; background:none; outline:none; font-size:13px; font-weight:700;"></div>
+          </div>
+          <div style="display:flex; gap:3px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:10px; padding:3px;">
+            <button onClick="{{ setLista }}" style="{{ listaTabStyle }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Lista</button>
+            <button onClick="{{ setCard }}" style="{{ cardTabStyle }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Card</button>
+          </div>
+          <div style="display:flex; align-items:center; gap:7px; padding:8px 12px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:10px; min-width:150px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8a988f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            <input placeholder="Pesquisar" style="border:none; background:none; outline:none; font-size:13px; width:100%;">
+          </div>
+          <button style="display:flex; align-items:center; gap:6px; padding:9px 13px; background:#fff; border:1px solid #e4e9e7; border-radius:10px; font-size:13px; font-weight:700; color:#4b5852; cursor:pointer;" style-hover="background:#f3f6f5;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3H2l8 9.5V19l4 2v-8.5L22 3Z"/></svg>Filtros</button>
+
+          <div style="flex:1;"></div>
+
+          <button onClick="{{ openCreateRota }}" style="display:flex; align-items:center; gap:6px; padding:9px 13px; background:#fff; border:1px solid #e4e9e7; border-radius:10px; font-size:13px; font-weight:700; color:#0a7a55; cursor:pointer;" style-hover="background:#f0fbf6;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Criar Rota</button>
+          <button style="display:flex; align-items:center; gap:5px; padding:9px 12px; background:#fff; border:1px solid #e4e9e7; border-radius:10px; font-size:13px; font-weight:700; color:#4b5852; cursor:pointer;" style-hover="background:#f3f6f5;">Serviços<span style="color:#b7c2bc;">▾</span></button>
+          <button style="display:flex; align-items:center; gap:5px; padding:9px 12px; background:#fff; border:1px solid #e4e9e7; border-radius:10px; font-size:13px; font-weight:700; color:#4b5852; cursor:pointer;" style-hover="background:#f3f6f5;">Veículos<span style="color:#b7c2bc;">▾</span></button>
+          <button style="display:flex; align-items:center; gap:5px; padding:9px 12px; background:#fff; border:1px solid #e4e9e7; border-radius:10px; font-size:13px; font-weight:700; color:#4b5852; cursor:pointer;" style-hover="background:#f3f6f5;">Ajustes<span style="color:#b7c2bc;">▾</span></button>
+          <button onClick="{{ exportRpa }}" style="display:flex; align-items:center; gap:8px; padding:9px 16px; background:#0c2a20; color:#fff; border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer;" style-hover="background:#123c2c;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Finalizar</button>
+        </div>
+
+        <!-- map row -->
+        <div style="flex:1; display:flex; min-height:0;">
+
+        <sc-if value="{{ filtersOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="width:264px; flex:0 0 264px; background:#fff; border-right:1px solid #e4e9e7; padding:18px; overflow:auto;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;"><div style="font-weight:800; font-size:15px;">Filtros</div><button onClick="{{ toggleFilters }}" style="border:none; background:#f3f6f5; width:26px; height:26px; border-radius:8px; cursor:pointer; color:#6b7a73; font-size:15px;">‹</button></div>
+          <div style="font-size:12px; color:#8a988f; margin-bottom:16px;">{{ pinCount }} OSs no mapa</div>
+
+          <div style="margin-bottom:16px;"><label style="font-size:12px; font-weight:700; color:#6b7a73;">Unidade</label>
+            <select style="width:100%; margin-top:6px; padding:9px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600; background:#fff;"><option>Todas as unidades</option><option>Bessa</option><option>Manaíra</option><option>Torre</option><option>Bancários</option></select></div>
+
+          <div style="margin-bottom:16px;"><label style="font-size:12px; font-weight:700; color:#6b7a73;">Data</label>
+            <input type="date" value="2026-07-11" style="width:100%; margin-top:6px; padding:9px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600;"></div>
+
+          <div><label style="font-size:12px; font-weight:700; color:#6b7a73;">Status</label>
+            <div style="margin-top:9px; display:flex; flex-direction:column; gap:8px;">
+              <sc-for list="{{ statusLegend }}" as="sl" hint-placeholder-count="4">
+                <label style="display:flex; align-items:center; gap:9px; padding:8px 11px; border:1px solid #eef2f0; border-radius:10px; cursor:pointer;">
+                  <input type="checkbox" checked style="accent-color:#10b981;">
+                  <span style="{{ sl.dot }}"></span>
+                  <span style="font-size:13px; font-weight:600; flex:1;">{{ sl.label }}</span>
+                  <span style="font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:#8a988f;">{{ sl.count }}</span>
+                </label>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <div style="flex:1; position:relative; overflow:hidden; background:#e6ede9;">
+          <div style="position:absolute; inset:0; background:#e6ede9;">
+            <div style="position:absolute; left:8%; top:12%; width:34%; height:40%; background:#dbe7df; border-radius:44% 56% 60% 40%; opacity:.9;"></div>
+            <div style="position:absolute; left:46%; top:8%; width:40%; height:46%; background:#e0eae3; border-radius:56% 44% 40% 60%;"></div>
+            <div style="position:absolute; left:20%; top:52%; width:44%; height:42%; background:#dee9e2; border-radius:50% 50% 44% 56%;"></div>
+            <div style="position:absolute; left:60%; top:54%; width:34%; height:40%; background:#d9e6df; border-radius:60% 40% 52% 48%;"></div>
+            <div style="position:absolute; right:-6%; top:6%; width:22%; height:90%; background:linear-gradient(180deg,#cfe0f0,#bcd6ec); border-radius:40% 0 0 46%; opacity:.75;"></div>
+            <div style="position:absolute; left:0; top:38%; width:100%; height:3px; background:repeating-linear-gradient(90deg,#cbd6d0 0 16px,transparent 16px 28px);"></div>
+            <div style="position:absolute; left:44%; top:0; width:3px; height:100%; background:repeating-linear-gradient(180deg,#cbd6d0 0 16px,transparent 16px 28px);"></div>
+            <div style="position:absolute; left:0; top:70%; width:100%; height:3px; background:repeating-linear-gradient(90deg,#cbd6d0 0 16px,transparent 16px 28px);"></div>
+          </div>
+
+          <sc-if value="{{ showSelectRect }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute; left:55%; top:24%; width:29%; height:26%; border:2px dashed #059669; background:rgba(16,185,129,.1); border-radius:8px; animation:gs-pop .25s ease; pointer-events:none;"></div>
+          </sc-if>
+
+          <sc-for list="{{ pinList }}" as="p" hint-placeholder-count="12">
+            <button onClick="{{ p.onClick }}" style="{{ p.style }}">
+              <sc-if value="{{ p.selected }}" hint-placeholder-val="{{ false }}"><span style="position:absolute; inset:-7px; border:2px solid #059669; border-radius:50%; rotate:-45deg;"></span></sc-if>
+            </button>
+          </sc-for>
+
+          <sc-if value="{{ activePinObj }}" hint-placeholder-val="{{ false }}">
+            <div style="{{ popoverStyle }}">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:2px;"><span style="{{ popDot }}"></span><span style="font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:14px;">{{ activePinOs }}</span></div>
+              <div style="font-size:12.5px; color:#7b8a83; margin-bottom:11px;">{{ activePinBairro }} · {{ activePinStatus }}</div>
+              <button onClick="{{ markPriority }}" style="width:100%; display:flex; align-items:center; gap:8px; padding:9px 11px; background:#fff5f4; color:#d6402f; border:1px solid #f6d5d0; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer; margin-bottom:7px;" style-hover="background:#fdeae7;">🚩 Marcar como prioridade</button>
+              <button onClick="{{ changeTeam }}" style="width:100%; display:flex; align-items:center; gap:8px; padding:9px 11px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:#e9efec;">🔁 Trocar serviço / equipe</button>
+              <button onClick="{{ closePin }}" style="position:absolute; top:10px; right:10px; border:none; background:none; cursor:pointer; color:#a7b3ae; font-size:16px;">✕</button>
+            </div>
+          </sc-if>
+
+          <div style="position:absolute; top:16px; left:16px; display:flex; gap:6px; background:#fff; padding:6px; border-radius:13px; box-shadow:0 6px 20px rgba(12,42,32,.12); border:1px solid #eef2f0;">
+            <sc-if value="{{ filtersClosed }}" hint-placeholder-val="{{ false }}"><button onClick="{{ toggleFilters }}" style="width:38px; height:38px; border:none; background:#f3f6f5; border-radius:9px; cursor:pointer; font-size:15px;">☰</button></sc-if>
+            <button onClick="{{ goCursor }}" style="{{ toolCursor }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 3 7.5 18 2.5-7 7-2.5L3 3Z"/></svg></button>
+            <button onClick="{{ goPoly }}" style="{{ toolPoly }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 9l3 11h12l3-11-9-7Z"/></svg></button>
+            <button onClick="{{ goRadius }}" style="{{ toolRadius }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 12h7"/></svg></button>
+          </div>
+
+          <div style="position:absolute; bottom:16px; left:16px; background:#fff; border:1px solid #eef2f0; border-radius:12px; padding:10px 13px; box-shadow:0 4px 14px rgba(12,42,32,.08); display:flex; gap:14px;">
+            <sc-for list="{{ statusLegend }}" as="sl" hint-placeholder-count="4">
+              <div style="display:flex; align-items:center; gap:6px;"><span style="{{ sl.dot }}"></span><span style="font-size:12px; font-weight:600; color:#4b5852;">{{ sl.label }}</span></div>
+            </sc-for>
+          </div>
+
+          <button onClick="{{ exportRpa }}" style="position:absolute; bottom:16px; right:16px; display:flex; align-items:center; gap:9px; padding:13px 20px; background:#0c2a20; color:#fff; border:none; border-radius:13px; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 8px 24px rgba(12,42,32,.28);" style-hover="background:#123c2c;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            Gerar arquivo RPA
+          </button>
+
+          <sc-if value="{{ hasSelection }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute; bottom:78px; left:50%; transform:translateX(-50%); background:#0c2a20; color:#fff; padding:11px 13px 11px 20px; border-radius:15px; display:flex; align-items:center; gap:16px; box-shadow:0 12px 34px rgba(12,42,32,.35); animation:gs-up .25s ease;">
+              <div style="font-size:14px; font-weight:700;"><span style="font-family:'IBM Plex Mono',monospace; color:#34d399; font-size:16px;">{{ selectedCount }}</span> OSs selecionadas</div>
+              <button onClick="{{ clearSelection }}" style="background:rgba(255,255,255,.1); color:#cfe; border:none; padding:9px 14px; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer;">Limpar</button>
+              <button onClick="{{ openAssign }}" style="background:#10b981; color:#04231a; border:none; padding:9px 18px; border-radius:10px; font-weight:800; font-size:13px; cursor:pointer;" style-hover="background:#34d399;">Atribuir equipe →</button>
+            </div>
+          </sc-if>
+        </div>
+
+          <!-- CRIAR ROTA slide-in panel -->
+          <sc-if value="{{ createRotaOpen }}" hint-placeholder-val="{{ false }}">
+          <div style="width:340px; flex:0 0 340px; background:#fff; border-left:1px solid #e4e9e7; display:flex; flex-direction:column; box-shadow:-10px 0 30px rgba(12,42,32,.08); animation:gs-fade .2s ease;">
+            <div style="display:flex; align-items:center; gap:10px; padding:16px 20px; border-bottom:1px solid #eef2f0;">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0c2a20" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20 3 17V4l6 3 6-3 6 3v13l-6-3-6 3Z"/><path d="M9 7v13M15 4v13"/></svg>
+              <div style="flex:1; font-weight:800; font-size:15px; text-transform:uppercase; letter-spacing:.02em;">Criar Rota</div>
+              <button onClick="{{ closeCreateRota }}" style="border:none; background:#f3f6f5; width:28px; height:28px; border-radius:8px; cursor:pointer; color:#6b7a73; font-size:15px;">✕</button>
+            </div>
+            <div style="flex:1; overflow:auto; padding:18px 20px; display:flex; flex-direction:column; gap:14px;">
+              <div style="display:flex; gap:12px; align-items:flex-end;">
+                <div style="flex:1;"><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">NOME *</label><input value="{{ rotaName }}" onChange="{{ onRotaName }}" placeholder="Ex.: ROTA - 01" style="width:100%; margin-top:5px; padding:10px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600;"></div>
+                <div><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">COR</label><input type="color" value="{{ rotaColor }}" onChange="{{ onRotaColor }}" style="display:block; margin-top:5px; width:44px; height:40px; border:1px solid #dbe3df; border-radius:10px; padding:2px; cursor:pointer; background:#fff;"></div>
+              </div>
+              <div><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">DATA DA ROTA *</label><input type="date" value="2026-07-11" style="width:100%; margin-top:5px; padding:10px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600;"></div>
+              <div style="display:flex; gap:12px;">
+                <div style="flex:1;"><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">PREVISÃO DE INÍCIO *</label><input type="time" value="07:00" style="width:100%; margin-top:5px; padding:10px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600;"></div>
+                <div style="flex:1;"><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">CARREGAMENTO *</label><input type="time" value="07:00" style="width:100%; margin-top:5px; padding:10px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600;"></div>
+              </div>
+              <div><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">EQUIPE / VEÍCULO *</label><select style="width:100%; margin-top:5px; padding:10px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600; background:#fff;"><option>Equipe A · QRT-2A18</option><option>Equipe B · PXG-7C55</option><option>Equipe C · ORT-9988</option><option>Equipe E · JHU-3376</option></select></div>
+              <div><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">PROFISSIONAL</label><select style="width:100%; margin-top:5px; padding:10px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600; background:#fff;"><option>J. Andrade</option><option>M. Souza</option><option>D. Lima</option></select></div>
+              <div><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">AJUDANTE</label><input placeholder="Opcional" style="width:100%; margin-top:5px; padding:10px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600;"></div>
+              <div><label style="font-size:11px; font-weight:800; color:#6b7a73; letter-spacing:.04em;">OBSERVAÇÃO</label><textarea placeholder="Obs" style="width:100%; margin-top:5px; padding:10px 11px; border:1px solid #dbe3df; border-radius:10px; font-size:13.5px; font-weight:600; resize:vertical; min-height:60px;"></textarea></div>
+              <div style="display:flex; align-items:center; gap:8px; padding:11px 13px; background:#f0fbf6; border:1px solid #cbeeda; border-radius:11px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0a7a55" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v6c0 5 3.5 8 9 9 5.5-1 9-4 9-9V7l-9-5Z"/></svg>
+                <span style="font-size:12.5px; font-weight:700; color:#0a7a55;"><span style="font-family:'IBM Plex Mono',monospace;">{{ selectedCount }}</span> serviços do mapa nesta rota</span>
+              </div>
+            </div>
+            <div style="padding:14px 20px; border-top:1px solid #eef2f0; display:flex; gap:10px;">
+              <button onClick="{{ closeCreateRota }}" style="flex:1; padding:11px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:11px; font-weight:700; font-size:13.5px; cursor:pointer;">Cancelar</button>
+              <button onClick="{{ saveRota }}" style="flex:1; padding:11px; background:#10b981; color:#04231a; border:none; border-radius:11px; font-weight:800; font-size:13.5px; cursor:pointer;" style-hover="background:#34d399;">Salvar</button>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+
+        <!-- bottom status tabs (routech style) -->
+        <div style="flex:0 0 auto; background:#fff; border-top:1px solid #e4e9e7; display:flex; align-items:center; padding:0 8px;">
+          <sc-for list="{{ despTabs }}" as="dt" hint-placeholder-count="5">
+            <button onClick="{{ dt.onClick }}" style="{{ dt.style }}"><span style="{{ dt.countStyle }}">{{ dt.count }}</span>{{ dt.label }}</button>
+          </sc-for>
+          <div style="flex:1;"></div>
+          <button style="display:flex; align-items:center; gap:7px; margin-right:8px; padding:8px 14px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:9px; font-size:12.5px; font-weight:700; color:#4b5852; cursor:pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Ações</button>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ========== M2b CONFIGURAÇÕES / EQUIPES ========== -->
+      <sc-if value="{{ showConfig }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:26px 32px; max-width:1240px; margin:0 auto; animation:gs-fade .3s ease;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:20px;">
+          <div style="flex:1;"><h1 style="font-size:20px; font-weight:800; letter-spacing:-.4px;">Configurações · Equipes</h1><div style="color:#7b8a83; font-size:13px;"><span style="font-family:'IBM Plex Mono',monospace; font-weight:700; color:#0a7a55;">{{ equipeActiveCount }}</span> equipes ativas para roteirização</div></div>
+          <button style="display:flex; align-items:center; gap:8px; padding:10px 18px; background:#0c2a20; color:#fff; border:none; border-radius:11px; font-weight:800; font-size:13.5px; cursor:pointer;" style-hover="background:#123c2c;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Nova equipe</button>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:16px;">
+          <sc-for list="{{ equipeCards }}" as="eq" hint-placeholder-count="5">
+            <div style="background:#fff; border:1px solid #e4e9e7; border-radius:16px; overflow:hidden;">
+              <div style="{{ eq.stripe }}"></div>
+              <div style="padding:16px 18px;">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+                  <span style="{{ eq.dot }}"></span>
+                  <div style="flex:1;"><div style="font-weight:800; font-size:15.5px;">{{ eq.nome }}</div><div style="font-family:'IBM Plex Mono',monospace; font-size:12px; color:#8a988f;">{{ eq.placa }}</div></div>
+                  <span style="{{ eq.statusStyle }}">{{ eq.statusLabel }}</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:11px; margin-bottom:14px;">
+                  <div style="background:#fbfcfc; border:1px solid #eef2f0; border-radius:10px; padding:9px 12px;"><div style="font-size:10.5px; font-weight:700; color:#8a988f; text-transform:uppercase; letter-spacing:.04em;">Líder</div><div style="font-size:13.5px; font-weight:700; margin-top:2px;">{{ eq.lider }}</div></div>
+                  <div style="background:#fbfcfc; border:1px solid #eef2f0; border-radius:10px; padding:9px 12px;"><div style="font-size:10.5px; font-weight:700; color:#8a988f; text-transform:uppercase; letter-spacing:.04em;">Membros</div><div style="font-size:13.5px; font-weight:700; margin-top:2px; font-family:'IBM Plex Mono',monospace;">{{ eq.membros }}</div></div>
+                  <div style="background:#fbfcfc; border:1px solid #eef2f0; border-radius:10px; padding:9px 12px;"><div style="font-size:10.5px; font-weight:700; color:#8a988f; text-transform:uppercase; letter-spacing:.04em;">Região</div><div style="font-size:13.5px; font-weight:700; margin-top:2px;">{{ eq.regiao }}</div></div>
+                  <div style="background:#fbfcfc; border:1px solid #eef2f0; border-radius:10px; padding:9px 12px;"><div style="font-size:10.5px; font-weight:700; color:#8a988f; text-transform:uppercase; letter-spacing:.04em;">Capac./dia</div><div style="font-size:13.5px; font-weight:700; margin-top:2px; font-family:'IBM Plex Mono',monospace;">{{ eq.capacidade }} OS</div></div>
+                </div>
+                <div style="height:6px; border-radius:5px; background:#f0f3f2; overflow:hidden; margin-bottom:14px;"><div style="{{ eq.capBar }}"></div></div>
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <button style="flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:9px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:10px; font-weight:700; font-size:13px; color:#4b5852; cursor:pointer;" style-hover="background:#e9efec;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>Editar</button>
+                  <button onClick="{{ eq.toggle }}" style="{{ eq.switchStyle }}"><span style="{{ eq.knobStyle }}"></span></button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ========== M3 ALMOXARIFADO ========== -->
+      <sc-if value="{{ isWarehouse }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:26px 32px; max-width:1280px; margin:0 auto; animation:gs-fade .3s ease;">
+        <div style="display:flex; gap:18px; flex-wrap:wrap; align-items:stretch;">
+          <div style="flex:2; min-width:420px; background:#fff; border:1px solid #e4e9e7; border-radius:18px; padding:22px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:18px;">
+              <div style="font-weight:800; font-size:16px;">Saída de kit</div>
+              <div style="padding:3px 11px; background:#e8f7f0; color:#0a7a55; border-radius:20px; font-size:12px; font-weight:800;">{{ hub }}</div>
+            </div>
+            <div style="display:grid; grid-template-columns:1.2fr 1.4fr .8fr; gap:13px; align-items:end;">
+              <div><label style="font-size:12px; font-weight:700; color:#6b7a73;">Equipe</label>
+                <select value="{{ whTeam }}" onChange="{{ onWhTeam }}" style="width:100%; margin-top:6px; padding:11px 12px; border:1px solid #dbe3df; border-radius:11px; font-size:14px; font-weight:600; background:#fff;"><option value="">Selecione…</option><option>Equipe A</option><option>Equipe B</option><option>Equipe C</option><option>Equipe D</option></select></div>
+              <div><label style="font-size:12px; font-weight:700; color:#6b7a73;">Kit</label>
+                <select value="{{ whKit }}" onChange="{{ onWhKit }}" style="width:100%; margin-top:6px; padding:11px 12px; border:1px solid #dbe3df; border-radius:11px; font-size:14px; font-weight:600; background:#fff;"><option value="">Selecione…</option><option>Kit Ligação Simples</option><option>Kit Hidrômetro</option><option>Kit Supressão</option><option>Kit Religação</option></select></div>
+              <div><label style="font-size:12px; font-weight:700; color:#6b7a73;">Qtd.</label>
+                <input type="number" min="1" value="{{ whQty }}" onChange="{{ onWhQty }}" style="width:100%; margin-top:6px; padding:11px 12px; border:1px solid #dbe3df; border-radius:11px; font-size:14px; font-weight:700; font-family:'IBM Plex Mono',monospace;"></div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px; margin-top:16px;">
+              <button onClick="{{ registerKit }}" style="padding:12px 24px; background:#0c2a20; color:#fff; border:none; border-radius:12px; font-weight:800; font-size:14px; cursor:pointer;" style-hover="background:#123c2c;">Registrar saída</button>
+              <div style="font-size:12.5px; color:#8a988f;">Trava de histórico ativa — bloqueia se a qtd. exceder a execução do dia anterior.</div>
+            </div>
+          </div>
+          <div style="flex:1; min-width:230px; background:linear-gradient(150deg,#0c2a20,#134734); border-radius:18px; padding:22px; color:#cfe3da;">
+            <div style="font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#6ea992;">Execução de ontem</div>
+            <div style="margin-top:14px; display:flex; flex-direction:column; gap:11px;">
+              <sc-for list="{{ prevDayList }}" as="pd" hint-placeholder-count="4">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding-bottom:9px; border-bottom:1px solid rgba(255,255,255,.08);"><span style="font-size:13px; font-weight:600; color:#e4f0ea;">{{ pd.kit }}</span><span style="font-family:'IBM Plex Mono',monospace; font-weight:700; color:#34d399;">{{ pd.qty }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:20px;">
+          <div style="background:#fff; border:1px solid #e4e9e7; border-radius:18px; padding:18px;">
+            <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;"><span style="width:9px; height:9px; border-radius:50%; background:#f59e0b;"></span><div style="font-weight:800; font-size:15px;">Envios pendentes</div><div style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8a988f;">{{ shipCount }}</div></div>
+            <div style="display:flex; flex-direction:column; gap:11px;">
+              <sc-for list="{{ shipments }}" as="s" hint-placeholder-count="3">
+                <div style="border:1px solid #eef2f0; border-radius:13px; padding:13px 15px; background:#fbfcfc;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-weight:700; font-size:14px;">{{ s.kit }}</span><span style="{{ s.badge }}">{{ s.statusLabel }}</span></div>
+                  <div style="display:flex; align-items:center; gap:14px; margin-top:8px; font-size:12.5px; color:#7b8a83;"><span>→ {{ s.to }}</span><span>{{ s.team }}</span><span style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-weight:700; color:#0f1c17;">{{ s.qty }} un.</span></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#fff; border:1px solid #e4e9e7; border-radius:18px; padding:18px;">
+            <div style="display:flex; align-items:center; gap:9px; margin-bottom:14px;"><span style="width:9px; height:9px; border-radius:50%; background:#3b82f6;"></span><div style="font-weight:800; font-size:15px;">Recebimentos pendentes</div><div style="margin-left:auto; font-family:'IBM Plex Mono',monospace; font-size:13px; color:#8a988f;">{{ recvCount }}</div></div>
+            <sc-if value="{{ hasReceipts }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex; flex-direction:column; gap:11px;">
+              <sc-for list="{{ receipts }}" as="r" hint-placeholder-count="2">
+                <div style="border:1px solid #dbe7fb; border-radius:13px; padding:13px 15px; background:#f5f9ff;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;"><span style="font-weight:700; font-size:14px;">{{ r.kit }}</span><span style="font-family:'IBM Plex Mono',monospace; font-weight:700;">{{ r.qty }} un.</span></div>
+                  <div style="font-size:12.5px; color:#7b8a83; margin-top:5px;">Origem: {{ r.from }} · em trânsito</div>
+                  <button onClick="{{ r.receive }}" style="width:100%; margin-top:11px; padding:11px; background:#2563eb; color:#fff; border:none; border-radius:11px; font-weight:800; font-size:13.5px; cursor:pointer;" style-hover="background:#1d4ed8;">✓ Receber carga</button>
+                </div>
+              </sc-for>
+            </div>
+            </sc-if>
+            <sc-if value="{{ noReceipts }}" hint-placeholder-val="{{ false }}">
+              <div style="text-align:center; padding:34px 12px; color:#a7b3ae;"><div style="font-size:30px;">📦</div><div style="font-size:13.5px; font-weight:600; margin-top:8px;">Nenhuma carga em trânsito</div><div style="font-size:12px; margin-top:2px;">Recebimentos aparecem aqui (Polos 2 e 3)</div></div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+      <!-- ========== M4 AUDITORIA ========== -->
+      <sc-if value="{{ isAudit }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:24px 28px; animation:gs-fade .3s ease;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+          <div style="flex:1;"><h1 style="font-size:20px; font-weight:800; letter-spacing:-.4px;">Auditoria & Fechamento</h1><div style="color:#7b8a83; font-size:13px;">Planilha de execução GSAN · 11/07/2026</div></div>
+          <button onClick="{{ triggerClosingUpload }}" style="display:flex; align-items:center; gap:8px; padding:10px 16px; background:#fff; border:1px solid #d8e0dc; border-radius:11px; font-weight:700; font-size:13.5px; cursor:pointer;" style-hover="background:#f3f6f5;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>Subir planilha de fechamento</button>
+        </div>
+
+        <div style="display:flex; gap:6px; border-bottom:1px solid #e4e9e7; margin-bottom:16px;">
+          <button onClick="{{ goTabGrade }}" style="{{ tabGradeStyle }}">Grade de auditoria</button>
+          <button onClick="{{ goTabInval }}" style="{{ tabInvalStyle }}">Invalidações <span style="{{ invalBadge }}">{{ invalCount }}</span></button>
+        </div>
+
+        <sc-if value="{{ auditGrade }}" hint-placeholder-val="{{ true }}">
+        <div style="background:#fff; border:1px solid #e4e9e7; border-radius:16px; overflow:hidden;">
+          <div style="display:grid; grid-template-columns:120px 1.4fr 1fr 96px 130px 120px; background:#f6f8f7; border-bottom:1px solid #e4e9e7; font-size:11.5px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#6b7a73;">
+            <div style="padding:11px 14px;">OS</div><div style="padding:11px 14px;">Serviço</div><div style="padding:11px 14px;">Equipe</div><div style="padding:11px 14px;">Foto</div><div style="padding:11px 14px;">Status</div><div style="padding:11px 14px;">Valor</div>
+          </div>
+          <sc-for list="{{ auditRows }}" as="row" hint-placeholder-count="8">
+            <div style="{{ row.rowStyle }}">
+              <div style="padding:0 14px; display:flex; align-items:center; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px;">{{ row.os }}</div>
+              <div onClick="{{ row.editServ }}" style="{{ row.servCell }}">
+                <sc-if value="{{ row.editingServ }}" hint-placeholder-val="{{ false }}"><input value="{{ row.servico }}" onChange="{{ row.onServ }}" onBlur="{{ row.commit }}" style="width:100%; border:2px solid #10b981; border-radius:7px; padding:6px 8px; font-size:13px; font-weight:600; outline:none;"></sc-if>
+                <sc-if value="{{ row.notEditingServ }}" hint-placeholder-val="{{ true }}"><span>{{ row.servico }}</span></sc-if>
+              </div>
+              <div onClick="{{ row.editEq }}" style="{{ row.eqCell }}">
+                <sc-if value="{{ row.editingEq }}" hint-placeholder-val="{{ false }}"><select value="{{ row.equipe }}" onChange="{{ row.onEq }}" style="width:100%; border:2px solid #10b981; border-radius:7px; padding:5px 6px; font-size:13px; font-weight:600; outline:none;"><option>Equipe A</option><option>Equipe B</option><option>Equipe C</option><option>Equipe D</option><option>—</option></select></sc-if>
+                <sc-if value="{{ row.notEditingEq }}" hint-placeholder-val="{{ true }}"><span>{{ row.equipe }}</span></sc-if>
+              </div>
+              <div style="padding:0 14px; display:flex; align-items:center;"><button onClick="{{ row.toggleFoto }}" style="{{ row.fotoStyle }}">{{ row.fotoLabel }}</button></div>
+              <div style="padding:0 14px; display:flex; align-items:center;"><span style="{{ row.statusStyle }}">{{ row.statusLabel }}</span></div>
+              <div style="padding:0 14px; display:flex; align-items:center; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px; color:#0f1c17;">{{ row.valor }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:10px; font-size:12.5px; color:#8a988f;">💡 Clique em qualquer célula de serviço ou equipe para editar inline — sem abrir telas.</div>
+        </sc-if>
+
+        <sc-if value="{{ auditInval }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff; border:1px solid #e4e9e7; border-radius:16px; overflow:hidden;">
+          <div style="padding:14px 18px; background:#fff5f4; border-bottom:1px solid #f6d5d0; display:flex; align-items:center; gap:10px;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#d6402f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+            <div style="font-weight:800; font-size:14.5px; color:#a3291b;">OSs reprovadas pela fiscalização CAGEPA</div>
+          </div>
+          <sc-for list="{{ invalidations }}" as="iv" hint-placeholder-count="4">
+            <div style="display:flex; align-items:center; gap:16px; padding:15px 18px; border-bottom:1px solid #f1f4f3;">
+              <span style="font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:14px;">{{ iv.os }}</span>
+              <div style="flex:1;"><div style="font-size:13.5px; font-weight:600;">{{ iv.motivo }}</div><div style="font-size:12px; color:#8a988f; margin-top:2px;">Inspetor: {{ iv.inspetor }} · {{ iv.data }}</div></div>
+              <button onClick="{{ iv.force }}" style="display:flex; align-items:center; gap:7px; padding:9px 15px; background:#0c2a20; color:#fff; border:none; border-radius:10px; font-weight:700; font-size:13px; cursor:pointer;" style-hover="background:#123c2c;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Forçar validação</button>
+            </div>
+          </sc-for>
+          <sc-if value="{{ invalEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; padding:40px; color:#a7b3ae;"><div style="font-size:30px;">✅</div><div style="font-size:13.5px; font-weight:600; margin-top:8px;">Nenhuma invalidação pendente</div></div>
+          </sc-if>
+        </div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- ========== M5 GERENCIAL ========== -->
+      <sc-if value="{{ isManagerial }}" hint-placeholder-val="{{ false }}">
+      <div style="padding:26px 32px; max-width:1320px; margin:0 auto; animation:gs-fade .3s ease;">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:14px;">
+          <div style="grid-column:span 2; background:#fff; border:1px solid #e4e9e7; border-radius:18px; padding:20px; display:flex; gap:24px;">
+            <div style="flex:1;"><div style="font-size:12.5px; font-weight:700; color:#6b7a73;">Produção bruta</div><div style="font-size:34px; font-weight:800; letter-spacing:-1px; margin-top:4px; font-family:'IBM Plex Mono',monospace;">1.240</div><div style="font-size:12.5px; color:#8a988f;">OSs executadas</div><div style="margin-top:8px; font-size:14px; font-weight:700; color:#0f1c17;">R$ 312.480</div></div>
+            <div style="width:1px; background:#eef2f0;"></div>
+            <div style="flex:1;"><div style="font-size:12.5px; font-weight:700; color:#0a7a55;">Produção validada</div><div style="font-size:34px; font-weight:800; letter-spacing:-1px; margin-top:4px; font-family:'IBM Plex Mono',monospace; color:#0a7a55;">812</div><div style="font-size:12.5px; color:#8a988f;">65,5% de conversão</div><div style="margin-top:8px; font-size:14px; font-weight:700; color:#0a7a55;">R$ 204.624</div></div>
+          </div>
+          <div style="background:#fff; border:1px solid #e4e9e7; border-radius:18px; padding:20px;"><div style="font-size:12.5px; font-weight:700; color:#6b7a73;">Impacto financeiro</div><div style="font-size:30px; font-weight:800; letter-spacing:-.8px; margin-top:6px; color:#d6402f; font-family:'IBM Plex Mono',monospace;">-R$ 107k</div><div style="font-size:12px; color:#8a988f; margin-top:4px;">glosa potencial em aberto</div></div>
+          <div style="background:linear-gradient(150deg,#0c2a20,#134734); border-radius:18px; padding:20px; color:#cfe3da;"><div style="font-size:12.5px; font-weight:700; color:#6ea992;">Prévia BM · {{ hub }}</div><div style="font-size:30px; font-weight:800; letter-spacing:-.8px; margin-top:6px; color:#34d399; font-family:'IBM Plex Mono',monospace;">R$ 204k</div><div style="font-size:12px; color:#8fbaa8; margin-top:4px;">a faturar no ciclo</div></div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:16px; margin-top:16px;">
+          <div style="background:#fff; border:1px solid #e4e9e7; border-radius:18px; padding:20px;">
+            <div style="font-weight:800; font-size:15px; margin-bottom:16px;">Funil de conversão diário</div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+              <sc-for list="{{ funnel }}" as="f" hint-placeholder-count="4">
+                <div>
+                  <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px;"><span style="font-weight:600;">{{ f.label }}</span><span style="font-family:'IBM Plex Mono',monospace; font-weight:700;">{{ f.value }}</span></div>
+                  <div style="height:26px; border-radius:8px; background:#f0f3f2; overflow:hidden;"><div style="{{ f.bar }}"></div></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="background:#fff; border:1px solid #e4e9e7; border-radius:18px; padding:20px;">
+            <div style="font-weight:800; font-size:15px; margin-bottom:16px;">Ranking de equipes</div>
+            <div style="display:flex; flex-direction:column; gap:14px;">
+              <sc-for list="{{ ranking }}" as="rk" hint-placeholder-count="5">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <span style="{{ rk.medal }}">{{ rk.pos }}</span>
+                  <span style="font-size:13.5px; font-weight:700; width:74px;">{{ rk.team }}</span>
+                  <div style="flex:1; height:11px; border-radius:6px; background:#f0f3f2; overflow:hidden;"><div style="{{ rk.bar }}"></div></div>
+                  <span style="font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px; width:38px; text-align:right;">{{ rk.value }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+    </main>
+  </div>
+
+  <!-- ================= FLOATING CHATBOT ================= -->
+  <sc-if value="{{ isManagerial }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; bottom:24px; right:24px; z-index:60;">
+    <sc-if value="{{ chatClosed }}" hint-placeholder-val="{{ true }}">
+      <button onClick="{{ toggleChat }}" style="width:60px; height:60px; border-radius:20px; background:linear-gradient(150deg,#10b981,#059669); border:none; cursor:pointer; box-shadow:0 12px 30px rgba(16,185,129,.4); display:flex; align-items:center; justify-content:center;" style-hover="transform:translateY(-2px);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+      </button>
+    </sc-if>
+    <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="width:380px; height:540px; background:#fff; border-radius:20px; box-shadow:0 24px 60px rgba(12,42,32,.3); border:1px solid #e4e9e7; display:flex; flex-direction:column; overflow:hidden; animation:gs-pop .25s ease;">
+        <div style="padding:15px 18px; background:linear-gradient(150deg,#0c2a20,#134734); color:#fff; display:flex; align-items:center; gap:11px;">
+          <div style="width:34px; height:34px; border-radius:10px; background:rgba(52,211,153,.2); display:flex; align-items:center; justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M2 12h4M18 12h4"/></svg></div>
+          <div style="flex:1;"><div style="font-weight:800; font-size:15px;">Assistente GeniOS</div><div style="font-size:11.5px; color:#8fbaa8;">● online · NLP integrado</div></div>
+          <button onClick="{{ toggleChat }}" style="border:none; background:rgba(255,255,255,.12); color:#fff; width:30px; height:30px; border-radius:9px; cursor:pointer; font-size:15px;">✕</button>
+        </div>
+        <div style="flex:1; overflow:auto; padding:16px; display:flex; flex-direction:column; gap:12px; background:#f7faf9;">
+          <sc-for list="{{ chatMsgs }}" as="m" hint-placeholder-count="2">
+            <div style="{{ m.wrap }}">
+              <div style="{{ m.bubble }}">
+                <div>{{ m.text }}</div>
+                <sc-if value="{{ m.isBm }}" hint-placeholder-val="{{ false }}">
+                  <div style="margin-top:10px; background:#fff; border:1px solid #e4e9e7; border-radius:12px; overflow:hidden;">
+                    <div style="padding:9px 12px; background:#f3f6f5; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:#6b7a73;">{{ m.bmTitle }}</div>
+                    <sc-for list="{{ m.bmRows }}" as="br" hint-placeholder-count="3">
+                      <div style="display:flex; justify-content:space-between; padding:8px 12px; border-top:1px solid #f1f4f3; font-size:12.5px;"><span style="color:#4b5852;">{{ br.k }}</span><span style="font-family:'IBM Plex Mono',monospace; font-weight:700;">{{ br.v }}</span></div>
+                    </sc-for>
+                    <div style="display:flex; justify-content:space-between; padding:10px 12px; border-top:2px solid #e4e9e7; background:#f7faf9;"><span style="font-weight:800; font-size:12.5px;">Total BM</span><span style="font-family:'IBM Plex Mono',monospace; font-weight:800; color:#0a7a55;">{{ m.bmTotal }}</span></div>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:12px; border-top:1px solid #eef2f0;">
+          <div style="display:flex; gap:7px; margin-bottom:9px; flex-wrap:wrap;">
+            <sc-for list="{{ chatSuggestions }}" as="sug" hint-placeholder-count="2">
+              <button onClick="{{ sug.onClick }}" style="padding:6px 11px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:20px; font-size:11.5px; font-weight:600; color:#4b5852; cursor:pointer;" style-hover="background:#e8f7f0;">{{ sug.text }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <input value="{{ chatInput }}" onChange="{{ onChatInput }}" onKeyDown="{{ onChatKey }}" placeholder="Pergunte sobre produção, BM, equipes…" style="flex:1; padding:11px 14px; border:1px solid #dbe3df; border-radius:12px; font-size:13.5px; outline:none;">
+            <button onClick="{{ sendChat }}" style="width:44px; border:none; background:#10b981; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;" style-hover="background:#059669;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7Z"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <!-- ================= ASSIGN MODAL ================= -->
+  <sc-if value="{{ assignModalOpen }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeAssign }}" style="position:fixed; inset:0; background:rgba(12,26,20,.5); z-index:70; display:flex; align-items:center; justify-content:center; animation:gs-fade .2s ease;">
+    <div onClick="{{ stop }}" style="width:460px; background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(0,0,0,.35); animation:gs-pop .25s ease;">
+      <div style="padding:20px 22px; border-bottom:1px solid #eef2f0;"><div style="font-size:18px; font-weight:800;">Atribuir despacho</div><div style="font-size:13px; color:#7b8a83; margin-top:2px;"><span style="font-family:'IBM Plex Mono',monospace; font-weight:700; color:#059669;">{{ selectedCount }}</span> OSs selecionadas no polígono</div></div>
+      <div style="padding:14px 22px; max-height:180px; overflow:auto;">
+        <sc-for list="{{ selectedList }}" as="so" hint-placeholder-count="3">
+          <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid #f4f6f5;"><span style="width:7px; height:7px; border-radius:50%; background:#f59e0b;"></span><span style="font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px;">{{ so.os }}</span><span style="font-size:12.5px; color:#8a988f;">{{ so.bairro }}</span></div>
+        </sc-for>
+      </div>
+      <div style="padding:6px 22px 20px;">
+        <div style="display:flex; gap:12px;">
+          <div style="flex:1;"><label style="font-size:12px; font-weight:700; color:#6b7a73;">Equipe</label><select value="{{ assignTeam }}" onChange="{{ onAssignTeam }}" style="width:100%; margin-top:6px; padding:11px 12px; border:1px solid #dbe3df; border-radius:11px; font-size:14px; font-weight:600;"><option value="">Selecione…</option><option>Equipe A</option><option>Equipe B</option><option>Equipe C</option><option>Equipe D</option><option>Equipe E</option></select></div>
+          <div style="flex:1;"><label style="font-size:12px; font-weight:700; color:#6b7a73;">Data</label><input type="date" value="2026-07-11" style="width:100%; margin-top:6px; padding:11px 12px; border:1px solid #dbe3df; border-radius:11px; font-size:14px; font-weight:600;"></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:18px;">
+          <button onClick="{{ closeAssign }}" style="flex:1; padding:12px; background:#f3f6f5; border:1px solid #e4e9e7; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer;">Cancelar</button>
+          <button onClick="{{ confirmAssign }}" style="{{ confirmBtnStyle }}">Atribuir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ================= CRITICAL WAREHOUSE MODAL ================= -->
+  <sc-if value="{{ criticalOpen }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed; inset:0; background:rgba(80,10,4,.42); z-index:70; display:flex; align-items:center; justify-content:center; animation:gs-fade .2s ease;">
+    <div style="width:460px; background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 30px 70px rgba(0,0,0,.4); border-top:5px solid #dc2626; animation:gs-pop .25s ease;">
+      <div style="padding:24px 24px 8px; text-align:center;">
+        <div style="width:58px; height:58px; margin:0 auto 14px; border-radius:50%; background:#fdeceb; display:flex; align-items:center; justify-content:center;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+        <div style="font-size:19px; font-weight:800; color:#a3170f;">Saída bloqueada</div>
+        <div style="font-size:13.5px; color:#6b7a73; margin-top:6px; line-height:1.5;">A quantidade solicitada excede a execução do dia anterior. A trava de histórico impediu o registro.</div>
+      </div>
+      <div style="margin:16px 24px; background:#fdf3f2; border:1px solid #f6d5d0; border-radius:14px; padding:14px 16px;">
+        <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:13.5px;"><span style="color:#6b7a73;">Kit</span><span style="font-weight:700;">{{ critKit }}</span></div>
+        <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:13.5px; border-top:1px solid #f6d5d0;"><span style="color:#6b7a73;">Solicitado</span><span style="font-family:'IBM Plex Mono',monospace; font-weight:800; color:#dc2626;">{{ critReq }} un.</span></div>
+        <div style="display:flex; justify-content:space-between; padding:5px 0; font-size:13.5px; border-top:1px solid #f6d5d0;"><span style="color:#6b7a73;">Executado ontem</span><span style="font-family:'IBM Plex Mono',monospace; font-weight:800;">{{ critPrev }} un.</span></div>
+      </div>
+      <div style="padding:4px 24px 22px; display:flex; gap:10px;">
+        <button onClick="{{ closeCritical }}" style="flex:1; padding:12px; background:#0c2a20; color:#fff; border:none; border-radius:12px; font-weight:800; font-size:14px; cursor:pointer;">Entendi, ajustar</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ================= TOAST ================= -->
+  <sc-if value="{{ toastMsg }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed; bottom:24px; left:50%; transform:translateX(-50%); z-index:80; background:#0c2a20; color:#fff; padding:13px 20px; border-radius:13px; box-shadow:0 12px 34px rgba(12,42,32,.35); display:flex; align-items:center; gap:10px; font-weight:700; font-size:14px; animation:gs-up .25s ease;">
+      <span style="width:22px; height:22px; border-radius:50%; background:#10b981; display:flex; align-items:center; justify-content:center; color:#04231a; font-size:13px;">✓</span>{{ toastMsg }}
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;tipoServico&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Todos&quot;,&quot;Relocação&quot;,&quot;Reposição&quot;],&quot;default&quot;:&quot;Todos&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Pendências&quot;}}">
+class Component extends DCLogic {
+  state = {
+    module: 'despacho',
+    pendSub: 'importacao', despSub: 'roteirizador',
+    expanded: { pend:false, desp:true },
+    createRotaOpen:false, rotaName:'', rotaColor:'#10b981', despTab:'roteirizar', listView:'card', operacao:'PSS',
+    pendencias:[
+      {id:1,os:'53172519',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'103059631',data:'2026-04-08 08:19:10',unidade:'COMERCIAL TERCEIROS JP 102',cidade:'JOÃO PESSOA',setor:23,quadra:340,lon:'-34,87611',lat:'-7,17693',prazo:240,abertura:'06/04/2026',decorrido:2304,atraso:-2064,equipe:'CARRO',prioridade:5,pp:11},
+      {id:2,os:'53172605',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'68668074',data:'2026-04-08 08:25:26',unidade:'COMERCIAL TERCEIROS JP 102',cidade:'JOÃO PESSOA',setor:85,quadra:722,lon:'-34,81539',lat:'-7,18187',prazo:240,abertura:'06/04/2026',decorrido:2304,atraso:-2064,equipe:'CARRO',prioridade:5,pp:11},
+      {id:3,os:'53172715',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'1339576',data:'2026-04-08 08:13:14',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:78,quadra:299,lon:'-34,80111',lat:'-7,17033',prazo:240,abertura:'06/04/2026',decorrido:2304,atraso:-2064,equipe:'CARRO',prioridade:5,pp:11},
+      {id:4,os:'53176338',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'8405310',data:'2026-04-08 14:29:37',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'CRUZ DO ESPIRITO SANTO',setor:1,quadra:285,lon:'-35,08356',lat:'-7,14050',prazo:240,abertura:'06/04/2026',decorrido:2304,atraso:-2064,equipe:'CARRO',prioridade:5,pp:11},
+      {id:5,os:'53183056',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'594903',data:'2026-04-07 09:31:47',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:6,quadra:5,lon:'-34,87865',lat:'-7,12753',prazo:240,abertura:'07/04/2026',decorrido:2280,atraso:-2040,equipe:'CARRO',prioridade:5,pp:11},
+      {id:6,os:'53191343',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'1073075',data:'2026-04-08 19:51:47',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'BAYEUX',setor:92,quadra:214,lon:'-34,92154',lat:'-7,13265',prazo:240,abertura:'08/04/2026',decorrido:2256,atraso:-2016,equipe:'CARRO',prioridade:5,pp:11},
+      {id:7,os:'53208732',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'68010424',data:'2026-04-10 10:58:21',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:83,quadra:215,lon:'-34,84382',lat:'-7,17399',prazo:240,abertura:'10/04/2026',decorrido:2208,atraso:-1968,equipe:'CARRO',prioridade:5,pp:11},
+      {id:8,os:'53209866',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'1301200',data:'2026-04-10 15:14:51',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:56,quadra:100,lon:'-34,85275',lat:'-7,10859',prazo:240,abertura:'10/04/2026',decorrido:2208,atraso:-1968,equipe:'CARRO',prioridade:5,pp:11},
+      {id:9,os:'53211034',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'68065787',data:'2026-04-11 10:04:03',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:1,quadra:10,lon:'-34,87757',lat:'-7,10826',prazo:240,abertura:'11/04/2026',decorrido:2184,atraso:-1944,equipe:'CARRO',prioridade:5,pp:11},
+      {id:10,os:'53222920',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'68008291',data:'2026-04-12 14:48:51',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'BAYEUX',setor:5,quadra:135,lon:'-34,93038',lat:'-7,12813',prazo:240,abertura:'12/04/2026',decorrido:2136,atraso:-1896,equipe:'CARRO',prioridade:5,pp:11},
+      {id:11,os:'53232971',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'103107841',data:'2026-04-14 10:45:25',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:20,quadra:555,lon:'-34,88480',lat:'-7,16514',prazo:240,abertura:'14/04/2026',decorrido:2112,atraso:-1872,equipe:'CARRO',prioridade:5,pp:11},
+      {id:12,os:'53234379',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'1342169',data:'2026-04-14 15:05:09',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:1,quadra:10,lon:'-34,87716',lat:'-7,16082',prazo:240,abertura:'14/04/2026',decorrido:2112,atraso:-1872,equipe:'MOTO',prioridade:5,pp:11},
+      {id:13,os:'53247091',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'103121035',data:'2026-04-16 08:37:40',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:61,quadra:425,lon:'-34,86532',lat:'-7,12985',prazo:240,abertura:'16/04/2026',decorrido:2064,atraso:-1824,equipe:'CARRO',prioridade:5,pp:11},
+      {id:14,os:'53249080',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'1362186',data:'2026-04-16 13:55:05',unidade:'COMERCIAL TERCEIROS JP 101',cidade:'JOÃO PESSOA',setor:78,quadra:298,lon:'-34,86104',lat:'-7,10983',prazo:240,abertura:'16/04/2026',decorrido:2064,atraso:-1824,equipe:'MOTO',prioridade:5,pp:11},
+      {id:15,os:'53250049',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'7687885',data:'2026-04-16 08:04:53',unidade:'COMERCIAL TERCEIROS JP 106',cidade:'CABEDELO',setor:30,quadra:55,lon:'-34,85125',lat:'-7,03700',prazo:240,abertura:'16/04/2026',decorrido:2064,atraso:-1824,equipe:'CARRO',prioridade:5,pp:11},
+      {id:16,os:'53252712',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'103127958',data:'2026-04-17 08:46:53',unidade:'COMERCIAL TERCEIROS JP 102',cidade:'JOÃO PESSOA',setor:11,quadra:215,lon:'-34,91499',lat:'-7,13356',prazo:240,abertura:'17/04/2026',decorrido:2040,atraso:-1800,equipe:'CARRO',prioridade:5,pp:11},
+      {id:17,os:'53273855',espec:'RELOC HID C/CX POLICARBO SOLIC II',imovel:'103144184',data:'2026-04-22 08:55:51',unidade:'COMERCIAL TERCEIROS JP 102',cidade:'JOÃO PESSOA',setor:75,quadra:335,lon:'-34,82054',lat:'-7,15944',prazo:240,abertura:'22/04/2026',decorrido:1920,atraso:-1680,equipe:'CARRO',prioridade:5,pp:11},
+    ], pendFilter:'todas',
+    equipes:[
+      {id:1,nome:'Equipe A',placa:'QRT-2A18',lider:'J. Andrade',membros:3,capacidade:42,regiao:'Zona Norte',cor:'#10b981',ativo:true},
+      {id:2,nome:'Equipe B',placa:'PXG-7C55',lider:'M. Souza',membros:2,capacidade:36,regiao:'Centro',cor:'#3b82f6',ativo:true},
+      {id:3,nome:'Equipe C',placa:'ORT-9988',lider:'D. Lima',membros:3,capacidade:40,regiao:'Zona Sul',cor:'#f59e0b',ativo:true},
+      {id:4,nome:'Equipe D',placa:'MNK-1042',lider:'F. Rocha',membros:2,capacidade:30,regiao:'Zona Leste',cor:'#a855f7',ativo:false},
+      {id:5,nome:'Equipe E',placa:'JHU-3376',lider:'R. Alves',membros:3,capacidade:38,regiao:'Bancários',cor:'#ec4899',ativo:true},
+    ],
+    hub: 'Polo 1 - Central',
+    importStage: 'idle', importPct: 0, alertsOpen: {},
+    filtersOpen: true, mapTool: 'cursor',
+    selectedIds: [], assignModalOpen: false, assignTeam: '',
+    activePin: null,
+    pins: [
+      {id:1,x:22,y:28,status:'pendente',os:'OS-48213',bairro:'Bessa'},
+      {id:2,x:30,y:37,status:'pendente',os:'OS-48219',bairro:'Bessa'},
+      {id:3,x:26,y:47,status:'pendente',os:'OS-48231',bairro:'Manaíra'},
+      {id:4,x:36,y:26,status:'atribuida',os:'OS-48120',bairro:'Tambaú'},
+      {id:5,x:44,y:33,status:'em_campo',os:'OS-48090',bairro:'Cabo Branco'},
+      {id:6,x:50,y:44,status:'prioridade',os:'OS-48301',bairro:'Centro'},
+      {id:7,x:62,y:30,status:'pendente',os:'OS-48333',bairro:'Torre'},
+      {id:8,x:70,y:38,status:'pendente',os:'OS-48340',bairro:'Torre'},
+      {id:9,x:58,y:52,status:'atribuida',os:'OS-48111',bairro:'Jaguaribe'},
+      {id:10,x:72,y:56,status:'em_campo',os:'OS-48077',bairro:'Cristo'},
+      {id:11,x:40,y:60,status:'pendente',os:'OS-48350',bairro:'Varadouro'},
+      {id:12,x:48,y:67,status:'pendente',os:'OS-48355',bairro:'Varadouro'},
+      {id:13,x:33,y:72,status:'prioridade',os:'OS-48299',bairro:'Roger'},
+      {id:14,x:78,y:32,status:'pendente',os:'OS-48360',bairro:'Bancários'},
+      {id:15,x:82,y:47,status:'atribuida',os:'OS-48150',bairro:'Bancários'},
+      {id:16,x:64,y:64,status:'pendente',os:'OS-48370',bairro:'Mangabeira'},
+    ],
+    whTeam:'', whKit:'', whQty:1,
+    criticalOpen:false, critKit:'', critReq:0, critPrev:0,
+    shipments:[
+      {id:1,kit:'Kit Ligação Simples',qty:14,to:'Polo 2 - Norte',team:'Equipe A',st:'transito'},
+      {id:2,kit:'Kit Hidrômetro',qty:8,to:'Polo 3 - Sul',team:'Equipe C',st:'preparando'},
+    ],
+    receipts:[
+      {id:1,kit:'Kit Religação',qty:10,from:'Polo 1 - Central'},
+      {id:2,kit:'Kit Supressão',qty:6,from:'Polo 1 - Central'},
+    ],
+    auditTab:'grade', editing:null,
+    auditRows:[
+      {id:1,os:'OS-48120',servico:'Ligação nova',equipe:'Equipe A',foto:true,status:'validada',valor:'R$ 252'},
+      {id:2,os:'OS-48090',servico:'Troca hidrômetro',equipe:'Equipe C',foto:false,status:'divergente',valor:'R$ 189'},
+      {id:3,os:'OS-48111',servico:'Religação',equipe:'Equipe B',foto:true,status:'pendente',valor:'R$ 133'},
+      {id:4,os:'OS-48301',servico:'Supressão',equipe:'—',foto:false,status:'divergente',valor:'R$ 210'},
+      {id:5,os:'OS-48150',servico:'Ligação nova',equipe:'Equipe A',foto:true,status:'validada',valor:'R$ 252'},
+      {id:6,os:'OS-48077',servico:'Vistoria',equipe:'Equipe D',foto:true,status:'validada',valor:'R$ 96'},
+      {id:7,os:'OS-48219',servico:'Troca hidrômetro',equipe:'Equipe B',foto:false,status:'pendente',valor:'R$ 189'},
+      {id:8,os:'OS-48231',servico:'Religação',equipe:'Equipe C',foto:true,status:'validada',valor:'R$ 133'},
+    ],
+    invalidations:[
+      {id:1,os:'OS-48301',motivo:'Foto ilegível — hidrômetro sem número visível',inspetor:'R. Nóbrega',data:'11/07'},
+      {id:2,os:'OS-48090',motivo:'Divergência de matrícula com cadastro GSAN',inspetor:'C. Farias',data:'11/07'},
+      {id:3,os:'OS-48355',motivo:'Serviço não corresponde ao executado em campo',inspetor:'R. Nóbrega',data:'10/07'},
+      {id:4,os:'OS-48370',motivo:'Ausência de coordenada válida (webscraper)',inspetor:'C. Farias',data:'10/07'},
+    ],
+    chatOpen:false, chatInput:'',
+    chatMsgs:[
+      {id:1,from:'bot',text:'Olá, Ana! Sou o assistente do GeniOS. Posso trazer prévias de BM, produção por equipe e status de conversão. O que você precisa?'},
+    ],
+    toastMsg:'',
+  };
+
+  componentWillUnmount(){ if(this._iv) clearInterval(this._iv); if(this._t) clearTimeout(this._t); }
+  toast(m){ this.setState({toastMsg:m}); if(this._t) clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toastMsg:''}),2600); }
+
+  startImport(){
+    this.setState({importStage:'processing', importPct:0});
+    if(this._iv) clearInterval(this._iv);
+    this._iv=setInterval(()=>{
+      this.setState(s=>{
+        const n=Math.min(100, s.importPct+(s.importPct<70?7:4));
+        if(n>=100){ clearInterval(this._iv); setTimeout(()=>this.setState({importStage:'done'}),350); }
+        return {importPct:n};
+      });
+    },140);
+  }
+  resetImport(){ this.setState({importStage:'idle', importPct:0}); }
+
+  selectTool(t){
+    if(t==='poligono'||t==='raio'){
+      const ids=this.state.pins.filter(p=>p.status==='pendente'&&p.x>=56&&p.x<=84&&p.y>=26&&p.y<=48).map(p=>p.id);
+      this.setState({mapTool:t, selectedIds:ids, activePin:null});
+    } else { this.setState({mapTool:t, selectedIds:[]}); }
+  }
+  clearSelection(){ this.setState({selectedIds:[], mapTool:'cursor'}); }
+  openAssign(){ this.setState({assignModalOpen:true}); }
+  closeAssign(){ this.setState({assignModalOpen:false}); }
+  confirmAssign(){
+    if(!this.state.assignTeam) return;
+    const set=new Set(this.state.selectedIds);
+    this.setState(s=>({ pins:s.pins.map(p=>set.has(p.id)?{...p,status:'atribuida'}:p), assignModalOpen:false, selectedIds:[], mapTool:'cursor', assignTeam:'' }));
+    this.toast('Despacho atribuído — pins atualizados');
+  }
+  clickPin(id){ this.setState(s=>({activePin: s.activePin===id?null:id, selectedIds:[]})); }
+  closePin(){ this.setState({activePin:null}); }
+  markPriority(){ const id=this.state.activePin; this.setState(s=>({pins:s.pins.map(p=>p.id===id?{...p,status:'prioridade'}:p), activePin:null})); this.toast('OS marcada como prioridade'); }
+  changeTeamPin(){ const id=this.state.activePin; this.setState(s=>({pins:s.pins.map(p=>p.id===id?{...p,status:'atribuida'}:p), activePin:null})); this.toast('Serviço/equipe atualizado'); }
+  exportRpa(){ this.toast('Arquivo RPA gerado — download iniciado'); }
+
+  registerKit(){
+    const {whKit,whQty,whTeam}=this.state;
+    if(!whKit||!whTeam){ this.toast('Selecione equipe e kit'); return; }
+    const prevMap={'Kit Ligação Simples':20,'Kit Hidrômetro':15,'Kit Supressão':8,'Kit Religação':12};
+    const prev=prevMap[whKit]??0; const req=Number(whQty)||0;
+    if(req>prev){ this.setState({criticalOpen:true, critKit:whKit, critReq:req, critPrev:prev}); return; }
+    this.setState(s=>({shipments:[{id:Date.now(),kit:whKit,qty:req,to:'Polo 2 - Norte',team:whTeam,st:'preparando'},...s.shipments], whQty:1}));
+    this.toast('Saída registrada');
+  }
+  closeCritical(){ this.setState({criticalOpen:false}); }
+  receiveCargo(id){ this.setState(s=>({receipts:s.receipts.filter(r=>r.id!==id)})); this.toast('Carga recebida e confirmada'); }
+
+  editCell(id,field){ this.setState({editing:{id,field}}); }
+  updateCell(id,field,val){ this.setState(s=>({auditRows:s.auditRows.map(r=>r.id===id?{...r,[field]:val}:r)})); }
+  commitCell(){ this.setState({editing:null}); }
+  toggleFoto(id){ this.setState(s=>({auditRows:s.auditRows.map(r=>r.id===id?{...r,foto:!r.foto}:r)})); }
+  forceValidate(id){ this.setState(s=>({invalidations:s.invalidations.filter(i=>i.id!==id)})); this.toast('Validação forçada — OS reintegrada ao BM'); }
+
+  botReply(q){
+    const t=(q||'').toLowerCase();
+    if(t.includes('bm')||t.includes('boletim')||t.includes('medi')||t.includes('polo 2')){
+      return {id:Date.now()+1,from:'bot',text:'Aqui está a prévia do Boletim de Medição para o Polo 2 (Norte):',bm:true,
+        bmTitle:'Prévia BM · Polo 2 - Norte',
+        bmRows:[{k:'Ligações executadas',v:'312'},{k:'Validadas',v:'268'},{k:'Conversão',v:'85,9%'},{k:'Glosa estimada',v:'R$ 11.088'}],
+        bmTotal:'R$ 84.320,00'};
+    }
+    if(t.includes('equipe')||t.includes('ranking')||t.includes('produ')){
+      return {id:Date.now()+1,from:'bot',text:'A Equipe A lidera hoje com 214 OSs validadas (94% de conversão), seguida da Equipe C com 188. A Equipe D está com a menor conversão (61%) — vale revisar as fotos pendentes.'};
+    }
+    if(t.includes('glosa')||t.includes('impacto')||t.includes('financ')){
+      return {id:Date.now()+1,from:'bot',text:'O impacto financeiro em aberto é de R$ 107 mil em glosa potencial, concentrado em 428 OSs divergentes. Cerca de 60% são resolvíveis por reanexo de foto.'};
+    }
+    return {id:Date.now()+1,from:'bot',text:'Posso ajudar com: prévia de BM por polo, ranking de equipes, conversão diária e impacto de glosa. Tente perguntar “Prévia do BM do Polo 2”.'};
+  }
+  pushChat(text){
+    if(!text||!text.trim()) return;
+    const u={id:Date.now(),from:'user',text:text.trim()};
+    this.setState(s=>({chatMsgs:[...s.chatMsgs,u], chatInput:''}));
+    const reply=this.botReply(text);
+    setTimeout(()=>this.setState(s=>({chatMsgs:[...s.chatMsgs,reply]})),650);
+  }
+
+  toggleGroup(g){ this.setState(st=>({expanded:{...st.expanded,[g]:!st.expanded[g]}})); }
+  goPend(sub){ this.setState(st=>({module:'importacao', pendSub:sub, expanded:{...st.expanded,pend:true}})); }
+  goDesp(sub){ this.setState(st=>({module:'despacho', despSub:sub, expanded:{...st.expanded,desp:true}})); }
+  resolvePend(id){ this.setState(st=>({pendencias:st.pendencias.filter(p=>p.id!==id)})); this.toast('Pendência resolvida'); }
+  toggleEquipe(id){ this.setState(st=>({equipes:st.equipes.map(e=>e.id===id?{...e,ativo:!e.ativo}:e)})); }
+  openCreateRota(){ this.setState({createRotaOpen:true}); }
+  closeCreateRota(){ this.setState({createRotaOpen:false}); }
+  saveRota(){ this.setState({createRotaOpen:false, rotaName:'', selectedIds:[], mapTool:'cursor'}); this.toast('Rota criada e serviços atribuídos'); }
+
+  renderVals(){
+    const s=this.state;
+    const stColors={pendente:'#f59e0b',atribuida:'#10b981',em_campo:'#3b82f6',prioridade:'#ef4444'};
+    const stLabels={pendente:'Pendente',atribuida:'Atribuída',em_campo:'Em campo',prioridade:'Prioridade'};
+
+    const navStyle=(active)=>'display:flex; align-items:center; gap:11px; padding:11px 12px; border:none; border-radius:11px; cursor:pointer; font-size:13.5px; font-weight:700; width:100%; transition:background .15s; background:'+(active?'rgba(52,211,153,.12)':'transparent')+'; color:'+(active?'#ffffff':'#aec4bb')+';';
+    const ico=(active)=>'display:flex; color:'+(active?'#34d399':'#7fa695')+';';
+    const chev=(open)=>'font-size:17px; line-height:1; color:#6f8f81; transition:transform .2s; transform:rotate('+(open?'90deg':'0')+');';
+    const subStyle=(active)=>'display:flex; align-items:center; gap:9px; padding:9px 11px; border:none; border-radius:9px; cursor:pointer; font-size:12.5px; font-weight:'+(active?'700':'600')+'; width:100%; text-align:left; transition:background .15s; background:'+(active?'rgba(52,211,153,.14)':'transparent')+'; color:'+(active?'#eafff6':'#8fb0a3')+';';
+    const subDot=(active)=>'width:5px; height:5px; border-radius:50%; flex:0 0 5px; background:'+(active?'#34d399':'#4a6357')+';';
+    const m=s.module;
+
+    const titles={importacao: s.pendSub==='gerenciar'?['Gerenciar Pendências','Resolução de divergências da importação']:['Importação de OS','Processamento da planilha GSAN diária'],
+      despacho: s.despSub==='config'?['Configurações · Equipes','Cadastro e capacidade das equipes de campo']:['Roteirizador','Mesa de operações — '+s.hub],
+      almoxarifado:['Almoxarifado Inteligente','Operação rápida de kits — '+s.hub],
+      auditoria:['Auditoria & Fechamento','Grade de execução no estilo planilha'],
+      gerencial:['Painel Gerencial','Visão executiva e assistente virtual']};
+
+    const alertDef=[
+      {id:'a1',tag:'CARACTERE',tagBg:'#fdf0dc',tagFg:'#b9760a',os:'OS-48291',title:'Caractere inválido no logradouro ("Rua Jo�o Pessoa")',detail:'A célula do endereço contém um caractere não reconhecido (0xFFFD) que impede o geocode. Registro importado, porém sem coordenada. Corrija o encoding da planilha ou edite manualmente na grade de auditoria.'},
+      {id:'a2',tag:'MATRÍCULA',tagBg:'#fdeceb',tagFg:'#c0392b',os:'OS-48340',title:'Divergência de matrícula com o cadastro GSAN',detail:'A matrícula 88.412-3 não corresponde ao titular ativo na base. Possível OS duplicada ou religação indevida. Verifique com a equipe de cadastro antes do despacho.'},
+      {id:'a3',tag:'DUPLICADO',tagBg:'#eef2f0',tagFg:'#6b7a73',os:'OS-48219',title:'Possível duplicidade — mesma matrícula em 2 OSs abertas',detail:'Detectadas 2 OSs abertas para a mesma matrícula na janela de 48h. Mantida a mais recente no upsert; a anterior foi sinalizada para revisão manual.'},
+    ].map(a=>({tag:a.tag,os:a.os,title:a.title,detail:a.detail,open:!!s.alertsOpen[a.id],
+      toggle:()=>this.setState(st=>({alertsOpen:{...st.alertsOpen,[a.id]:!st.alertsOpen[a.id]}})),
+      tagStyle:'padding:3px 9px; border-radius:7px; font-size:10.5px; font-weight:800; letter-spacing:.03em; background:'+a.tagBg+'; color:'+a.tagFg+';',
+      chev:'font-size:20px; color:#b7c2bc; transition:transform .2s; transform:rotate('+(s.alertsOpen[a.id]?'90deg':'0')+');'}));
+
+    const importSteps=[
+      {k:0,label:'Lendo planilha e normalizando encoding'},
+      {k:25,label:'Filtrando unidades dentro do escopo do contrato'},
+      {k:55,label:'Upsert de OSs no banco (novas + atualizações)'},
+      {k:85,label:'Validando integridade e gerando alertas'},
+    ].map(st=>{
+      const done=s.importPct>st.k+15, active=!done && s.importPct>=st.k;
+      return {label:st.label, mark:done?'✓':'',
+        dot:'width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex:0 0 22px; '+(done?'background:#10b981; color:#fff;':(active?'background:#fff; border:2px solid #10b981; color:#10b981;':'background:#eef2f0; color:#b7c2bc;')),
+        text:'font-size:13.5px; font-weight:'+(active?'700':'500')+'; color:'+(done?'#0f1c17':(active?'#0f1c17':'#a7b3ae'))+';'};
+    });
+
+    const pinList=s.pins.map(p=>{
+      const sel=s.selectedIds.includes(p.id); const c=stColors[p.status];
+      return {onClick:()=>this.clickPin(p.id), selected:sel,
+        style:'position:absolute; left:'+p.x+'%; top:'+p.y+'%; transform:translate(-50%,-50%); width:18px; height:18px; border-radius:50% 50% 50% 0; rotate:45deg; border:2.5px solid #fff; background:'+c+'; cursor:pointer; padding:0; z-index:'+(sel?25:10)+'; box-shadow:0 3px 6px rgba(0,0,0,.28);'+(p.status==='prioridade'?' animation:gs-pulse 1.4s ease-in-out infinite;':'')};
+    });
+
+    const legendCounts={};
+    Object.keys(stLabels).forEach(k=>legendCounts[k]=s.pins.filter(p=>p.status===k).length);
+    const statusLegend=Object.keys(stLabels).map(k=>({label:stLabels[k],count:legendCounts[k],
+      dot:'width:11px; height:11px; border-radius:50%; background:'+stColors[k]+'; flex:0 0 11px;'}));
+
+    const toolStyle=(active)=>'width:38px; height:38px; border:none; border-radius:9px; cursor:pointer; display:flex; align-items:center; justify-content:center; background:'+(active?'#0c2a20':'#f3f6f5')+'; color:'+(active?'#34d399':'#4b5852')+';';
+
+    const ap=s.pins.find(p=>p.id===s.activePin);
+    const popoverStyle=ap?('position:absolute; left:'+Math.min(ap.x,72)+'%; top:'+ap.y+'%; transform:translateY(14px); width:230px; background:#fff; border:1px solid #e4e9e7; border-radius:15px; padding:14px; box-shadow:0 14px 40px rgba(12,42,32,.24); z-index:40; animation:gs-pop .2s ease;'):'';
+    const selectedList=s.pins.filter(p=>s.selectedIds.includes(p.id));
+
+    const prevMap={'Kit Ligação Simples':20,'Kit Hidrômetro':15,'Kit Supressão':8,'Kit Religação':12};
+    const prevDayList=Object.keys(prevMap).map(k=>({kit:k,qty:prevMap[k]}));
+    const shipments=s.shipments.map(sh=>({kit:sh.kit,qty:sh.qty,to:sh.to,team:sh.team,
+      statusLabel:sh.st==='transito'?'Em trânsito':'Preparando',
+      badge:'padding:3px 9px; border-radius:20px; font-size:11px; font-weight:800; '+(sh.st==='transito'?'background:#e7effc; color:#2563eb;':'background:#fdf0dc; color:#b9760a;')}));
+    const receipts=s.receipts.map(r=>({kit:r.kit,qty:r.qty,from:r.from,receive:()=>this.receiveCargo(r.id)}));
+
+    const statusMap={validada:['Validada','#e8f7f0','#0a7a55'],pendente:['Pendente','#fdf0dc','#b9760a'],divergente:['Divergente','#fdeceb','#c0392b']};
+    const auditRows=s.auditRows.map((r,i)=>{
+      const editingServ=!!s.editing&&s.editing.id===r.id&&s.editing.field==='servico';
+      const editingEq=!!s.editing&&s.editing.id===r.id&&s.editing.field==='equipe';
+      const sm=statusMap[r.status];
+      const cellBase='padding:0 14px; display:flex; align-items:center; font-size:13.5px; font-weight:600; cursor:pointer; border-left:1px solid #f4f6f5;';
+      return {os:r.os, servico:r.servico, equipe:r.equipe, valor:r.valor,
+        rowStyle:'display:grid; grid-template-columns:120px 1.4fr 1fr 96px 130px 120px; min-height:46px; border-bottom:1px solid #f1f4f3; background:'+(i%2?'#fbfcfc':'#fff')+';',
+        editingServ, notEditingServ:!editingServ, editingEq, notEditingEq:!editingEq,
+        servCell:cellBase+(editingServ?' padding:6px 10px;':''),
+        eqCell:cellBase+(editingEq?' padding:6px 10px;':''),
+        editServ:()=>this.editCell(r.id,'servico'),
+        editEq:()=>this.editCell(r.id,'equipe'),
+        onServ:(e)=>this.updateCell(r.id,'servico',e.target.value),
+        onEq:(e)=>{this.updateCell(r.id,'equipe',e.target.value); this.commitCell();},
+        commit:()=>this.commitCell(),
+        toggleFoto:()=>this.toggleFoto(r.id),
+        fotoLabel:r.foto?'✓ OK':'✕ Falta',
+        fotoStyle:'padding:5px 10px; border-radius:8px; border:none; cursor:pointer; font-size:12px; font-weight:800; '+(r.foto?'background:#e8f7f0; color:#0a7a55;':'background:#fdeceb; color:#c0392b;'),
+        statusLabel:sm[0], statusStyle:'padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:800; background:'+sm[1]+'; color:'+sm[2]+';'};
+    });
+    const invalidations=s.invalidations.map(iv=>({os:iv.os,motivo:iv.motivo,inspetor:iv.inspetor,data:iv.data,force:()=>this.forceValidate(iv.id)}));
+    const tabActive='padding:11px 18px; border:none; background:none; cursor:pointer; font-size:14px; font-weight:800; color:#0c2a20; border-bottom:3px solid #10b981;';
+    const tabIdle='padding:11px 18px; border:none; background:none; cursor:pointer; font-size:14px; font-weight:700; color:#8a988f; border-bottom:3px solid transparent;';
+
+    const funnelDef=[{label:'Importadas',value:1240,c:'#93b7ab'},{label:'Roteirizadas',value:1120,c:'#4ec99a'},{label:'Executadas',value:940,c:'#10b981'},{label:'Validadas',value:812,c:'#059669'}];
+    const funnel=funnelDef.map(f=>({label:f.label,value:f.value.toLocaleString('pt-BR'),
+      bar:'height:100%; width:'+(f.value/1240*100)+'%; background:'+f.c+'; border-radius:8px; animation:gs-bar .8s ease;'}));
+    const rankDef=[{team:'Equipe A',value:214},{team:'Equipe C',value:188},{team:'Equipe B',value:171},{team:'Equipe E',value:142},{team:'Equipe D',value:97}];
+    const medals=['#f0b429','#9fb3ab','#c88a4a','#cdd6d2','#cdd6d2'];
+    const ranking=rankDef.map((r,i)=>({team:r.team,value:r.value,pos:i+1,
+      medal:'width:24px; height:24px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:'+(i<3?'#04231a':'#6b7a73')+'; background:'+medals[i]+';',
+      bar:'height:100%; width:'+(r.value/214*100)+'%; background:'+(i===0?'#059669':'#10b981')+'; border-radius:6px; animation:gs-bar .8s ease;'}));
+
+    const chatMsgs=s.chatMsgs.map(msg=>{
+      const isUser=msg.from==='user';
+      return {text:msg.text, isBm:!!msg.bm, bmTitle:msg.bmTitle, bmRows:msg.bmRows||[], bmTotal:msg.bmTotal,
+        wrap:'display:flex; '+(isUser?'justify-content:flex-end;':'justify-content:flex-start;'),
+        bubble:'max-width:82%; padding:11px 14px; border-radius:15px; font-size:13.5px; line-height:1.5; '+(isUser?'background:#0c2a20; color:#fff; border-bottom-right-radius:5px;':'background:#fff; color:#0f1c17; border:1px solid #e4e9e7; border-bottom-left-radius:5px;')};
+    });
+    const chatSuggestions=[
+      {text:'Prévia do BM do Polo 2',onClick:()=>this.pushChat('Prévia do BM do Polo 2')},
+      {text:'Ranking de equipes',onClick:()=>this.pushChat('Ranking de equipes hoje')},
+      {text:'Impacto de glosa',onClick:()=>this.pushChat('Qual o impacto de glosa?')},
+    ];
+
+    // ---- Pendências ----
+    const equipeCount=(k)=>s.pendencias.filter(p=>p.equipe===k).length;
+    const filterDefs=[['todas','Todas',s.pendencias.length],['CARRO','Carro',equipeCount('CARRO')],['MOTO','Moto',equipeCount('MOTO')]];
+    const pendFilterTabs=filterDefs.map(([k,label,count])=>({label,count,onClick:()=>this.setState({pendFilter:k}),
+      style:'padding:8px 14px; border:1px solid '+(s.pendFilter===k?'#0c2a20':'#e4e9e7')+'; border-radius:11px; cursor:pointer; font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px; background:'+(s.pendFilter===k?'#0c2a20':'#fff')+'; color:'+(s.pendFilter===k?'#fff':'#4b5852')+';',
+      countStyle:'font-family:\'IBM Plex Mono\',monospace; font-size:11.5px; font-weight:700; padding:1px 7px; border-radius:10px; background:'+(s.pendFilter===k?'rgba(52,211,153,.25)':'#f0f3f2')+'; color:'+(s.pendFilter===k?'#bff0dc':'#6b7a73')+';'}));
+    // Tipo de serviço (Relocação / Reposição) — deriva por OS
+    const reposIds=new Set([3,6,9,12,15]);
+    const tipoDe=(p)=>reposIds.has(p.id)?'reposicao':'relocacao';
+    const tipoServico=this.props.tipoServico ?? 'Todos';
+    const pendComTipo=s.pendencias.map(p=>({...p,tipo:tipoDe(p)}));
+    const tipoCount=(k)=>pendComTipo.filter(p=>p.tipo===k).length;
+    const pendVisible=pendComTipo
+      .filter(p=>s.pendFilter==='todas'||p.equipe===s.pendFilter)
+      .filter(p=>tipoServico==='Todos'||(tipoServico==='Relocação'&&p.tipo==='relocacao')||(tipoServico==='Reposição'&&p.tipo==='reposicao'));
+    const pendItems=pendVisible.map((p,i)=>({os:p.os,espec:p.tipo==='reposicao'?p.espec.replace('RELOC HID','REPOSIÇÃO HID'):p.espec,imovel:p.imovel,data:p.data,unidade:p.unidade,cidade:p.cidade,setor:p.setor,quadra:p.quadra,lon:p.lon,lat:p.lat,prazo:p.prazo,abertura:p.abertura,decorrido:p.decorrido,atraso:p.atraso,equipe:p.equipe,prioridade:p.prioridade,pp:p.pp,
+      tipoLabel:p.tipo==='reposicao'?'Reposição':'Relocação',
+      tipoStyle:'padding:3px 10px; border-radius:6px; font-size:11px; font-weight:800; letter-spacing:.02em; white-space:nowrap; background:'+(p.tipo==='reposicao'?'#fdf0dc':'#eef2f0')+'; color:'+(p.tipo==='reposicao'?'#b9760a':'#4b5852')+';',
+      trStyle:'border-bottom:1px solid #f1f4f3; background:'+(i%2?'#fbfcfc':'#fff')+';',
+      equipeStyle:'padding:3px 10px; border-radius:6px; font-size:11px; font-weight:800; letter-spacing:.03em; background:'+(p.equipe==='MOTO'?'#e7effc':'#eef2f0')+'; color:'+(p.equipe==='MOTO'?'#2563eb':'#4b5852')+';',
+      resolve:()=>this.resolvePend(p.id)}));
+
+    // ---- Equipes ----
+    const equipeCards=s.equipes.map(e=>({nome:e.nome,placa:e.placa,lider:e.lider,membros:e.membros,capacidade:e.capacidade,regiao:e.regiao,ativo:e.ativo,
+      stripe:'height:5px; background:'+e.cor+';',
+      dot:'width:10px; height:10px; border-radius:50%; background:'+e.cor+'; flex:0 0 10px;',
+      statusStyle:'padding:3px 10px; border-radius:20px; font-size:11px; font-weight:800; background:'+(e.ativo?'#e8f7f0':'#eef2f0')+'; color:'+(e.ativo?'#0a7a55':'#8a988f')+';',
+      statusLabel:e.ativo?'Ativa':'Inativa',
+      switchStyle:'width:40px; height:23px; border-radius:20px; border:none; cursor:pointer; position:relative; transition:background .2s; background:'+(e.ativo?'#10b981':'#cdd6d2')+';',
+      knobStyle:'position:absolute; top:3px; left:'+(e.ativo?'20px':'3px')+'; width:17px; height:17px; border-radius:50%; background:#fff; transition:left .2s; box-shadow:0 1px 3px rgba(0,0,0,.2);',
+      capBar:'height:100%; width:'+Math.min(100,e.capacidade/50*100)+'%; background:'+e.cor+'; border-radius:5px;',
+      toggle:()=>this.toggleEquipe(e.id)}));
+
+    // ---- Despacho bottom tabs (routech style) ----
+    const cnt=(st)=>s.pins.filter(p=>p.status===st).length;
+    const tabDefs=[['roteirizar','A Roteirizar',cnt('pendente'),'#0a7a55'],['atendido','Não atendido',0,'#6b7a73'],['agendamento','Agendamento',0,'#6b7a73'],['erros','Erros',0,'#c0392b'],['emrota','Em rota',cnt('em_campo')+cnt('atribuida'),'#2563eb']];
+    const despTabs=tabDefs.map(([k,label,count,color])=>({label,count,onClick:()=>this.setState({despTab:k}),
+      style:'display:flex; align-items:center; gap:8px; padding:12px 16px; border:none; background:none; cursor:pointer; font-size:13px; font-weight:700; border-bottom:2.5px solid '+(s.despTab===k?'#10b981':'transparent')+'; color:'+(s.despTab===k?'#0c2a20':'#8a988f')+';',
+      countStyle:'font-family:\'IBM Plex Mono\',monospace; font-size:11px; font-weight:800; min-width:18px; height:18px; padding:0 5px; border-radius:9px; display:flex; align-items:center; justify-content:center; color:#fff; background:'+color+';'}));
+
+    return {
+      togglePend:()=>this.toggleGroup('pend'), toggleDesp:()=>this.toggleGroup('desp'),
+      goPendImport:()=>this.goPend('importacao'), goPendGerenciar:()=>this.goPend('gerenciar'),
+      goDespRot:()=>this.goDesp('roteirizador'), goDespConfig:()=>this.goDesp('config'),
+      goAlmox:()=>this.setState({module:'almoxarifado'}), goAudit:()=>this.setState({module:'auditoria'}),
+      goGerencial:()=>this.setState({module:'gerencial'}),
+      navPend:navStyle(m==='importacao'), navDesp:navStyle(m==='despacho'), navAlmox:navStyle(m==='almoxarifado'), navAudit:navStyle(m==='auditoria'), navGerencial:navStyle(m==='gerencial'),
+      icoPend:ico(m==='importacao'), icoDesp:ico(m==='despacho'), icoAlmox:ico(m==='almoxarifado'), icoAudit:ico(m==='auditoria'), icoGerencial:ico(m==='gerencial'),
+      pendExpanded:s.expanded.pend, despExpanded:s.expanded.desp, chevPend:chev(s.expanded.pend), chevDesp:chev(s.expanded.desp),
+      subPendImport:subStyle(m==='importacao'&&s.pendSub==='importacao'), subPendGerenciar:subStyle(m==='importacao'&&s.pendSub==='gerenciar'),
+      subDespRot:subStyle(m==='despacho'&&s.despSub==='roteirizador'), subDespConfig:subStyle(m==='despacho'&&s.despSub==='config'),
+      dotPendImport:subDot(m==='importacao'&&s.pendSub==='importacao'), dotPendGerenciar:subDot(m==='importacao'&&s.pendSub==='gerenciar'),
+      dotDespRot:subDot(m==='despacho'&&s.despSub==='roteirizador'), dotDespConfig:subDot(m==='despacho'&&s.despSub==='config'),
+      showPendImport:m==='importacao'&&s.pendSub==='importacao', showPendGerenciar:m==='importacao'&&s.pendSub==='gerenciar',
+      showRoteirizador:m==='despacho'&&s.despSub==='roteirizador', showConfig:m==='despacho'&&s.despSub==='config',
+      operacao:s.operacao, onOperacao:(e)=>this.setState({operacao:e.target.value}),
+      createRotaOpen:s.createRotaOpen, openCreateRota:()=>this.openCreateRota(), closeCreateRota:()=>this.closeCreateRota(), saveRota:()=>this.saveRota(),
+      rotaName:s.rotaName, onRotaName:(e)=>this.setState({rotaName:e.target.value}), rotaColor:s.rotaColor, onRotaColor:(e)=>this.setState({rotaColor:e.target.value}),
+      listCard:s.listView==='card', listLista:s.listView==='lista', setCard:()=>this.setState({listView:'card'}), setLista:()=>this.setState({listView:'lista'}),
+      cardTabStyle:'padding:7px 13px; border:none; border-radius:8px; cursor:pointer; font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:6px; background:'+(s.listView==='card'?'#0c2a20':'transparent')+'; color:'+(s.listView==='card'?'#34d399':'#4b5852')+';',
+      listaTabStyle:'padding:7px 13px; border:none; border-radius:8px; cursor:pointer; font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:6px; background:'+(s.listView==='lista'?'#0c2a20':'transparent')+'; color:'+(s.listView==='lista'?'#34d399':'#4b5852')+';',
+      pendItems:pendItems, pendFilterTabs:pendFilterTabs, pendVisibleCount:pendVisible.length, pendEmpty:pendVisible.length===0,
+      equipeCards:equipeCards, equipeActiveCount:s.equipes.filter(e=>e.ativo).length,
+      despTabs:despTabs,
+      hub:s.hub, onHubChange:(e)=>this.setState({hub:e.target.value}),
+      pageTitle:titles[m][0], pageSub:titles[m][1],
+      isImport:m==='importacao', isDespacho:m==='despacho', isWarehouse:m==='almoxarifado', isAudit:m==='auditoria', isManagerial:m==='gerencial',
+      toastMsg:s.toastMsg, stop:(e)=>e.stopPropagation(),
+      importIdle:s.importStage==='idle', importProcessing:s.importStage==='processing', importDone:s.importStage==='done',
+      startImport:()=>this.startImport(), resetImport:()=>this.resetImport(),
+      importPct:s.importPct, importBarStyle:'height:100%; width:'+s.importPct+'%; background:linear-gradient(90deg,#34d399,#059669); border-radius:5px; transition:width .14s;',
+      importSteps, skeletons:[1,2,3,4], alerts:alertDef,
+      filtersOpen:s.filtersOpen, filtersClosed:!s.filtersOpen, toggleFilters:()=>this.setState(st=>({filtersOpen:!st.filtersOpen})),
+      pinCount:s.pins.length, statusLegend, pinList,
+      goCursor:()=>this.selectTool('cursor'), goPoly:()=>this.selectTool('poligono'), goRadius:()=>this.selectTool('raio'),
+      toolCursor:toolStyle(s.mapTool==='cursor'), toolPoly:toolStyle(s.mapTool==='poligono'), toolRadius:toolStyle(s.mapTool==='raio'),
+      showSelectRect:s.selectedIds.length>0 && (s.mapTool==='poligono'||s.mapTool==='raio'),
+      hasSelection:s.selectedIds.length>0, selectedCount:s.selectedIds.length, selectedList,
+      clearSelection:()=>this.clearSelection(), openAssign:()=>this.openAssign(),
+      assignModalOpen:s.assignModalOpen, closeAssign:()=>this.closeAssign(),
+      assignTeam:s.assignTeam, onAssignTeam:(e)=>this.setState({assignTeam:e.target.value}), confirmAssign:()=>this.confirmAssign(),
+      confirmBtnStyle:'flex:1; padding:12px; background:'+(s.assignTeam?'#10b981':'#a9d9c7')+'; color:'+(s.assignTeam?'#04231a':'#fff')+'; border:none; border-radius:12px; font-weight:800; font-size:14px; cursor:'+(s.assignTeam?'pointer':'not-allowed')+';',
+      activePinObj:!!ap, popoverStyle,
+      activePinOs:ap?ap.os:'', activePinBairro:ap?ap.bairro:'', activePinStatus:ap?stLabels[ap.status]:'',
+      popDot:ap?('width:9px; height:9px; border-radius:50%; background:'+stColors[ap.status]+';'):'',
+      markPriority:()=>this.markPriority(), changeTeam:()=>this.changeTeamPin(), closePin:()=>this.closePin(), exportRpa:()=>this.exportRpa(),
+      whTeam:s.whTeam, whKit:s.whKit, whQty:s.whQty,
+      onWhTeam:(e)=>this.setState({whTeam:e.target.value}), onWhKit:(e)=>this.setState({whKit:e.target.value}), onWhQty:(e)=>this.setState({whQty:e.target.value}),
+      registerKit:()=>this.registerKit(), prevDayList,
+      shipments, shipCount:s.shipments.length, receipts, recvCount:s.receipts.length,
+      hasReceipts:s.receipts.length>0, noReceipts:s.receipts.length===0,
+      criticalOpen:s.criticalOpen, critKit:s.critKit, critReq:s.critReq, critPrev:s.critPrev, closeCritical:()=>this.closeCritical(),
+      triggerClosingUpload:()=>this.toast('Planilha de fechamento recebida'),
+      auditGrade:s.auditTab==='grade', auditInval:s.auditTab==='inval',
+      goTabGrade:()=>this.setState({auditTab:'grade'}), goTabInval:()=>this.setState({auditTab:'inval'}),
+      tabGradeStyle:s.auditTab==='grade'?tabActive:tabIdle, tabInvalStyle:s.auditTab==='inval'?tabActive:tabIdle,
+      invalCount:s.invalidations.length, invalBadge:'margin-left:5px; padding:1px 7px; border-radius:12px; font-size:11px; font-weight:800; background:'+(s.auditTab==='inval'?'#fdeceb':'#eef2f0')+'; color:'+(s.auditTab==='inval'?'#c0392b':'#6b7a73')+';',
+      auditRows, invalidations, invalEmpty:s.invalidations.length===0,
+      funnel, ranking,
+      chatOpen:s.chatOpen, chatClosed:!s.chatOpen, toggleChat:()=>this.setState(st=>({chatOpen:!st.chatOpen})),
+      chatMsgs, chatInput:s.chatInput, onChatInput:(e)=>this.setState({chatInput:e.target.value}),
+      onChatKey:(e)=>{if(e.key==='Enter') this.pushChat(this.state.chatInput);},
+      sendChat:()=>this.pushChat(this.state.chatInput), chatSuggestions,
+    };
+  }
+}
+</script>
+</body>
+</html>
