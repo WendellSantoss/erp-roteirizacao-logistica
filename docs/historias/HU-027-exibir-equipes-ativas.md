@@ -1,6 +1,7 @@
 ---
 id: HU-027
 titulo: Ver quantas equipes estão disponíveis no polo
+ordem: 42
 modulo: Equipes
 epico: EP-B Planejamento e despacho
 tela: "Configurações · Equipes" › "N equipes ativas para roteirização"

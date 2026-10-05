@@ -1,6 +1,7 @@
 ---
 id: HU-061
 titulo: Ver as OSs reprovadas pela fiscalização
+ordem: 62
 modulo: Auditoria
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Auditoria & Fechamento" › "Invalidações" ("OSs reprovadas pela fiscalização CAGEPA")

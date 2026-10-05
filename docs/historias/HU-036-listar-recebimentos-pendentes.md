@@ -1,6 +1,7 @@
 ---
 id: HU-036
 titulo: Ver as cargas a receber no meu polo
+ordem: 74
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › "Recebimentos pendentes"

@@ -1,6 +1,7 @@
 ---
 id: HU-024
 titulo: Informar a coordenada de uma unidade manualmente
+ordem: 32
 modulo: Webscraper
 epico: EP-A Ingestão e preparação de dados
 tela: — (sem tela no protótipo)

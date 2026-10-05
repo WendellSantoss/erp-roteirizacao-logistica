@@ -1,6 +1,7 @@
 ---
 id: HU-035
 titulo: Acompanhar os envios de kits para outros polos
+ordem: 73
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › "Envios pendentes"

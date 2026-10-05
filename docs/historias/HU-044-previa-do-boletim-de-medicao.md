@@ -1,6 +1,7 @@
 ---
 id: HU-044
 titulo: Ver a prévia do Boletim de Medição do polo
+ordem: 60
 modulo: Gerencial
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Gerencial" › cartão "Prévia BM"

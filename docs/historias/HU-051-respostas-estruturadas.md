@@ -1,6 +1,7 @@
 ---
 id: HU-051
 titulo: Receber respostas estruturadas, como o detalhe do BM
+ordem: 79
 modulo: Assistente
 epico: EP-E Inteligência e suporte à decisão
 tela: "Assistente GeniOS" › cartão de BM ("Total BM")

@@ -1,6 +1,7 @@
 ---
 id: HU-011
 titulo: Escolher a operação e a data do planejamento
+ordem: 37
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › Operação e Data da Rota

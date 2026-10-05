@@ -1,6 +1,7 @@
 ---
 id: HU-030
 titulo: Alternar entre visualização em lista e em cartões
+ordem: 43
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › botões "Lista" e "Card"

@@ -1,6 +1,7 @@
 ---
 id: HU-056
 titulo: Criar rota a partir das OSs selecionadas
+ordem: 45
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador", modal "Criar Rota"

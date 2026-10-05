@@ -1,6 +1,7 @@
 ---
 id: HU-066
 titulo: Parametrizar preços, prazos, unidades do escopo e operações
+ordem: 23
 modulo: Transversal
 epico: EP-F Requisitos transversais
 tela: — (a desenhar)

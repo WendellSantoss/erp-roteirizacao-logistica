@@ -1,6 +1,7 @@
 ---
 id: HU-015
 titulo: Registrar a saída de kits para uma equipe
+ordem: 67
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › "Saída de kit"

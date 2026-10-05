@@ -1,6 +1,7 @@
 ---
 id: HU-004
 titulo: Inserir e atualizar OSs sem perder o tratamento feito
+ordem: 25
 modulo: Importação
 epico: EP-A Ingestão e preparação de dados
 tela: "Importação da OS diária" › resumo "Novas OSs" e "OSs atualizadas (upsert)"

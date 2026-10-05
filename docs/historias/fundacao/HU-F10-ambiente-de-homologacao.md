@@ -1,6 +1,7 @@
 ---
 id: HU-F10
 titulo: Publicar ambiente de homologação
+ordem: 10
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

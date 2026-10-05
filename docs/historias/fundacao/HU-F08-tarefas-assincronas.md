@@ -1,6 +1,7 @@
 ---
 id: HU-F08
 titulo: Executar tarefas assíncronas com progresso
+ordem: 8
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

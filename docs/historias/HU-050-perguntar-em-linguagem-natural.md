@@ -1,6 +1,7 @@
 ---
 id: HU-050
 titulo: Perguntar sobre a operação em linguagem natural
+ordem: 78
 modulo: Assistente
 epico: EP-E Inteligência e suporte à decisão
 tela: "Assistente GeniOS"

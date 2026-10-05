@@ -1,6 +1,7 @@
 ---
 id: HU-F13
 titulo: Monitorar a disponibilidade e garantir backup restaurável
+ordem: 13
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

@@ -1,6 +1,7 @@
 ---
 id: HU-063
 titulo: Liberar excepcionalmente a trava de histórico
+ordem: 71
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › diálogo "Saída bloqueada" › "Solicitar liberação" (a desenhar)

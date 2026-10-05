@@ -1,6 +1,7 @@
 ---
 id: HU-046
 titulo: Reaproveitar coordenadas já capturadas
+ordem: 35
 modulo: Webscraper
 epico: EP-A Ingestão e preparação de dados
 tela: —

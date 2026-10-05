@@ -1,6 +1,7 @@
 ---
 id: HU-041
 titulo: Ver a produção bruta do período
+ordem: 57
 modulo: Gerencial
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Gerencial" › cartão "Produção bruta"

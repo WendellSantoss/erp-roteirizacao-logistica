@@ -1,6 +1,7 @@
 ---
 id: HU-042
 titulo: Ver a produção validada e a taxa de conversão
+ordem: 58
 modulo: Gerencial
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Gerencial" › cartão "Produção validada"

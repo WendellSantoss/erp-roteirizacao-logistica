@@ -1,6 +1,7 @@
 ---
 id: HU-043
 titulo: Ver o impacto financeiro da glosa potencial
+ordem: 59
 modulo: Gerencial
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Gerencial" › cartão "Impacto financeiro"

@@ -1,6 +1,7 @@
 ---
 id: HU-034
 titulo: Ver a execução de ontem por kit
+ordem: 70
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › "Execução de ontem"

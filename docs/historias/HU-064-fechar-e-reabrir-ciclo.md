@@ -1,6 +1,7 @@
 ---
 id: HU-064
 titulo: Fechar e reabrir o ciclo de medição
+ordem: 64
 modulo: Auditoria
 epico: EP-D Fechamento, auditoria e faturamento
 tela: — (a desenhar)

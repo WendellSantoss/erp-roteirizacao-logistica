@@ -1,6 +1,7 @@
 ---
 id: HU-F05
 titulo: Publicar o contrato da API
+ordem: 5
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

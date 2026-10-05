@@ -1,6 +1,7 @@
 ---
 id: HU-016
 titulo: Bloquear saída de kit acima da execução anterior
+ordem: 68
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › Saída de kit e diálogo "Saída bloqueada"

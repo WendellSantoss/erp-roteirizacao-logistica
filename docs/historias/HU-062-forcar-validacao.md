@@ -1,6 +1,7 @@
 ---
 id: HU-062
 titulo: Forçar a validação de uma OS reprovada
+ordem: 63
 modulo: Auditoria
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Auditoria & Fechamento" › "Invalidações" › "Forçar validação"

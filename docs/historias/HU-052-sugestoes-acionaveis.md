@@ -1,6 +1,7 @@
 ---
 id: HU-052
 titulo: Executar operações a partir de sugestões do assistente
+ordem: 81
 modulo: Assistente
 epico: EP-E Inteligência e suporte à decisão
 tela: "Assistente GeniOS" › sugestão "Atribuir despacho"

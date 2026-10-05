@@ -1,6 +1,7 @@
 ---
 id: HU-058
 titulo: Marcar uma OS como prioridade
+ordem: 50
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › pin › "Marcar como prioridade"

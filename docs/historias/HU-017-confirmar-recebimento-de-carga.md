@@ -1,6 +1,7 @@
 ---
 id: HU-017
 titulo: Confirmar o recebimento de uma carga
+ordem: 75
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › "Recebimentos pendentes" › "Receber carga"

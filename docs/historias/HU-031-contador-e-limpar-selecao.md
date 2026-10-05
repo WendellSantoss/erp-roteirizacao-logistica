@@ -1,6 +1,7 @@
 ---
 id: HU-031
 titulo: Ver o contador de OSs selecionadas e limpar a seleção
+ordem: 44
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › barra "N OSs selecionadas · Limpar"

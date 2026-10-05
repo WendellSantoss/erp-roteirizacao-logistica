@@ -1,6 +1,7 @@
 ---
 id: HU-006
 titulo: Listar as OSs que precisam de tratamento
+ordem: 27
 modulo: Pendências
 epico: EP-A Ingestão e preparação de dados
 tela: "Gerenciar Pendências"

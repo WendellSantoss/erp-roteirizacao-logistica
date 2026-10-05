@@ -1,6 +1,7 @@
 ---
 id: HU-054
 titulo: Escolher o polo de trabalho em qualquer tela
+ordem: 20
 modulo: Transversal
 epico: EP-F Requisitos transversais
 tela: Cabeçalho › seletor "Polo 1 - Central / Polo 2 - Norte / Polo 3 - Sul"

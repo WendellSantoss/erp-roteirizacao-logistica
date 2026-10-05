@@ -1,6 +1,7 @@
 ---
 id: HU-F11
 titulo: Modelar as entidades centrais e o ciclo de vida da OS
+ordem: 11
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

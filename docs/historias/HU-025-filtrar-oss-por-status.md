@@ -1,6 +1,7 @@
 ---
 id: HU-025
 titulo: Filtrar as pendências por situação com contador
+ordem: 33
 modulo: Pendências
 epico: EP-A Ingestão e preparação de dados
 tela: "Gerenciar Pendências" › filtros rápidos

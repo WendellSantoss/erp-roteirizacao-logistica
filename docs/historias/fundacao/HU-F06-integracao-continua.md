@@ -1,6 +1,7 @@
 ---
 id: HU-F06
 titulo: Bloquear merge sem CI verde
+ordem: 6
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

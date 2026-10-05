@@ -1,6 +1,7 @@
 ---
 id: HU-029
 titulo: Impedir a inativação de equipe com rota em aberto
+ordem: 46
 modulo: Equipes
 epico: EP-B Planejamento e despacho
 tela: "Configurações (Equipes)" › "Editar"

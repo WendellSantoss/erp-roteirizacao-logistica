@@ -1,6 +1,7 @@
 ---
 id: HU-F01
 titulo: Montar o monorepo
+ordem: 1
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

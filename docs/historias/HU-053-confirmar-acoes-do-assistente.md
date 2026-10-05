@@ -1,6 +1,7 @@
 ---
 id: HU-053
 titulo: Confirmar antes que o assistente execute uma ação
+ordem: 80
 modulo: Assistente
 epico: EP-E Inteligência e suporte à decisão
 tela: "Assistente GeniOS" › diálogo de confirmação

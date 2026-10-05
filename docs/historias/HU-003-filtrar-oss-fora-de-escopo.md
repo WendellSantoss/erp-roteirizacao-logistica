@@ -1,6 +1,7 @@
 ---
 id: HU-003
 titulo: Descartar OSs fora do escopo contratual
+ordem: 24
 modulo: Importação
 epico: EP-A Ingestão e preparação de dados
 tela: "Importação da OS diária" › resumo "Ignorados (fora de escopo)"

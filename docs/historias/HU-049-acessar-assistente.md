@@ -1,6 +1,7 @@
 ---
 id: HU-049
 titulo: Abrir o assistente de qualquer tela
+ordem: 77
 modulo: Assistente
 epico: EP-E Inteligência e suporte à decisão
 tela: "Assistente GeniOS" (painel lateral, "● online · NLP integrado")

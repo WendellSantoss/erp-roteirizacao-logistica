@@ -1,6 +1,7 @@
 ---
 id: HU-059
 titulo: Trocar a equipe ou retirar uma OS da rota antes do despacho
+ordem: 51
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › pin › "Trocar serviço / equipe"

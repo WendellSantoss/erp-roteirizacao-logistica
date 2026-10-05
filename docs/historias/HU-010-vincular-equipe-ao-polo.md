@@ -1,6 +1,7 @@
 ---
 id: HU-010
 titulo: Restringir cada equipe ao seu polo
+ordem: 41
 modulo: Equipes
 epico: EP-B Planejamento e despacho
 tela: "Configurações (Equipes)"

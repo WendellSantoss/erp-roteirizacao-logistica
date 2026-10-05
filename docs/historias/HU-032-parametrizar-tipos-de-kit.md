@@ -1,6 +1,7 @@
 ---
 id: HU-032
 titulo: Manter o catálogo de tipos de kit
+ordem: 66
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: — (sem tela no protótipo; usado no campo "Kit")

@@ -1,6 +1,7 @@
 ---
 id: HU-033
 titulo: Explicar por que a saída foi bloqueada
+ordem: 69
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › diálogo "Saída bloqueada"

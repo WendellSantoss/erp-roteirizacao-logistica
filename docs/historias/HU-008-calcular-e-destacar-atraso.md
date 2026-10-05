@@ -1,6 +1,7 @@
 ---
 id: HU-008
 titulo: Calcular e destacar o atraso de cada OS
+ordem: 29
 modulo: Pendências
 epico: EP-A Ingestão e preparação de dados
 tela: "Gerenciar Pendências" › colunas Decorrido e Atraso

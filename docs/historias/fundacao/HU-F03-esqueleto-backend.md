@@ -1,6 +1,7 @@
 ---
 id: HU-F03
 titulo: Criar o esqueleto do backend
+ordem: 3
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

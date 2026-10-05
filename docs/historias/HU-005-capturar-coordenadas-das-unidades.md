@@ -1,6 +1,7 @@
 ---
 id: HU-005
 titulo: Capturar as coordenadas das unidades no portal GSAN
+ordem: 26
 modulo: Webscraper
 epico: EP-A Ingestão e preparação de dados
 tela: Cabeçalho › "Webscraper — Capturando coords."

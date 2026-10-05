@@ -1,6 +1,7 @@
 ---
 id: HU-026
 titulo: Desconsiderar uma OS
+ordem: 34
 modulo: Pendências
 epico: EP-A Ingestão e preparação de dados
 tela: "Gerenciar Pendências" › coluna Desconsiderar

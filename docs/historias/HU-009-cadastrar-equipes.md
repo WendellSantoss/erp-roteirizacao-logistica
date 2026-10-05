@@ -1,6 +1,7 @@
 ---
 id: HU-009
 titulo: Cadastrar, editar e inativar equipes
+ordem: 40
 modulo: Equipes
 epico: EP-B Planejamento e despacho
 tela: "Configurações (Equipes)" › cartões de equipe, "Nova equipe", "Editar"

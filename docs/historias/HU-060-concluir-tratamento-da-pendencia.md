@@ -1,6 +1,7 @@
 ---
 id: HU-060
 titulo: Liberar OSs tratadas para roteirização
+ordem: 36
 modulo: Pendências
 epico: EP-A Ingestão e preparação de dados
 tela: "Gerenciar Pendências" (ação ainda não desenhada no protótipo)

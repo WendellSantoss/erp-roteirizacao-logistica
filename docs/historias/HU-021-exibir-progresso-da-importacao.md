@@ -1,6 +1,7 @@
 ---
 id: HU-021
 titulo: Acompanhar o progresso da importação
+ordem: 17
 modulo: Importação
 epico: EP-A Ingestão e preparação de dados
 tela: "Importação da OS diária" › "Processando planilha GSAN…" e "Importação concluída"

@@ -1,6 +1,7 @@
 ---
 id: HU-039
 titulo: Corrigir dados da execução direto na grade
+ordem: 56
 modulo: Auditoria
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Auditoria & Fechamento" › "Grade de auditoria" (edição inline)

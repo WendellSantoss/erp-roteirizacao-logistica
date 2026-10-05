@@ -1,6 +1,7 @@
 ---
 id: HU-057
 titulo: Atribuir rapidamente as OSs selecionadas a uma equipe
+ordem: 47
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › modal "Atribuir despacho"

@@ -1,6 +1,7 @@
 ---
 id: HU-012
 titulo: Selecionar OSs por polígono no mapa
+ordem: 38
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador"

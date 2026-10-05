@@ -1,6 +1,7 @@
 ---
 id: HU-048
 titulo: Ver o funil de conversão diário
+ordem: 61
 modulo: Gerencial
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Gerencial" › "Funil de conversão diário"

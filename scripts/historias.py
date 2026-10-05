@@ -13,6 +13,8 @@ HISTORIAS = RAIZ / "docs" / "historias"
 ERS = RAIZ / "docs" / "requisitos" / "ers.md"
 INDICE_INICIO = "<!-- indice:inicio -->"
 INDICE_FIM = "<!-- indice:fim -->"
+ORDEM_INICIO = "<!-- ordem:inicio -->"
+ORDEM_FIM = "<!-- ordem:fim -->"
 
 EPICOS = [
     "EP-0 Fundação técnica",
@@ -42,6 +44,36 @@ def ler_cabecalho(caminho):
 def chave_ordem(h):
     i = h["id"]
     return (0, int(i[4:])) if i.startswith("HU-F") else (1, int(i[3:]))
+
+
+def calcular_ordem(historias):
+    """Ordem de desenvolvimento: nenhuma história antes das suas dependências.
+    Entre as que já podem começar, vem primeiro a de menor fase, depois épico, depois ID."""
+    por_id = {h["id"]: h for h in historias}
+    def chave(i):
+        h = por_id[i]
+        return (int(h["fase"]), EPICOS.index(h["epico"]), chave_ordem(h))
+    feitas, ordem = set(), []
+    while len(ordem) < len(por_id):
+        prontas = [i for i in por_id if i not in feitas and all(d in feitas for d in por_id[i]["depende_de"])]
+        if not prontas:
+            raise SystemExit("ERRO: dependência circular entre " + ", ".join(sorted(set(por_id) - feitas)))
+        proxima = min(prontas, key=chave)
+        ordem.append(proxima)
+        feitas.add(proxima)
+    return {i: n for n, i in enumerate(ordem, start=1)}
+
+
+def gravar_ordem(h, n):
+    caminho = HISTORIAS / h["arquivo"]
+    texto = caminho.read_text(encoding="utf-8")
+    if re.search(r"^ordem: .*$", texto, re.M):
+        novo = re.sub(r"^ordem: .*$", f"ordem: {n}", texto, count=1, flags=re.M)
+    else:
+        novo = re.sub(r"^(titulo: .*)$", rf"\1\nordem: {n}", texto, count=1, flags=re.M)
+    if novo != texto:
+        caminho.write_text(novo, encoding="utf-8")
+    h["ordem"] = str(n)
 
 
 def ids_da_ers(prefixo):
@@ -84,22 +116,38 @@ def main():
         if rf not in rf_cobertos:
             erros.append(f"{rf} da ERS não tem história")
 
+    ordem = calcular_ordem(historias) if not erros else {}
+    for h in historias:
+        if ordem and h.get("ordem") != str(ordem[h["id"]]):
+            erros.append(f"{h['id']}: ordem {h.get('ordem', 'ausente')}, esperada {ordem[h['id']]} (rode o script sem --check)")
+
     if "--check" in sys.argv:
         for e in erros:
             print("ERRO:", e)
         print(f"{len(historias)} histórias, {len(erros)} erros")
         sys.exit(1 if erros else 0)
 
+    erros = [e for e in erros if "(rode o script sem --check)" not in e]
+    for h in historias:
+        gravar_ordem(h, ordem[h["id"]])
+
+    # Ordem de desenvolvimento no README
+    seq = [ORDEM_INICIO, "", "| Ordem | ID | Título | Fase | Depende de |", "|---|---|---|---|---|"]
+    for h in sorted(historias, key=lambda h: int(h["ordem"])):
+        deps = ", ".join(f"{d} ({ordem[d]})" for d in h["depende_de"]) or "—"
+        seq.append(f"| {h['ordem']} | [{h['id']}]({h['arquivo']}) | {h['titulo']} | {h['fase']} | {deps} |")
+    seq += ["", ORDEM_FIM]
+
     # Índice no README, agrupado por épico
     linhas = [INDICE_INICIO, ""]
     for ep in EPICOS:
         do_epico = [h for h in historias if h["epico"] == ep]
         linhas += [f"### {ep} ({len(do_epico)})", "",
-                   "| ID | Título | Fase | Prioridade | Status | Requisitos | Depende de |",
-                   "|---|---|---|---|---|---|---|"]
+                   "| Ordem | ID | Título | Fase | Prioridade | Status | Requisitos | Depende de |",
+                   "|---|---|---|---|---|---|---|---|"]
         for h in do_epico:
             linhas.append(
-                f"| [{h['id']}]({h['arquivo']}) | {h['titulo']} | {h['fase']} | {h['prioridade']} "
+                f"| {h['ordem']} | [{h['id']}]({h['arquivo']}) | {h['titulo']} | {h['fase']} | {h['prioridade']} "
                 f"| {h['status']} | {', '.join(h['requisitos']) or '—'} | {', '.join(h['depende_de']) or '—'} |"
             )
         linhas.append("")
@@ -107,6 +155,7 @@ def main():
     readme = HISTORIAS / "README.md"
     texto = readme.read_text(encoding="utf-8")
     texto = re.sub(rf"{INDICE_INICIO}.*{INDICE_FIM}", "\n".join(linhas), texto, flags=re.S)
+    texto = re.sub(rf"{ORDEM_INICIO}.*{ORDEM_FIM}", "\n".join(seq), texto, flags=re.S)
     readme.write_text(texto, encoding="utf-8")
 
     # Matriz de rastreabilidade

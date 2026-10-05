@@ -1,6 +1,7 @@
 ---
 id: HU-038
 titulo: Ver a grade de auditoria da execução
+ordem: 54
 modulo: Auditoria
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Auditoria & Fechamento" › "Grade de auditoria"

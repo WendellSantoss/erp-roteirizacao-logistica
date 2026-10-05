@@ -1,6 +1,7 @@
 ---
 id: HU-020
 titulo: Restringir módulos e ações pelo perfil do usuário
+ordem: 18
 modulo: Transversal
 epico: EP-F Requisitos transversais
 tela: Menu lateral (itens visíveis conforme perfil)

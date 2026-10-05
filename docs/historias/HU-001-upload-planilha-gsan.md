@@ -1,6 +1,7 @@
 ---
 id: HU-001
 titulo: Enviar a planilha diária do GSAN
+ordem: 15
 modulo: Importação
 epico: EP-A Ingestão e preparação de dados
 tela: "Importação da OS diária" (docs/design/prototipo/GeniOS ERP.html)

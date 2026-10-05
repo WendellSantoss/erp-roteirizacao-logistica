@@ -1,6 +1,7 @@
 ---
 id: HU-023
 titulo: Ver e reprocessar as unidades cuja captura falhou
+ordem: 31
 modulo: Webscraper
 epico: EP-A Ingestão e preparação de dados
 tela: — (sem tela no protótipo; acessada pelo indicador do cabeçalho)

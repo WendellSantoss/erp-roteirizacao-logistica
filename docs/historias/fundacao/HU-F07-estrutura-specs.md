@@ -1,6 +1,7 @@
 ---
 id: HU-F07
 titulo: Preparar o repositório para desenvolvimento por especificação
+ordem: 7
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

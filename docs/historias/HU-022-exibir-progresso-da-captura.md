@@ -1,6 +1,7 @@
 ---
 id: HU-022
 titulo: Ver o progresso da captura no cabeçalho
+ordem: 30
 modulo: Webscraper
 epico: EP-A Ingestão e preparação de dados
 tela: Cabeçalho › "Webscraper — Capturando coords. 77 / 120 unidades"

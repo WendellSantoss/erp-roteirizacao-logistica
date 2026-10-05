@@ -1,6 +1,7 @@
 ---
 id: HU-068
 titulo: Ver o ranking de equipes
+ordem: 65
 modulo: Gerencial
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Gerencial" › "Ranking de equipes"

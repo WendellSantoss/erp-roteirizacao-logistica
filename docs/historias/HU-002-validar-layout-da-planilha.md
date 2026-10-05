@@ -1,6 +1,7 @@
 ---
 id: HU-002
 titulo: Validar o layout da planilha antes de importar
+ordem: 16
 modulo: Importação
 epico: EP-A Ingestão e preparação de dados
 tela: "Importação da OS diária" › Log de alertas

@@ -1,6 +1,7 @@
 ---
 id: HU-F04
 titulo: Criar o esqueleto do frontend
+ordem: 4
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

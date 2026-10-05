@@ -1,6 +1,7 @@
 ---
 id: HU-028
 titulo: Cadastrar profissionais e ajudantes
+ordem: 39
 modulo: Equipes
 epico: EP-B Planejamento e despacho
 tela: — (sem tela no protótipo; usada nos campos Líder, Membros, Profissional e Ajudante)

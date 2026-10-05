@@ -1,6 +1,7 @@
 ---
 id: HU-F02
 titulo: Subir o ambiente local com um comando
+ordem: 2
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

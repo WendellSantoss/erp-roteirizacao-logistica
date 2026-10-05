@@ -1,6 +1,7 @@
 ---
 id: HU-040
 titulo: Registrar cada correção feita na grade
+ordem: 55
 modulo: Auditoria
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Auditoria & Fechamento" › histórico da linha (a desenhar)

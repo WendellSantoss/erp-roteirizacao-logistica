@@ -1,6 +1,7 @@
 ---
 id: HU-047
 titulo: Registrar divergência no recebimento
+ordem: 76
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" › "Receber carga" (variação ainda não desenhada)

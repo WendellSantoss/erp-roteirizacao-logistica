@@ -1,6 +1,7 @@
 ---
 id: HU-037
 titulo: Enviar a planilha de execução do GSAN
+ordem: 52
 modulo: Auditoria
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Auditoria & Fechamento" › "Subir planilha de fechamento"

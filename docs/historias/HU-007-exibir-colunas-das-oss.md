@@ -1,6 +1,7 @@
 ---
 id: HU-007
 titulo: Exibir as colunas operacionais da OS na lista de pendências
+ordem: 28
 modulo: Pendências
 epico: EP-A Ingestão e preparação de dados
 tela: "Gerenciar Pendências" › tabela

@@ -1,6 +1,7 @@
 ---
 id: HU-F12
 titulo: Rodar testes de ponta a ponta no navegador
+ordem: 12
 modulo: Fundação
 epico: EP-0 Fundação técnica
 tela: —

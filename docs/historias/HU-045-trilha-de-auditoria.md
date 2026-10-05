@@ -1,6 +1,7 @@
 ---
 id: HU-045
 titulo: Manter a trilha de auditoria das alterações
+ordem: 19
 modulo: Transversal
 epico: EP-F Requisitos transversais
 tela: — (consulta a desenhar)

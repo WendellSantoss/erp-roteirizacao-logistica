@@ -1,6 +1,7 @@
 ---
 id: HU-013
 titulo: Finalizar o planejamento do dia
+ordem: 48
 modulo: Roteirizador
 epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › botão "Finalizar"

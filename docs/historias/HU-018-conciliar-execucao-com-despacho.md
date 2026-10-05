@@ -1,6 +1,7 @@
 ---
 id: HU-018
 titulo: Conciliar a execução com as OSs despachadas
+ordem: 53
 modulo: Auditoria
 epico: EP-D Fechamento, auditoria e faturamento
 tela: "Auditoria & Fechamento" › "Grade de auditoria" e "Invalidações"

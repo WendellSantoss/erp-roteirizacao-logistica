@@ -1,6 +1,7 @@
 ---
 id: HU-067
 titulo: Registrar envio de kits para outro polo
+ordem: 72
 modulo: Almoxarifado
 epico: EP-C Suprimentos e logística
 tela: "Almoxarifado" (formulário de envio a desenhar)
