@@ -11,7 +11,7 @@
 
 ## Equipe
 
-Projeto desenvolvido por:
+Projeto desenvolvido porr:
 
 | Integrante                |
 |----------------------------|
