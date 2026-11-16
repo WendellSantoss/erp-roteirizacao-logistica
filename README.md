@@ -11,8 +11,8 @@
 
 ## Links do Protótipo Publicado (Nuvem)
 
-* **Frontend (Vercel):** *(será preenchido)*
-* **Backend / Health Check (Render):** *(será preenchido)*
+* **Frontend (Vercel):** https://erp-roteirizacao-logistica-so5e.vercel.app
+* **Backend / Health Check (Render):** https://genios-api-kruh.onrender.com/health
 
 > ⚠️ **Aviso sobre tempo de resposta (Plano Gratuito Render):** O servidor backend está hospedado no plano gratuito do Render e hiberna automaticamente após períodos de inatividade. Por isso, **o primeiro acesso após um período ocioso pode levar cerca de 50 a 60 segundos (~1 minuto)** para responder enquanto o contêiner é reativado.
 
