@@ -1,4 +1,20 @@
+# Variáveis de ambiente (nunca enviar senhas reais)
+.env
+.env.local
+.env.*.local
+
+# Python / Django
+venv/
 __pycache__/
 *.pyc
-.env
+*.pyo
+db.sqlite3
+
+# Node / Vite / React
 node_modules/
+dist/
+.vite/
+
+# Sistema Operacional / IDEs
+.DS_Store
+Thumbs.db

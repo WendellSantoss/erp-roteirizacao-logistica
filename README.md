@@ -1,4 +1,4 @@
-# GeniOS - ERP Roteirização Logística
+# GeniOS — ERP Roteirização Logística
 
 **Sistema ERP Operacional para Roteirização, Controle Logístico e Auditoria de Contratos**
 
@@ -9,17 +9,27 @@
 
 ---
 
+## Links do Protótipo Publicado (Nuvem)
+
+* **Frontend (Vercel):** *(será preenchido)*
+* **Backend / Health Check (Render):** *(será preenchido)*
+
+> ⚠️ **Aviso sobre tempo de resposta (Plano Gratuito Render):** O servidor backend está hospedado no plano gratuito do Render e hiberna automaticamente após períodos de inatividade. Por isso, **o primeiro acesso após um período ocioso pode levar cerca de 50 a 60 segundos (~1 minuto)** para responder enquanto o contêiner é reativado.
+
+---
+
 ## Equipe
 
 Projeto desenvolvido por:
 
-| Integrante                |
+| Integrante                 |
 |----------------------------|
-| Ana Beatriz da Silva        |
-| Deivisson da Silva Rocha    |
-| Felipe de Almeida Silva     |
-| Wendell dos Santos          |
+| Ana Beatriz da Silva       |
+| Deivisson da Silva Rocha   |
+| Felipe de Almeida Silva    |
+| Wendell dos Santos         |
 
+---
 
 ## Sumário
 
@@ -33,7 +43,7 @@ Projeto desenvolvido por:
 8. [Tecnologias Utilizadas](#8-tecnologias-utilizadas)
 9. [Modelagem de Dados](#9-modelagem-de-dados)
 10. [Estrutura do Repositório](#10-estrutura-do-repositório)
-11. [Instalação e Execução](#11-instalação-e-execução)
+11. [Instalação e Execução Local](#11-instalação-e-execução-local)
 12. [Padrão de Contribuição](#12-padrão-de-contribuição)
 13. [Testes](#13-testes)
 14. [Segurança e Conformidade](#14-segurança-e-conformidade)
@@ -41,32 +51,31 @@ Projeto desenvolvido por:
 16. [Roadmap](#16-roadmap)
 17. [Perguntas Frequentes (FAQ)](#17-perguntas-frequentes-faq)
 18. [Glossário](#18-glossário)
-19. [Equipe](#19-equipe)
-20. [Licença](#20-licença)
+19. [Licença](#19-licença)
 
 ---
 
 ## 1. Visão Geral
 
-O **ERP Roteirização Logística** é uma solução de gestão empresarial (ERP) voltada para empresas do setor de transporte e logística, integrando três frentes operacionais em uma única plataforma:
+O **GeniOS (ERP Roteirização Logística)** é uma solução de gestão empresarial (ERP) voltada para empresas do setor de transporte, saneamento/serviços de campo e logística, integrando três frentes operacionais em uma única plataforma:
 
-- **Roteirização**: planejamento e otimização de rotas de entrega e coleta;
-- **Controle Logístico**: gestão de frota, motoristas, cargas e status de entregas em tempo real;
-- **Auditoria de Contratos**: acompanhamento da conformidade de contratos firmados com clientes e fornecedores.
+- **Roteirização**: planejamento e otimização de rotas de entrega, coleta e atendimento de Ordens de Serviço (OS);
+- **Controle Logístico**: gestão de frota, equipes/motoristas, kits de materiais, cargas e status de entregas em tempo real;
+- **Auditoria de Contratos**: acompanhamento da conformidade de contratos firmados com clientes e fornecedores, incluindo travas de histórico e rastreabilidade.
 
-O sistema centraliza informações que tradicionalmente ficam dispersas entre planilhas, sistemas isolados e controles manuais, proporcionando maior visibilidade operacional, rastreabilidade de processos e apoio à tomada de decisão gerencial.
+O sistema centraliza informações que tradicionalmente ficam dispersas entre planilhas, sistemas legados (como GSAN) e controles manuais, proporcionando maior visibilidade operacional, rastreabilidade de processos e apoio à tomada de decisão gerencial.
 
-Este projeto foi desenvolvido no contexto acadêmico/técnico, aplicando conceitos de engenharia de software, modelagem de banco de dados, arquitetura em camadas e boas práticas de desenvolvimento colaborativo.
+Este projeto foi desenvolvido no contexto acadêmico/técnico da disciplina de Projeto de Software com apoio de IA, aplicando conceitos de engenharia de software, modelagem C4, arquitetura em camadas e boas práticas de desenvolvimento colaborativo.
 
 ## 2. Contexto e Justificativa
 
 Empresas do setor logístico frequentemente enfrentam três problemas recorrentes:
 
-1. **Ineficiência no planejamento de rotas**, gerando custos elevados com combustível, tempo ocioso e atrasos nas entregas;
-2. **Falta de visibilidade sobre a frota e as cargas**, dificultando o acompanhamento em tempo real do status das operações;
+1. **Ineficiência no planejamento de rotas**, gerando custos elevados com combustível, tempo ocioso e atrasos nas entregas/execuções;
+2. **Falta de visibilidade sobre a frota, equipes e cargas**, dificultando o acompanhamento em tempo real do status das operações;
 3. **Ausência de controle sistemático sobre contratos**, resultando em vencimentos não identificados, cláusulas não cumpridas e riscos jurídicos e financeiros.
 
-O ERP Roteirização Logística propõe endereçar esses três problemas de forma integrada, eliminando a fragmentação de informações e reduzindo a dependência de controles manuais.
+O **GeniOS** propõe endereçar esses três problemas de forma integrada, eliminando a fragmentação de informações e reduzindo a dependência de controles manuais.
 
 ## 3. Objetivos do Projeto
 
@@ -77,7 +86,7 @@ Desenvolver um sistema ERP que integre roteirização, controle logístico e aud
 ### 3.2 Objetivos Específicos
 
 - Reduzir custos operacionais por meio da otimização de rotas de entrega e coleta;
-- Aumentar a eficiência do controle de frota, motoristas e cargas;
+- Aumentar a eficiência do controle de frota, equipes, motoristas e cargas;
 - Automatizar processos de auditoria contratual, reduzindo riscos de não conformidade;
 - Centralizar dados operacionais em uma base única e confiável;
 - Disponibilizar indicadores gerenciais (KPIs) para apoio à tomada de decisão;
@@ -86,339 +95,326 @@ Desenvolver um sistema ERP que integre roteirização, controle logístico e aud
 
 ## 4. Público-Alvo e Perfis de Usuário
 
-O sistema é destinado a empresas de transporte, distribuição e logística de pequeno, médio e grande porte. Os principais perfis de usuário previstos são:
-
-| Perfil        | Descrição das Responsabilidades                                                             |
-|---------------|-----------------------------------------------------------------------------------------------|
-| Administrador | Gestão completa do sistema, cadastro de usuários, configurações gerais e acesso a todos os módulos. |
-| Operador      | Responsável pelo cadastro e acompanhamento de rotas, entregas, veículos e motoristas.          |
-| Auditor       | Responsável pela análise de contratos, verificação de conformidade e emissão de relatórios de auditoria. |
-| Motorista (consulta) | Acesso restrito para consulta de rotas e entregas atribuídas (perfil opcional, conforme evolução do projeto). |
+| Perfil               | Descrição das Responsabilidades                                                                 |
+|----------------------|-------------------------------------------------------------------------------------------------|
+| Administrador        | Gestão completa do sistema, cadastro de usuários, configurações gerais e acesso a todos os polos/módulos. |
+| Operador             | Responsável pela importação de dados, cadastro e acompanhamento de rotas, entregas, equipes e veículos. |
+| Auditor              | Responsável pela análise de contratos, verificação de conformidade, histórico de kits e emissão de relatórios. |
+| Motorista (consulta) | Acesso restrito para consulta de rotas e entregas atribuídas (perfil previsto na evolução do projeto). |
 
 ## 5. Requisitos do Sistema
 
 ### 5.1 Requisitos Funcionais
 
-| Código  | Descrição                                                                 |
-|---------|------------------------------------------------------------------------------|
-| RF01    | O sistema deve permitir o cadastro de rotas com pontos de coleta e entrega.  |
-| RF02    | O sistema deve calcular rotas otimizadas por distância e tempo estimado.     |
-| RF03    | O sistema deve permitir a reprogramação de rotas em caso de imprevistos.     |
-| RF04    | O sistema deve permitir o cadastro e gestão de veículos da frota.            |
-| RF05    | O sistema deve permitir o cadastro de motoristas e seu vínculo com veículos e rotas. |
-| RF06    | O sistema deve registrar e atualizar o status de cada entrega.               |
-| RF07    | O sistema deve permitir o controle de estoque e movimentação de cargas.      |
-| RF08    | O sistema deve permitir o cadastro de contratos com clientes e fornecedores. |
-| RF09    | O sistema deve emitir alertas automáticos de vencimento contratual.         |
-| RF10    | O sistema deve permitir o registro de auditorias e não conformidades.       |
-| RF11    | O sistema deve gerar relatórios de conformidade contratual por período.      |
-| RF12    | O sistema deve autenticar usuários e controlar o acesso por perfil.         |
-| RF13    | O sistema deve exibir um dashboard com indicadores operacionais.            |
-| RF14    | O sistema deve permitir a exportação de relatórios em PDF e Excel.          |
-| RF15    | O sistema deve registrar um log de auditoria das ações realizadas por usuário. |
+| Código | Descrição                                                                            |
+|--------|--------------------------------------------------------------------------------------|
+| RF01   | O sistema deve permitir o cadastro de rotas com pontos de coleta e entrega.          |
+| RF02   | O sistema deve calcular rotas otimizadas por distância e tempo estimado.             |
+| RF03   | O sistema deve permitir a reprogramação de rotas em caso de imprevistos.             |
+| RF04   | O sistema deve permitir o cadastro e gestão de veículos da frota.                    |
+| RF05   | O sistema deve permitir o cadastro de motoristas/equipes e seu vínculo com veículos e rotas. |
+| RF06   | O sistema deve registrar e atualizar o status de cada entrega / Ordem de Serviço.    |
+| RF07   | O sistema deve permitir o controle de estoque, kits e movimentação de cargas.        |
+| RF08   | O sistema deve permitir o cadastro de contratos com clientes e fornecedores.         |
+| RF09   | O sistema deve emitir alertas automáticos de vencimento contratual.                 |
+| RF10   | O sistema deve permitir o registro de auditorias e não conformidades.                |
+| RF11   | O sistema deve gerar relatórios de conformidade contratual por período.              |
+| RF12   | O sistema deve autenticar usuários e controlar o acesso por perfil e polo.           |
+| RF13   | O sistema deve exibir um dashboard com indicadores operacionais.                     |
+| RF14   | O sistema deve permitir a exportação de relatórios em PDF e Excel.                   |
+| RF15   | O sistema deve registrar um log de auditoria das ações realizadas por usuário.       |
 
 ### 5.2 Requisitos Não Funcionais
 
-| Código   | Descrição                                                                      |
-|----------|-----------------------------------------------------------------------------------|
-| RNF01    | O sistema deve responder às requisições em tempo aceitável (abaixo de 2 segundos em operações comuns). |
-| RNF02    | O sistema deve garantir a integridade dos dados armazenados.                      |
-| RNF03    | O sistema deve possuir controle de acesso baseado em perfis (RBAC).               |
-| RNF04    | O sistema deve armazenar senhas de forma criptografada.                          |
-| RNF05    | O sistema deve ser compatível com os principais navegadores web (Chrome, Firefox, Edge). |
-| RNF06    | O sistema deve seguir arquitetura em camadas para facilitar manutenção e testes.  |
-| RNF07    | O sistema deve manter logs de auditoria para fins de rastreabilidade.             |
-| RNF08    | O sistema deve ser escalável para suportar aumento de volume de dados e usuários. |
-| RNF09    | O código-fonte deve seguir padrões de nomenclatura e organização definidos pela equipe. |
-| RNF10    | O sistema deve possuir documentação técnica atualizada (este README e arquivos em `docs/`). |
+| Código | Descrição                                                                                 |
+|--------|-------------------------------------------------------------------------------------------|
+| RNF01  | O sistema deve responder às requisições em tempo aceitável (abaixo de 2 segundos em operações comuns, após o warm-up da instância). |
+| RNF02  | O sistema deve garantir a integridade transacional dos dados armazenados.                 |
+| RNF03  | O sistema deve possuir controle de acesso baseado em perfis (RBAC) e filtro global por polo. |
+| RNF04  | O sistema deve armazenar senhas de forma criptografada.                                   |
+| RNF05  | O sistema deve ser compatível com os principais navegadores web (Chrome, Firefox, Edge).  |
+| RNF06  | O sistema deve seguir arquitetura de Monólito Modular em camadas para facilitar manutenção e testes. |
+| RNF07  | O sistema deve manter logs de auditoria imutáveis para fins de rastreabilidade.           |
+| RNF08  | O sistema deve ser escalável para suportar aumento de volume de dados e usuários.         |
+| RNF09  | O código-fonte deve seguir padrões de nomenclatura e organização definidos pela equipe.   |
+| RNF10  | O sistema deve possuir documentação técnica atualizada (este README e arquivos em `docs/`). |
 
 ## 6. Escopo Funcional Detalhado
 
 ### 6.1 Módulo de Roteirização
 
-- Cadastro de rotas, pontos de entrega/coleta e regiões de atendimento;
+- Importação e validação de planilhas operacionais (GSAN) com upsert transacional;
+- Cadastro de rotas, pontos de entrega/coleta e regiões/polos de atendimento;
 - Cálculo de rotas otimizadas (menor distância/tempo);
-- Definição de janelas de horário para entregas;
-- Visualização de rotas em mapa;
-- Reprogramação dinâmica de rotas em caso de imprevistos (trânsito, avarias, cancelamentos);
+- Visualização de rotas e reprogramação dinâmica em caso de imprevistos;
 - Histórico de rotas executadas, com tempo real vs. tempo estimado.
 
 ### 6.2 Módulo de Controle Logístico
 
 - Cadastro e gestão de veículos da frota (placa, capacidade, tipo, status de manutenção);
-- Cadastro de motoristas e vínculo com veículos/rotas;
-- Controle de status de entregas (pendente, em trânsito, entregue, devolvido, cancelado);
-- Gestão de estoque e movimentação de cargas entre pontos de distribuição;
-- Histórico de manutenção preventiva e corretiva dos veículos;
-- Alertas de manutenção programada.
+- Cadastro de motoristas/equipes e vínculo com veículos/rotas;
+- Controle de status de entregas e Ordens de Serviço pendentes;
+- Gestão de estoque, kits de materiais e movimentação de cargas;
+- Histórico e alertas de manutenção preventiva e corretiva dos veículos.
 
 ### 6.3 Módulo de Auditoria de Contratos
 
 - Cadastro de contratos com clientes e fornecedores, incluindo vigência, cláusulas e valores;
 - Controle de status contratual (ativo, em renovação, encerrado, suspenso);
-- Alertas de vencimento e renovação de contratos;
-- Registro de auditorias periódicas e identificação de não conformidades;
-- Registro de ações corretivas vinculadas a não conformidades identificadas;
+- Trava de histórico de kits utilizados em OS concluídas;
+- Registro de auditorias periódicas, identificação de não conformidades e ações corretivas;
 - Geração de relatórios de conformidade contratual por cliente, fornecedor ou período.
 
 ### 6.4 Módulo Administrativo e de Segurança
 
-- Autenticação e controle de acesso por perfil de usuário (administrador, operador, auditor);
+- Autenticação via token e controle de acesso por perfil de usuário (administrador, operador, auditor) e filtro por polo;
 - Dashboard com indicadores operacionais consolidados (KPIs de rotas, frota e contratos);
-- Emissão de relatórios gerenciais em PDF e Excel;
-- Log de auditoria de todas as ações relevantes realizadas no sistema;
-- Gestão de usuários, permissões e redefinição de senhas.
+- Log de auditoria de todas as ações relevantes realizadas no sistema.
 
 ## 7. Arquitetura do Sistema
 
-### 7.1 Visão em Camadas
+### 7.1 Visão em Camadas e Hospedagem (ADR-001)
 
-O sistema adota uma arquitetura em camadas, separando interface, regras de negócio e persistência de dados, o que favorece manutenibilidade, testabilidade e evolução independente de cada camada:
+O sistema adota a arquitetura de **Monólito Modular** (detalhada em `docs/adr/ADR-001-arquitetura-mvp.md`), separando a SPA frontend da API REST backend e do banco gerenciado na nuvem:
 
 ```
-┌───────────────────────────────┐
-│      Front-end (Interface)     │
-│  Dashboard, formulários, mapas │
-└───────────────┬─────────────────┘
-                │ HTTP / REST API
-┌───────────────▼─────────────────┐
-│       Back-end (API/Serviços)   │
-│  Regras de negócio, autenticação│
-│  Roteirização, auditoria        │
-└───────────────┬─────────────────┘
-                │ ORM / Queries
-┌───────────────▼─────────────────┐
-│      Banco de Dados (SGBD)       │
-│  Rotas, veículos, contratos,     │
-│  usuários, auditorias, etc.      │
-└───────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│     Front-end SPA (Vercel)              │
+│     React + TypeScript + Vite           │
+└────────────────────┬────────────────────┘
+                     │ HTTPS / REST API (JSON)
+┌────────────────────▼────────────────────┐
+│     Back-end API REST (Render)          │
+│     Python + Django + DRF               │
+│     (Monólito Modular: núcleo/rotas)    │
+└────────────────────┬────────────────────┘
+                     │ PostgreSQL (SSL)
+┌────────────────────▼────────────────────┐
+│     Banco de Dados (Neon)               │
+│     PostgreSQL Gerenciado na Nuvem      │
+└─────────────────────────────────────────┘
 ```
 
 ### 7.2 Fluxo de Dados
 
-1. O usuário interage com a interface (dashboard, formulários de cadastro, telas de acompanhamento);
-2. As requisições são enviadas via API REST para o back-end;
-3. O back-end aplica as regras de negócio (validações, cálculos de rota, verificação de conformidade contratual);
-4. Os dados são persistidos ou consultados no banco de dados via camada de acesso a dados (ORM);
+1. O usuário interage com a interface web (SPA hospedada na Vercel);
+2. As requisições são enviadas via API REST (HTTPS/JSON) para o back-end Django no Render;
+3. O back-end aplica as regras de negócio (autenticação, validações, importação transacional, cálculo de rotas e auditoria);
+4. Os dados são persistidos ou consultados no PostgreSQL hospedado no Neon via ORM do Django;
 5. A resposta é retornada ao front-end, atualizando a interface do usuário.
 
 ## 8. Tecnologias Utilizadas
 
-> Seção a ser atualizada conforme definição final da stack pela equipe.
+Conforme definido no **ADR-001** (`docs/adr/ADR-001-arquitetura-mvp.md`):
 
-| Camada              | Tecnologia prevista                          |
-|---------------------|-------------------------------------------------|
-| Back-end            | A definir (ex.: Java com Spring Boot / Node.js com Express / Python com Django) |
-| Front-end           | A definir (ex.: React / Angular / HTML, CSS, JavaScript) |
-| Banco de Dados      | A definir (ex.: MySQL / PostgreSQL / SQL Server) |
-| Controle de versão  | Git e GitHub                                     |
-| Modelagem de dados  | Diagrama Entidade-Relacionamento (DER), UML       |
-| Gestão de projeto   | Kanban (ex.: Trello, GitHub Projects, Notion)     |
-| Documentação        | Markdown                                          |
+| Camada             | Tecnologia adotada                                      |
+|--------------------|---------------------------------------------------------|
+| Back-end           | Python 3.11+, Django 5.1, Django REST Framework (DRF)   |
+| Front-end          | React 19, TypeScript, Vite                              |
+| Banco de Dados     | PostgreSQL (hospedado no Neon)                          |
+| Hospedagem / Cloud | Vercel (Front-end) e Render (Back-end via Gunicorn)     |
+| Controle de versão | Git e GitHub                                            |
+| Modelagem          | Modelo C4 (Contexto, Contêineres e Componentes) em `docs/` |
+| Gestão de projeto  | GitHub Projects (Kanban)                                |
+| Documentação       | Markdown e Architecture Decision Records (ADR)          |
 
 ## 9. Modelagem de Dados
 
 ### 9.1 Dicionário de Entidades
 
-| Entidade    | Descrição                                                        |
-|-------------|----------------------------------------------------------------------|
-| Usuario     | Usuários do sistema e seus perfis de acesso (administrador, operador, auditor). |
-| Motorista   | Motoristas cadastrados, vinculados a veículos e rotas.                |
-| Veiculo     | Frota disponível para operação, com dados de capacidade e manutenção. |
-| Rota        | Trajetos planejados, com pontos de parada e janelas de horário.        |
-| Entrega     | Registros de entrega/coleta associados a uma rota específica.          |
-| Cliente     | Clientes atendidos pela operação logística.                            |
-| Fornecedor  | Fornecedores vinculados a contratos de prestação de serviço.            |
-| Contrato    | Contratos firmados com clientes e fornecedores, com vigência e cláusulas. |
-| Auditoria   | Registros de conformidade e não conformidade contratual, com ações corretivas. |
+| Entidade   | Descrição                                                                      |
+|------------|--------------------------------------------------------------------------------|
+| Usuario    | Usuários do sistema, polos vinculados e perfis de acesso (administrador, operador, auditor). |
+| Equipe / Motorista | Equipes operacionais e motoristas cadastrados, vinculados a veículos e rotas. |
+| Veiculo    | Frota disponível para operação, com dados de capacidade e manutenção.          |
+| OrdemServico | Ordens de Serviço importadas/cadastradas com status, polo e prioridade.      |
+| Rota       | Trajetos planejados, com pontos de parada e janelas de horário.                |
+| KitMaterial| Kits de materiais vinculados às equipes e bloqueados após conclusão da OS.     |
+| Contrato   | Contratos firmados com clientes e fornecedores, com vigência e cláusulas.      |
+| Auditoria  | Registros de conformidade, histórico de operações e não conformidades.         |
 
 ### 9.2 Relacionamentos Principais
 
-- Um **Motorista** pode estar vinculado a múltiplos **Veículos** ao longo do tempo, mas a apenas um por vez em cada **Rota**;
-- Uma **Rota** possui múltiplas **Entregas**, cada uma vinculada a um **Cliente**;
+- Uma **Equipe / Motorista** pode estar vinculada a múltiplos **Veículos** ao longo do tempo, mas a apenas um por vez em cada **Rota**;
+- Uma **Rota** possui múltiplas **Ordens de Serviço / Entregas**, vinculadas a um **Polo** operacional;
 - Um **Contrato** está vinculado a um **Cliente** ou **Fornecedor**, e pode gerar múltiplos registros de **Auditoria**;
-- Cada **Auditoria** pode gerar ações corretivas registradas e vinculadas ao contrato correspondente.
-
-> O diagrama entidade-relacionamento (DER) completo deve ser mantido em `database/diagramas/`.
+- Todas as operações críticas registram trilhas imutáveis na entidade **Auditoria**.
 
 ## 10. Estrutura do Repositório
 
 ```
 erp-roteirizacao-logistica/
 │
-├── backend/                  # API e regras de negócio
-│   ├── src/
-│   ├── config/
-│   └── tests/
+├── backend/                     # API REST em Python / Django + DRF
+│   ├── config/                  # Configurações do projeto Django (settings, urls, wsgi)
+│   ├── nucleo/                  # App principal (views, models, health check)
+│   ├── .env.example             # Modelo de variáveis de ambiente do backend
+│   ├── manage.py                # Utilitário CLI do Django
+│   └── requirements.txt         # Dependências Python
 │
-├── frontend/                  # Interface do usuário
-│   ├── src/
-│   ├── public/
-│   └── assets/
+├── frontend/                    # Interface SPA em React + TypeScript (Vite)
+│   ├── public/                  # Arquivos estáticos públicos
+│   ├── src/                     # Código-fonte React (App.tsx, componentes, serviços)
+│   ├── .env.example             # Modelo de variáveis de ambiente do frontend
+│   ├── index.html               # Ponto de entrada HTML
+│   ├── package.json             # Dependências e scripts Node
+│   └── vite.config.ts           # Configuração do Vite
 │
-├── database/                   # Scripts SQL, migrações e diagramas
-│   ├── migrations/
-│   └── diagramas/
-│
-├── docs/                        # Documentação complementar do projeto
-│   ├── requisitos.md
-│   └── arquitetura.md
+├── docs/                        # Pacote de Contexto (Etapa 1)
+│   ├── adr/
+│   │   └── ADR-001-arquitetura-mvp.md
+│   ├── contrato-api.md          # Especificação dos endpoints REST
+│   ├── historias-priorizadas.md # Histórias de usuário do MVP
+│   ├── registro-uso-ia.md       # Log obrigatório de uso de IA nas etapas
+│   └── c4-nivel*.png            # Diagramas da arquitetura C4
 │
 ├── .gitignore
 ├── LICENSE
 └── README.md
 ```
 
-## 11. Instalação e Execução
+## 11. Instalação e Execução Local
 
 ### 11.1 Pré-requisitos
 
-- Git instalado;
-- Runtime/linguagem definida pela equipe (ex.: Node.js, JDK, Python);
-- SGBD configurado (ex.: MySQL, PostgreSQL);
-- Gerenciador de pacotes correspondente à stack escolhida (ex.: npm, pip, maven).
+- **Git** instalado;
+- **Python 3.11+** instalado;
+- **Node.js 20+ (LTS)** e **npm** instalados;
+- Uma URL de conexão PostgreSQL válida (ex.: banco gratuito no [Neon](https://neon.tech)).
 
 ### 11.2 Passo a Passo
 
 ```bash
 # 1. Clonar o repositório
-git clone https://github.com/WendellSantoss/erp-roteirizacao-logistica.git
-
-# 2. Acessar a pasta do projeto
+git clone [https://github.com/WendellSantoss/erp-roteirizacao-logistica.git](https://github.com/WendellSantoss/erp-roteirizacao-logistica.git)
 cd erp-roteirizacao-logistica
-
-# 3. Instalar as dependências
-npm install
-
-# 4. Configurar as variáveis de ambiente
-cp .env.example .env
-
-# 5. Executar as migrações do banco de dados
-npm run migrate
-
-# 6. Iniciar a aplicação
-npm start
 ```
 
-> Os comandos acima devem ser ajustados conforme a stack tecnológica final adotada pela equipe.
+#### Configurando e rodando o Back-end (`/backend`)
+```bash
+cd backend
+
+# Copie o arquivo de exemplo e preencha com sua DATABASE_URL real do Neon
+cp .env.example .env
+
+# Crie e ative o ambiente virtual
+python -m venv venv
+# No Windows:
+venv\Scripts\activate
+# No Linux/Mac:
+# source venv/bin/activate
+
+# Instale as dependências e inicie o servidor
+pip install -r requirements.txt
+python manage.py runserver
+```
+> A API ficará disponível em `http://127.0.0.1:8000` (teste o endpoint `http://127.0.0.1:8000/health`).
+
+#### Configurando e rodando o Front-end (`/frontend`)
+Em outro terminal, a partir da raiz do projeto:
+```bash
+cd frontend
+
+# Copie o arquivo de exemplo (apontando para [http://127.0.0.1:8000](http://127.0.0.1:8000))
+cp .env.example .env
+
+# Instale as dependências e inicie o servidor Vite
+npm install
+npm run dev
+```
+> A interface web ficará disponível em `http://localhost:5173`.
 
 ### 11.3 Variáveis de Ambiente
 
-| Variável       | Descrição                                  |
-|----------------|-------------------------------------------------|
-| `DB_HOST`      | Endereço do servidor de banco de dados          |
-| `DB_PORT`      | Porta de conexão do banco de dados              |
-| `DB_USER`      | Usuário de acesso ao banco de dados             |
-| `DB_PASSWORD`  | Senha de acesso ao banco de dados               |
-| `DB_NAME`      | Nome do banco de dados                          |
-| `APP_PORT`     | Porta em que a aplicação será executada         |
-| `JWT_SECRET`   | Chave secreta utilizada para geração de tokens de autenticação |
+| Pasta      | Variável               | Descrição                                                   |
+|------------|------------------------|-------------------------------------------------------------|
+| `backend`  | `SECRET_KEY`           | Chave secreta do Django                                     |
+| `backend`  | `DEBUG`                | `True` em desenvolvimento local, `False` em produção        |
+| `backend`  | `DATABASE_URL`         | String de conexão PostgreSQL do Neon (`postgresql://...`)   |
+| `backend`  | `ALLOWED_HOSTS`        | Hosts permitidos (ex.: `localhost,127.0.0.1` ou `.onrender.com`) |
+| `backend`  | `CORS_ALLOWED_ORIGINS` | URL do front-end autorizada a consumir a API                |
+| `frontend` | `VITE_API_URL`         | URL base da API Django (sem barra no final)                 |
 
 ## 12. Padrão de Contribuição
 
 ### 12.1 Fluxo de Branches
 
-1. Realize um fork do repositório (caso não seja colaborador direto);
-2. Crie uma branch a partir de `main` com nome descritivo: `feature/nome-da-feature`, `fix/nome-do-bug` ou `docs/nome-da-documentacao`;
-3. Desenvolva e teste as alterações localmente;
-4. Envie a branch para o repositório remoto;
-5. Abra um Pull Request descrevendo claramente as alterações realizadas;
-6. Aguarde revisão de ao menos um outro integrante da equipe antes do merge.
+1. Crie uma branch a partir de `main` com nome descritivo: `feature/nome-da-feature`, `fix/nome-do-bug` ou `docs/nome-da-documentacao`;
+2. Desenvolva e teste as alterações localmente;
+3. Envie a branch para o repositório remoto;
+4. Abra um Pull Request descrevendo claramente as alterações realizadas;
+5. Aguarde revisão de ao menos um outro integrante da equipe antes do merge.
 
 ### 12.2 Padrão de Commits
 
 Utilize o padrão `tipo: descrição breve`, seguindo os tipos abaixo:
 
 | Tipo       | Uso                                                        |
-|------------|-------------------------------------------------------------|
-| `feat`     | Nova funcionalidade                                          |
-| `fix`      | Correção de bug                                              |
-| `docs`     | Alterações na documentação                                   |
-| `refactor` | Refatoração de código sem alteração de comportamento         |
-| `test`     | Adição ou ajuste de testes                                   |
-| `chore`    | Tarefas de manutenção (configuração, dependências, etc.)     |
+|------------|------------------------------------------------------------|
+| `feat`     | Nova funcionalidade                                        |
+| `fix`      | Correção de bug                                            |
+| `docs`     | Alterações na documentação                                 |
+| `refactor` | Refatoração de código sem alteração de comportamento       |
+| `test`     | Adição ou ajuste de testes                                 |
+| `chore`    | Tarefas de manutenção (configuração, dependências, etc.)   |
 
-Exemplo: `feat: adiciona cálculo de rota otimizada por distância`
+Exemplo: `feat: adiciona endpoint de health check conectado ao Neon`
 
 ## 13. Testes
 
-- **Testes unitários**: cobrindo regras de negócio críticas (cálculo de rotas, validações de contrato, controle de status de entrega);
-- **Testes de integração**: validando a comunicação entre back-end e banco de dados;
-- **Testes manuais**: roteiro de testes funcionais documentado em `docs/` para validação das principais jornadas de uso (cadastro de rota, registro de entrega, cadastro e auditoria de contrato).
-
-```bash
-# Exemplo de execução de testes (ajustar conforme stack adotada)
-npm test
-```
+- **Smoke Test / Health Check (Etapa 2):** Validação ponta a ponta entre Front-end (Vercel) $\rightarrow$ Back-end (Render) $\rightarrow$ Banco de Dados (Neon) via `GET /health` executando `SELECT 1;`.
+- **Testes unitários e de integração:** Cobrindo regras de negócio críticas (importação transacional, cálculo de rotas, trava de kits e auditoria) nas próximas etapas.
 
 ## 14. Segurança e Conformidade
 
 - Autenticação de usuários com armazenamento de senhas criptografadas;
-- Controle de acesso baseado em perfis (RBAC), restringindo funcionalidades conforme o papel do usuário;
-- Log de auditoria para todas as ações relevantes realizadas no sistema (criação, edição e exclusão de registros);
-- Validação de dados de entrada em todas as camadas para prevenir inconsistências e vulnerabilidades comuns (ex.: injeção de SQL);
-- Boas práticas de proteção de variáveis sensíveis, mantendo credenciais fora do controle de versão (uso de `.env`).
+- Controle de acesso baseado em perfis (RBAC) e segregação operacional por polo;
+- Log de auditoria para todas as ações relevantes realizadas no sistema;
+- Proteção rigorosa de credenciais mantendo `.env` fora do controle de versão e versionando apenas `.env.example`.
 
 ## 15. Indicadores e Relatórios (KPIs)
 
-O dashboard administrativo deve consolidar, entre outros, os seguintes indicadores:
+O dashboard administrativo consolida os seguintes indicadores:
 
-- Número de rotas concluídas no período;
-- Tempo médio de entrega por rota;
+- Número de rotas e Ordens de Serviço concluídas no período;
+- Tempo médio de execução/entrega por rota;
 - Percentual de entregas realizadas dentro do prazo;
-- Custo médio por rota (combustível, manutenção);
+- Custo médio por rota e consumo de kits;
 - Número de contratos ativos, em renovação e encerrados;
-- Número de não conformidades identificadas em auditorias no período;
 - Percentual de conformidade contratual geral.
 
 ## 16. Roadmap
 
 - [x] Levantamento de requisitos funcionais e não funcionais
-- [ ] Modelagem do banco de dados
-- [ ] Desenvolvimento do módulo de roteirização
-- [ ] Desenvolvimento do módulo de controle logístico
+- [x] Pacote de contexto e arquitetura (Histórias priorizadas, ADR-001, Diagramas C4 e Contrato da API)
+- [x] Esqueleto ambulante publicado na nuvem (Vercel $\rightarrow$ Render $\rightarrow$ Neon)
+- [ ] Modelagem completa do banco de dados e migrations do domínio
+- [ ] Desenvolvimento do módulo de importação GSAN e roteirização
+- [ ] Desenvolvimento do módulo de controle logístico e kits
 - [ ] Desenvolvimento do módulo de auditoria de contratos
-- [ ] Implementação de autenticação e perfis de acesso
-- [ ] Implementação do dashboard de indicadores
+- [ ] Implementação completa de autenticação, RBAC e dashboard de KPIs
 - [ ] Testes automatizados (unitários e de integração)
-- [ ] Documentação técnica complementar (`docs/`)
-- [ ] Deploy em ambiente de homologação
-- [ ] Deploy em ambiente de produção
 
 ## 17. Perguntas Frequentes (FAQ)
 
-**O sistema pode ser utilizado por empresas de qualquer porte?**
-Sim, a arquitetura foi pensada para ser escalável, atendendo desde pequenas transportadoras até operações de maior volume.
-
-**É necessário conexão com serviços externos de mapas?**
-Dependendo da estratégia de roteirização adotada, pode ser necessária integração com APIs de geolocalização e cálculo de rotas (a definir pela equipe).
+**Por que a primeira requisição demora cerca de 1 minuto?**
+Porque o back-end está hospedado no plano gratuito do Render, que coloca o serviço em hibernação após períodos sem acesso. Assim que o contêiner reativa, as respostas seguintes voltam a ser rápidas.
 
 **O sistema substitui o uso de planilhas de controle logístico?**
 Sim, esse é um dos objetivos centrais do projeto: centralizar em uma única plataforma informações antes dispersas em planilhas e controles manuais.
 
 ## 18. Glossário
 
-| Termo         | Definição                                                                 |
-|---------------|--------------------------------------------------------------------------|
-| ERP           | Enterprise Resource Planning — sistema integrado de gestão empresarial.  |
-| Roteirização  | Processo de planejamento e otimização de rotas de entrega/coleta.       |
-| KPI           | Key Performance Indicator — indicador-chave de desempenho.               |
-| RBAC          | Role-Based Access Control — controle de acesso baseado em papéis/perfis. |
-| DER           | Diagrama Entidade-Relacionamento — representação da modelagem de dados. |
+| Termo            | Definição                                                                |
+|------------------|--------------------------------------------------------------------------|
+| ERP              | Enterprise Resource Planning — sistema integrado de gestão empresarial.  |
+| Roteirização     | Processo de planejamento e otimização de rotas de entrega/coleta.        |
+| KPI              | Key Performance Indicator — indicador-chave de desempenho.               |
+| RBAC             | Role-Based Access Control — controle de acesso baseado em papéis/perfis. |
+| OS               | Ordem de Serviço operacional vinculada a um polo e uma equipe.           |
 | Não conformidade | Situação em que uma cláusula contratual ou processo não é cumprido conforme o previsto. |
 
-## 19. Equipe
-
-Projeto desenvolvido por:
-
-| Integrante                |
-|----------------------------|
-| Ana Beatriz da Silva        |
-| Deivisson da Silva Rocha    |
-| Felipe de Almeida Silva     |
-| Wendell dos Santos          |
-
-## 20. Licença
+## 19. Licença
 
 Este projeto está licenciado sob os termos da licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
 
