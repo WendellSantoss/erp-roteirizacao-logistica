@@ -1,0 +1,49 @@
+# Configuração de qualidade do backend (Etapa 3 — guia de código, ver AGENTS.md §4)
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+extend-exclude = ["*/migrations/*", ".venv"]
+
+[tool.ruff.lint]
+select = [
+  "E", "W",   # pycodestyle
+  "F",        # pyflakes
+  "I",        # ordenação de imports
+  "N",        # nomes (pep8-naming)
+  "B",        # bugbear
+  "C90",      # complexidade ciclomática (mccabe)
+  "PL",       # pylint: parâmetros, comandos, ramificações, retornos
+  "BLE",      # proíbe except Exception genérico
+  "ERA",      # proíbe código comentado
+  "DJ",       # boas práticas Django
+  "UP",       # sintaxe moderna
+  "SIM",      # simplificações
+  "RET",      # retornos
+  "T20",      # proíbe print
+  "TID",      # imports banidos (camadas, ver banned-api)
+]
+ignore = [
+  "PLR2004",  # números mágicos em testes de constraint são legíveis
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 8
+
+[tool.ruff.lint.pylint]
+max-args = 4
+max-positional-args = 4
+max-statements = 30
+max-branches = 8
+max-returns = 4
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+# Rotas não acessam o banco: ORM, SQL e transação ficam em models/consultas/services (AGENTS.md §2).
+"django.db".msg = "views.py não acessa o banco; use services.py ou consultas.py"
+
+[tool.ruff.lint.per-file-ignores]
+# banned-api vale só para as rotas
+"!**/views.py" = ["TID251"]
+"manage.py" = ["PLC0415"]  # arquivo gerado pelo Django: import tardio é intencional

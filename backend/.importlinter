@@ -1,0 +1,37 @@
+# Regras de dependência entre módulos (docs/diagramas-c4/README.md e AGENTS.md §2).
+# A regra "views.py não acessa o banco" fica no ruff (TID251), pois o import-linter não
+# proíbe subpacotes externos como django.db.
+[importlinter]
+root_packages =
+    config
+    nucleo
+    importacao
+    almoxarifado
+    dados_demo
+
+[importlinter:contract:nucleo-independente]
+name = Núcleo não depende de módulos de negócio
+type = forbidden
+source_modules =
+    nucleo
+forbidden_modules =
+    importacao
+    almoxarifado
+
+[importlinter:contract:modulos-independentes]
+name = Módulos de negócio não importam um ao outro
+type = independence
+modules =
+    importacao
+    almoxarifado
+
+[importlinter:contract:seeds-isolados]
+name = Código de produção não depende dos dados de demonstração
+type = forbidden
+source_modules =
+    config
+    nucleo
+    importacao
+    almoxarifado
+forbidden_modules =
+    dados_demo

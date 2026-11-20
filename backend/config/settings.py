@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 import dj_database_url
 from dotenv import load_dotenv
 
@@ -25,6 +26,9 @@ INSTALLED_APPS = [
     "corsheaders",
     # Apps do GeniOS
     "nucleo",
+    "importacao",
+    "almoxarifado",
+    "dados_demo",
 ]
 
 MIDDLEWARE = [
@@ -80,6 +84,4 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = os.getenv(
-    "CORS_ALLOWED_ORIGINS", "http://localhost:5173"
-).split(",")
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")
