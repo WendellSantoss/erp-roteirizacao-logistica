@@ -220,25 +220,19 @@ Conforme definido no **ADR-001** (`docs/adr/ADR-001-arquitetura-mvp.md`):
 
 ## 9. Modelagem de Dados
 
-### 9.1 Dicionário de Entidades
+O esquema completo, com justificativas, riscos, LGPD e a tabela "história → tabelas lidas/gravadas",
+está em **[`docs/banco/modelo-dados.md`](docs/banco/modelo-dados.md)**. Diagrama ER:
+[`docs/banco/diagrama-er.png`](docs/banco/diagrama-er.png).
 
-| Entidade   | Descrição                                                                      |
-|------------|--------------------------------------------------------------------------------|
-| Usuario    | Usuários do sistema, polos vinculados e perfis de acesso (administrador, operador, auditor). |
-| Equipe / Motorista | Equipes operacionais e motoristas cadastrados, vinculados a veículos e rotas. |
-| Veiculo    | Frota disponível para operação, com dados de capacidade e manutenção.          |
-| OrdemServico | Ordens de Serviço importadas/cadastradas com status, polo e prioridade.      |
-| Rota       | Trajetos planejados, com pontos de parada e janelas de horário.                |
-| KitMaterial| Kits de materiais vinculados às equipes e bloqueados após conclusão da OS.     |
-| Contrato   | Contratos firmados com clientes e fornecedores, com vigência e cláusulas.      |
-| Auditoria  | Registros de conformidade, histórico de operações e não conformidades.         |
+| Módulo | Tabelas | Histórias |
+|---|---|---|
+| `nucleo` | Polo, PerfilUsuario (+ `auth_user`), Unidade, Equipe, OrdemServico, RegistroAuditoria | HU-019/020, HU-006..008, HU-F11 |
+| `importacao` | Importacao, AlertaImportacao | HU-001..004 |
+| `almoxarifado` | TipoKit, ExecucaoKit (limite D-1), SaidaKit | HU-016 |
 
-### 9.2 Relacionamentos Principais
-
-- Uma **Equipe / Motorista** pode estar vinculada a múltiplos **Veículos** ao longo do tempo, mas a apenas um por vez em cada **Rota**;
-- Uma **Rota** possui múltiplas **Ordens de Serviço / Entregas**, vinculadas a um **Polo** operacional;
-- Um **Contrato** está vinculado a um **Cliente** ou **Fornecedor**, e pode gerar múltiplos registros de **Auditoria**;
-- Todas as operações críticas registram trilhas imutáveis na entidade **Auditoria**.
+- A OS é identificada por `(numero, polo)` (RN-01) e só tem os campos vindos do GSAN atualizados na reimportação (RN-02).
+- A trilha de auditoria é **append-only**: um trigger no PostgreSQL bloqueia UPDATE e DELETE (RNF-16).
+- No máximo uma importação em andamento por polo, garantido por índice único parcial.
 
 ## 10. Estrutura do Repositório
 
@@ -247,10 +241,16 @@ erp-roteirizacao-logistica/
 │
 ├── backend/                     # API REST em Python / Django + DRF
 │   ├── config/                  # Configurações do projeto Django (settings, urls, wsgi)
-│   ├── nucleo/                  # App principal (views, models, health check)
+│   ├── nucleo/                  # Núcleo: polos, usuários, OS, auditoria, health check
+│   ├── importacao/              # Módulo de importação da planilha GSAN
+│   ├── almoxarifado/            # Módulo de kits e trava de histórico
+│   ├── dados_demo/              # Seeds fictícios (python manage.py popular_dados_demo)
 │   ├── .env.example             # Modelo de variáveis de ambiente do backend
+│   ├── .importlinter            # Regras de dependência entre módulos
+│   ├── pyproject.toml           # Configuração do ruff (linter e formatter)
 │   ├── manage.py                # Utilitário CLI do Django
-│   └── requirements.txt         # Dependências Python
+│   ├── requirements.txt         # Dependências Python
+│   └── requirements-dev.txt     # Ferramentas de qualidade (ruff, import-linter)
 │
 ├── frontend/                    # Interface SPA em React + TypeScript (Vite)
 │   ├── public/                  # Arquivos estáticos públicos
@@ -265,9 +265,14 @@ erp-roteirizacao-logistica/
 │   │   └── ADR-001-arquitetura-mvp.md
 │   ├── contrato-api.md          # Especificação dos endpoints REST
 │   ├── historias-priorizadas.md # Histórias de usuário do MVP
+│   ├── banco/                   # Modelo de dados e diagrama ER (Etapa 4)
+│   ├── processo/                # Processo e template de prompt (Etapa 3)
 │   ├── registro-uso-ia.md       # Log obrigatório de uso de IA nas etapas
-│   └── c4-nivel*.png            # Diagramas da arquitetura C4
+│   └── diagramas-c4/            # Diagramas da arquitetura C4
 │
+├── .github/workflows/           # CI: lint, regras de camadas, testes e build
+├── AGENTS.md                    # Guia de código para humanos e IA (Etapa 3)
+├── CLAUDE.md                    # Importa o AGENTS.md para o Claude Code
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -304,9 +309,14 @@ venv\Scripts\activate
 # No Linux/Mac:
 # source venv/bin/activate
 
-# Instale as dependências e inicie o servidor
-pip install -r requirements.txt
+# Instale as dependências, crie as tabelas, popule os dados fictícios e inicie o servidor
+pip install -r requirements-dev.txt
+python manage.py migrate
+python manage.py popular_dados_demo   # usa SENHA_USUARIOS_DEMO do .env
 python manage.py runserver
+
+# Verificações do guia de código (AGENTS.md) — rodar antes de cada commit
+ruff format --check . && ruff check . && lint-imports && python manage.py test
 ```
 > A API ficará disponível em `http://127.0.0.1:8000` (teste o endpoint `http://127.0.0.1:8000/health`).
 
@@ -321,6 +331,9 @@ cp .env.example .env
 # Instale as dependências e inicie o servidor Vite
 npm install
 npm run dev
+
+# Verificações do guia de código (AGENTS.md)
+npm run format:check && npm run lint && npm run build
 ```
 > A interface web ficará disponível em `http://localhost:5173`.
 
@@ -333,6 +346,7 @@ npm run dev
 | `backend`  | `DATABASE_URL`         | String de conexão PostgreSQL do Neon (`postgresql://...`)   |
 | `backend`  | `ALLOWED_HOSTS`        | Hosts permitidos (ex.: `localhost,127.0.0.1` ou `.onrender.com`) |
 | `backend`  | `CORS_ALLOWED_ORIGINS` | URL do front-end autorizada a consumir a API                |
+| `backend`  | `SENHA_USUARIOS_DEMO`  | Senha dos usuários fictícios criados pelo seed (só local/demonstração) |
 | `frontend` | `VITE_API_URL`         | URL base da API Django (sem barra no final)                 |
 
 ## 12. Padrão de Contribuição

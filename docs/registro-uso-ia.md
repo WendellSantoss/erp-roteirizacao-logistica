@@ -66,3 +66,40 @@ Ao cruzar os fluxos das 5 histórias priorizadas com os endpoints e payloads def
 | 15/11/2026 | Gemini (gratuito) | 1. Pacote de Contexto | Revisar `contrato-api.md` contra `historias-priorizadas.md` apontando endpoints faltantes ou inconsistentes. | Apontou 3 endpoints faltantes (`equipes`, `auditoria`, `logout`) e 6 inconsistências de payload/paginação/status HTTP; sugestões verificadas contra o Projeto Arquitetural e os diagramas C4. | Incorporados os endpoints de consulta, padronizado retorno `201 Created` síncrono para o Render gratuito, adicionada paginação e descartado fluxo assíncrono Celery/Redis e `HU-018` no escopo do MVP. |
 | 16/11/2026 | Gemini (gratuito) | 2. Esqueleto ambulante | Gerar configuração inicial do Django + DRF com rota `GET /health` (`SELECT 1;`) conectada ao PostgreSQL Neon e frontend React + TypeScript com Vite | Estrutura criada localmente e validada com retorno `HTTP 200 OK` antes do deploy | Ajustado `DATABASE_URL` no `.env` local e configurado `.gitignore` para bloquear credenciais |
 | 16/11/2026 | Gemini (gratuito) | 2. Esqueleto ambulante | Diagnosticar falha de build no Render (`psycopg-binary`) e configurar comunicação CORS entre Vercel e Render | Identificada incompatibilidade do `psycopg-binary==3.2.3` com Python 3.14 no Render e necessidade de liberar origem da Vercel | Atualizado `psycopg[binary]==3.3.9` no `requirements.txt`, fixada versão do Python no Render e atualizado `CORS_ALLOWED_ORIGINS` com a URL da Vercel |
+| 20/11/2026 | Claude Code · Opus 5.5 (plano: _a confirmar_) | 3. Guia de código | Ler PDF da atividade, ADR, C4 e contrato; rascunhar `AGENTS.md` com camadas, nomes, limites, erros, comentários e testes; configurar ruff, import-linter, ESLint e Prettier | Linters rodando sem erro sobre o esqueleto da Etapa 2; regra de camada testada inserindo `from django.db import ...` numa view (ruff acusou TID251) | Regras **pendentes de revisão e aprovação do grupo**; `/health` refatorado (SQL movido para `nucleo/consultas.py`, `except Exception` trocado por `DatabaseError`, `fetch` movido para `src/servicos/`) |
+| 20/11/2026 | Claude Code · Opus 5.5 (plano: _a confirmar_) | 4. Banco de dados | Derivar models das 5 histórias + C4 nível 4, com migrations, trigger de auditoria, seeds fictícios, testes de esquema, justificativas e riscos | 23 testes verdes em PostgreSQL 17 local; `migrate` do zero, `migrate zero` e reaplicação OK; seed idempotente (rodado 2×); UPDATE na auditoria recusado pelo trigger | Removido campo `desconsiderada` do C4 (derivado do estado); removido bloqueio de TRUNCATE; PostGIS adiado; ER gerado com Graphviz |
+
+---
+
+## Etapas 3 e 4 — detalhes (Pessoa 2: Deivisson)
+
+### Ferramenta
+Claude Code (agente de terminal que lê o repositório) com o modelo Opus 5.5. O agente lê
+`CLAUDE.md` automaticamente, que importa o `AGENTS.md`.
+
+### Prompt inicial (resumo)
+> "Chegou a hora de fazer o projeto final (PDF). Eu fiquei como a Pessoa 2 (Etapas 3 e 4). Dê um
+> pull e vamos começar."
+
+O agente leu o PDF da atividade, `historias-priorizadas.md`, `contrato-api.md`, ADR-001, o README
+dos diagramas C4, a imagem do C4 nível 4 e as histórias HU-004, HU-016, HU-020 e HU-F11 antes de
+propor qualquer código.
+
+### Erros e alucinações da IA detectados (insumo para a Etapa 8)
+
+| # | O que a IA fez | Como percebemos | Correção |
+|---|---|---|---|
+| 1 | Usou na view uma exceção `nucleo.excecoes.BancoIndisponivel` que **não existia** | O ruff passou (não valida imports inexistentes); a própria IA notou ao revisar o diff, antes de rodar | Reescrito: `banco_disponivel()` retorna `bool` e trata `DatabaseError` |
+| 2 | Supôs que o import-linter conseguia proibir `django.db` nas views | `lint-imports` falhou: "subpackages of external packages are not valid" | Regra movida para o ruff (`TID251` banned-api só em `views.py`) |
+| 3 | Um `sed` para registrar o app `dados_demo` inseriu o nome em **todos** os contratos do `.importlinter` | Contrato de independência quebrou apontando `dados_demo` | Arquivo reescrito à mão |
+| 4 | Esperava `InternalError` do trigger; o Django levanta `ProgrammingError` | Testes de imutabilidade falharam | Teste ajustado para o tipo real |
+| 5 | Primeiro trigger também bloqueava TRUNCATE | Análise: o `flush` do `TransactionTestCase` usa TRUNCATE, e a Etapa 5 precisa dele para testar a concorrência da trava (HU-016 CA07) | Bloqueio de TRUNCATE removido e risco documentado |
+
+### Divergências da arquitetura (e decisão)
+- C4 nível 4 tem `OrdemServico.desconsiderada: bool` → **removido** (duas fontes de verdade); exposto como propriedade.
+- ADR prevê PostGIS → **adiado** (seleção por polígono está fora do MVP).
+- C4 mostra `Importacao.arquivo: FileField` → **não guardamos o arquivo** (disco efêmero do Render), só nome + hash.
+- C4 mostra `Usuario` próprio → **`PerfilUsuario` 1-1 com `auth.User`** (migrations de `auth` já aplicadas no Neon na Etapa 2).
+
+### Proporção aproximada
+Estimativa inicial (a conferir pelo grupo após a revisão): gerado pela IA e aceito como veio ~70%; ajustado após revisão/teste ~25%; reescrito à mão ~5%.

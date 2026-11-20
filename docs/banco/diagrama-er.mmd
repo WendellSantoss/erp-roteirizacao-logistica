@@ -1,0 +1,138 @@
+erDiagram
+    POLO ||--o{ UNIDADE : "possui"
+    POLO ||--o{ EQUIPE : "possui"
+    POLO ||--o{ ORDEM_SERVICO : "agrupa"
+    POLO }o--o{ PERFIL_USUARIO : "autoriza"
+    AUTH_USER ||--|| PERFIL_USUARIO : "tem"
+    UNIDADE ||--o{ ORDEM_SERVICO : "localiza"
+    EQUIPE |o--o{ ORDEM_SERVICO : "atribuida a"
+    POLO ||--o{ IMPORTACAO : "recebe"
+    AUTH_USER ||--o{ IMPORTACAO : "envia"
+    IMPORTACAO ||--o{ ALERTA_IMPORTACAO : "gera"
+    IMPORTACAO |o--o{ ORDEM_SERVICO : "cria / atualiza"
+    POLO |o--o{ REGISTRO_AUDITORIA : "escopo"
+    AUTH_USER |o--o{ REGISTRO_AUDITORIA : "autor"
+    POLO ||--o{ EXECUCAO_KIT : "executou"
+    TIPO_KIT ||--o{ EXECUCAO_KIT : "de"
+    POLO ||--o{ SAIDA_KIT : "registra"
+    EQUIPE ||--o{ SAIDA_KIT : "recebe"
+    TIPO_KIT ||--o{ SAIDA_KIT : "de"
+    AUTH_USER ||--o{ SAIDA_KIT : "registrou"
+
+    POLO {
+        bigint id PK
+        varchar codigo UK
+        varchar nome UK
+        bool ativo
+    }
+    AUTH_USER {
+        int id PK
+        varchar username UK "e-mail"
+        varchar email
+        varchar first_name
+        varchar password "hash"
+        bool is_active
+    }
+    PERFIL_USUARIO {
+        bigint id PK
+        int usuario_id FK,UK
+        varchar perfil "CHECK enum"
+        bool pode_visualizar_todos
+    }
+    UNIDADE {
+        bigint id PK
+        bigint polo_id FK "UK(polo,codigo)"
+        varchar codigo
+        varchar nome
+        bool no_escopo
+        decimal latitude "nullable"
+        decimal longitude "nullable"
+    }
+    EQUIPE {
+        bigint id PK
+        bigint polo_id FK "UK(polo,codigo)"
+        varchar codigo
+        varchar nome
+        bool ativa
+    }
+    ORDEM_SERVICO {
+        bigint id PK
+        varchar numero "UK(numero,polo)"
+        bigint polo_id FK
+        bigint unidade_id FK
+        varchar tipo
+        varchar especificacao
+        varchar numero_imovel
+        varchar cidade
+        varchar setor
+        varchar quadra
+        timestamptz abertura
+        int prazo_horas "CHECK > 0"
+        varchar estado "CHECK enum"
+        bool prioridade
+        bigint equipe_id FK "nullable"
+        bigint importacao_origem_id FK "nullable"
+        bigint importacao_ultima_id FK "nullable"
+        timestamptz criado_em
+        timestamptz atualizado_em
+    }
+    IMPORTACAO {
+        bigint id PK
+        bigint polo_id FK "UK parcial: 1 em andamento"
+        int usuario_id FK
+        varchar nome_arquivo
+        char hash_sha256
+        varchar status "CHECK enum"
+        varchar etapa
+        smallint percentual "CHECK <= 100"
+        int total_linhas
+        int novas
+        int atualizadas
+        int fora_escopo
+        text motivo_falha
+        timestamptz iniciada_em
+        timestamptz concluida_em
+    }
+    ALERTA_IMPORTACAO {
+        bigint id PK
+        bigint importacao_id FK
+        int linha
+        varchar campo
+        varchar motivo
+    }
+    REGISTRO_AUDITORIA {
+        bigint id PK "append-only (trigger)"
+        bigint polo_id FK "nullable"
+        varchar entidade
+        bigint entidade_id
+        varchar campo
+        jsonb valor_anterior
+        jsonb valor_novo
+        text justificativa
+        int autor_id FK "nullable = sistema"
+        varchar origem "CHECK enum"
+        timestamptz registrado_em
+    }
+    TIPO_KIT {
+        bigint id PK
+        varchar codigo UK
+        varchar nome
+        bool ativo
+    }
+    EXECUCAO_KIT {
+        bigint id PK
+        bigint polo_id FK "UK(polo,kit,data)"
+        bigint tipo_kit_id FK
+        date data
+        int quantidade
+    }
+    SAIDA_KIT {
+        bigint id PK
+        bigint polo_id FK
+        bigint equipe_id FK
+        bigint tipo_kit_id FK
+        int quantidade "CHECK > 0"
+        date data
+        timestamptz registrado_em
+        int registrado_por_id FK
+    }
