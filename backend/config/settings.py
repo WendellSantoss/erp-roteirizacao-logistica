@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import dj_database_url
+from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,6 +24,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Bibliotecas de terceiros
     "rest_framework",
+    "rest_framework.authtoken",
+    "drf_spectacular",
     "corsheaders",
     # Apps do GeniOS
     "nucleo",
@@ -85,3 +88,33 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+# O filtro global de polo viaja no cabeçalho X-Polo-Id (contrato §1).
+CORS_ALLOW_HEADERS = (*default_headers, "x-polo-id")
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ["nucleo.autenticacao.TokenBearerComValidade"],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "EXCEPTION_HANDLER": "nucleo.tratamento_erros.tratar_excecao",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "GeniOS API",
+    "DESCRIPTION": "API do MVP do GeniOS. Contrato de referência: docs/contrato-api.md.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+# HU-001 RN-L02: planilha de até 25 MiB. O Django precisa aceitar o corpo para o service
+# responder 413 com mensagem clara em vez de um erro genérico.
+LIMITE_PLANILHA_BYTES = 25 * 1024 * 1024
+DATA_UPLOAD_MAX_MEMORY_SIZE = LIMITE_PLANILHA_BYTES + 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = LIMITE_PLANILHA_BYTES + 1024 * 1024
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "root": {"handlers": ["console"], "level": "INFO"},
+}
