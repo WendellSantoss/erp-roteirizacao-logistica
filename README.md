@@ -254,7 +254,8 @@ erp-roteirizacao-logistica/
 │
 ├── frontend/                    # Interface SPA em React + TypeScript (Vite)
 │   ├── public/                  # Arquivos estáticos públicos
-│   ├── src/                     # Código-fonte React (App.tsx, componentes, serviços)
+│   ├── src/                     # servicos/ (única camada com fetch), tipos/, hooks/, componentes/, paginas/
+│   ├── vercel.json              # Rewrite da SPA (rotas /pendencias, /importacao... abrem direto)
 │   ├── .env.example             # Modelo de variáveis de ambiente do frontend
 │   ├── index.html               # Ponto de entrada HTML
 │   ├── package.json             # Dependências e scripts Node
@@ -266,7 +267,7 @@ erp-roteirizacao-logistica/
 │   ├── contrato-api.md          # Especificação dos endpoints REST
 │   ├── historias-priorizadas.md # Histórias de usuário do MVP
 │   ├── banco/                   # Modelo de dados e diagrama ER (Etapa 4)
-│   ├── processo/                # Processo e template de prompt (Etapa 3)
+│   ├── processo/                # Template de prompt (Etapa 3) e relatório das Etapas 5 e 6
 │   ├── registro-uso-ia.md       # Log obrigatório de uso de IA nas etapas
 │   └── diagramas-c4/            # Diagramas da arquitetura C4
 │
@@ -318,7 +319,7 @@ python manage.py runserver
 # Verificações do guia de código (AGENTS.md) — rodar antes de cada commit
 ruff format --check . && ruff check . && lint-imports && python manage.py test
 ```
-> A API ficará disponível em `http://127.0.0.1:8000` (teste o endpoint `http://127.0.0.1:8000/health`).
+> A API ficará disponível em `http://127.0.0.1:8000` (teste o endpoint `http://127.0.0.1:8000/health`). A documentação interativa (Swagger) fica em `http://127.0.0.1:8000/api/docs/`.
 
 #### Configurando e rodando o Front-end (`/frontend`)
 Em outro terminal, a partir da raiz do projeto:
@@ -333,7 +334,7 @@ npm install
 npm run dev
 
 # Verificações do guia de código (AGENTS.md)
-npm run format:check && npm run lint && npm run build
+npm run format:check && npm run lint && npm test && npm run build
 ```
 > A interface web ficará disponível em `http://localhost:5173`.
 
@@ -377,7 +378,10 @@ Exemplo: `feat: adiciona endpoint de health check conectado ao Neon`
 ## 13. Testes
 
 - **Smoke Test / Health Check (Etapa 2):** Validação ponta a ponta entre Front-end (Vercel) $\rightarrow$ Back-end (Render) $\rightarrow$ Banco de Dados (Neon) via `GET /health` executando `SELECT 1;`.
-- **Testes unitários e de integração:** Cobrindo regras de negócio críticas (importação transacional, cálculo de rotas, trava de kits e auditoria) nas próximas etapas.
+- **Backend (Etapa 5):** 101 testes em PostgreSQL (`python manage.py test`), um ou mais por critério de aceite das histórias do MVP: login e bloqueio (HU-019), matriz de acesso com `403` por célula (HU-020), ciclo de vida da OS com todas as transições (HU-F11), importação com layout, escopo e upsert tudo-ou-nada (HU-001 a HU-004), atraso e tratamento de pendências (HU-006 a HU-008) e trava de kits com teste de concorrência real (HU-016 CA07).
+- **Frontend (Etapa 6):** Vitest (`npm test`) para os formatos da HU-007 e a validação de envio da HU-001.
+- **Documentação da API:** Swagger UI em `/api/docs/` e esquema OpenAPI em `/api/schema/`, gerados do código.
+- Detalhes, mapa história → endpoint → teste e decisões: [`docs/processo/etapas-5-e-6.md`](docs/processo/etapas-5-e-6.md).
 
 ## 14. Segurança e Conformidade
 
@@ -402,12 +406,13 @@ O dashboard administrativo consolida os seguintes indicadores:
 - [x] Levantamento de requisitos funcionais e não funcionais
 - [x] Pacote de contexto e arquitetura (Histórias priorizadas, ADR-001, Diagramas C4 e Contrato da API)
 - [x] Esqueleto ambulante publicado na nuvem (Vercel $\rightarrow$ Render $\rightarrow$ Neon)
-- [ ] Modelagem completa do banco de dados e migrations do domínio
-- [ ] Desenvolvimento do módulo de importação GSAN e roteirização
-- [ ] Desenvolvimento do módulo de controle logístico e kits
-- [ ] Desenvolvimento do módulo de auditoria de contratos
-- [ ] Implementação completa de autenticação, RBAC e dashboard de KPIs
-- [ ] Testes automatizados (unitários e de integração)
+- [x] Guia de código, linters e CI (Etapa 3)
+- [x] Modelagem do banco de dados, migrations e seeds do MVP (Etapa 4)
+- [x] Backend das 5 histórias do MVP com testes e OpenAPI (Etapa 5)
+- [x] Frontend das 5 histórias do MVP consumindo a API (Etapa 6)
+- [ ] Integração, testes ponta a ponta e versão final (Etapa 7)
+- [ ] Retrospectiva sobre o uso de IA (Etapa 8)
+- [ ] Roteirização, controle logístico completo, auditoria de contratos e dashboard de KPIs (pós-MVP)
 
 ## 17. Perguntas Frequentes (FAQ)
 

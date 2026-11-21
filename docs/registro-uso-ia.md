@@ -69,6 +69,8 @@ Ao cruzar os fluxos das 5 histórias priorizadas com os endpoints e payloads def
 | 20/11/2026 | Claude Code · Opus 5.5 (Pro, pago) | 3. Guia de código | Ler PDF da atividade, ADR, C4 e contrato; rascunhar `AGENTS.md` com camadas, nomes, limites, erros, comentários e testes; configurar ruff, import-linter, ESLint e Prettier | Linters rodando sem erro sobre o esqueleto da Etapa 2; regra de camada testada inserindo `from django.db import ...` numa view (ruff acusou TID251) | Regras **pendentes de revisão e aprovação do grupo**; `/health` refatorado (SQL movido para `nucleo/consultas.py`, `except Exception` trocado por `DatabaseError`, `fetch` movido para `src/servicos/`) |
 | 20/11/2026 | Claude Code · Opus 5.5 (Pro, pago) | 4. Banco de dados | Derivar models das 5 histórias + C4 nível 4, com migrations, trigger de auditoria, seeds fictícios, testes de esquema, justificativas e riscos | 23 testes verdes em PostgreSQL 17 local; `migrate` do zero, `migrate zero` e reaplicação OK; seed idempotente (rodado 2×); UPDATE na auditoria recusado pelo trigger | Removido campo `desconsiderada` do C4 (derivado do estado); removido bloqueio de TRUNCATE; PostGIS adiado; ER gerado com Graphviz |
 
+| 21/11/2026 | Claude Code · Opus 5.5 (Pro, pago) | 5. Backend | Implementar, história por história, os endpoints do contrato com services, testes por CA e OpenAPI, seguindo AGENTS.md e o template de prompt | 101 testes verdes em PostgreSQL 17; ruff, lint-imports e makemigrations --check limpos; teste de mutação confirmou que o CA07 (concorrência) falha sem o `select_for_update`; 5.000 linhas importadas em 1,3 s | Agente corrigiu após lint/revisão: views chamando `consultas` direto (passaram a chamar services), helper importado de outra view, polo podendo ficar travado "em andamento" após erro inesperado (`try/finally`); N818 desativado com justificativa. **Revisão humana pendente** |
+| 21/11/2026 | Claude Code · Opus 5.5 (Pro, pago) | 6. Frontend | Uma tela por história consumindo a API só por `src/servicos/`, com estados de carregando/erro/vazio e acessibilidade básica | ESLint/Prettier/build limpos; 9 testes Vitest; roteiro Playwright local passou nos fluxos das 5 histórias, inclusive em 390 px sem rolagem horizontal | `setState` dentro de efeito (regra do react-hooks 7) reescrito; hook com nome fora do padrão; `eslint-disable` trocado por remontagem com `key`; estilo de cabeçalho vazando para `th` de linha. **Revisão humana pendente** |
 ---
 
 ## Etapas 3 e 4 — detalhes (Pessoa 2: Deivisson)
@@ -103,3 +105,52 @@ propor qualquer código.
 
 ### Proporção aproximada
 Estimativa inicial (a conferir pelo grupo após a revisão): gerado pela IA e aceito como veio ~70%; ajustado após revisão/teste ~25%; reescrito à mão ~5%.
+
+---
+
+## Etapas 5 e 6 — detalhes (Pessoa 3: Felipe)
+
+### Ferramenta
+Claude Code (agente de terminal que lê o repositório), modelo Opus 5.5. O agente lê `CLAUDE.md`, que
+importa o `AGENTS.md`. Plano: **Pro (pago)**.
+
+### Prompt inicial (resumo)
+> "Eu fiquei responsável pela Pessoa 3 (Etapas 5 e 6). O Deivisson fez a Pessoa 2 (PDF anexo) e a
+> Beatriz a Pessoa 1 (no repositório). Usaremos Vercel, Render e Neon. Analise os artefatos e
+> realize as etapas da Pessoa 3. Se tiver dúvida, pergunte. Pode usar contexto do gerOS."
+
+Antes de gerar código, o agente leu o PDF da atividade, o relatório das Etapas 3 e 4, `AGENTS.md`,
+contrato, ADR-001, README do C4, `modelo-dados.md`, as histórias HU-001 a HU-008, HU-016, HU-019,
+HU-020 e HU-F11, os models, seeds e testes existentes, e o protótipo visual em `docs/design/`.
+Do gerOS (sistema real da equipe) aproveitou só a forma de casar cabeçalhos do GSAN sem acento.
+
+Como o pedido foi um só, o agente aplicou internamente o template de `docs/processo/template-prompt.md`
+a cada incremento (contexto = história + trecho do contrato; tarefa = um endpoint/tela; critérios =
+AGENTS.md §2–§7; restrições = sem dependência não verificada, sem alterar migrations; saída = arquivos +
+testes). Cada incremento só foi commitado com lint e testes verdes.
+
+### Erros e alucinações da IA detectados (insumo para a Etapa 8)
+
+| # | O que a IA fez | Como percebemos | Correção |
+|---|---|---|---|
+| 1 | Deixou um import sem uso (`replace`) e um `__all__` estranho em `nucleo/upsert.py` | Revisão do próprio diff antes de rodar o lint | Removidos |
+| 2 | Views chamando `consultas.py` direto (pulando a camada de serviço) | Revisão contra a tabela de camadas do AGENTS.md (o linter não pega: só proíbe `django.db`) | Views passaram a chamar funções de `services.py` |
+| 3 | Primeira versão da importação podia deixar o polo travado "em andamento" para sempre se um erro inesperado (não de banco) ocorresse no meio | Análise do fluxo: o índice único parcial bloquearia todos os envios seguintes do polo | `try/finally` marca `FALHOU` e libera o polo |
+| 4 | Nomes de exceção em português conflitam com a regra N818 do ruff (exige sufixo `Error`) | `ruff check` | Regra desligada no `pyproject.toml` com justificativa (o AGENTS.md manda `ErroDeNegocio`, `TransicaoNaoPermitida`) |
+| 5 | `setState` síncrono dentro de `useEffect` e hook chamado `usarAcoes` | ESLint (`react-hooks/set-state-in-effect`, `rules-of-hooks`) | `useConsulta` reescrito derivando "carregando"; hook renomeado para `useAcoesPendencias` |
+| 6 | `eslint-disable` para forçar recarga ao trocar o polo | Revisão: o guia só aceita disable aprovado | Página remontada com `key={polo}` no `App.tsx` |
+| 7 | Teste supôs uma ordem fixa na lista de módulos do perfil | Teste falhou | `assertCountEqual` |
+| 8 | Captura de tela mostrou importação "VALIDANDO" no histórico | Conferência no banco (estava `CONCLUIDA`) | Não era bug: a captura saiu antes da recarga; roteiro passou a esperar a resposta |
+
+Teste de mutação: removendo o `select_for_update` da trava de kits, o teste do CA07 falhou 3 de 3
+vezes; com a trava, passou 3 de 3. Isso mostra que o teste realmente protege a regra.
+
+### Divergências da arquitetura e das histórias
+Ver a tabela da seção 4 de `docs/processo/etapas-5-e-6.md` (contrato x HU-001 CA05, sessão de 8 h x
+30 min, colunas omitidas, prazo padrão, D-1 corrido, importação síncrona).
+
+### Proporção aproximada
+Código gerado pelo agente: ~100% das linhas. Dentro disso, ~80% ficou como saiu na primeira versão e
+~20% foi ajustado pelo próprio agente após lint, testes ou revisão contra o AGENTS.md. Reescrito à mão
+pelo grupo: 0% até aqui — **a revisão humana (Felipe e grupo) ainda precisa acontecer e atualizar
+esta estimativa**.

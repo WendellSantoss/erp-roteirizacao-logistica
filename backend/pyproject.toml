@@ -24,6 +24,7 @@ select = [
 ]
 ignore = [
   "PLR2004",  # números mágicos em testes de constraint são legíveis
+  "N818",     # exceções seguem o domínio em português (AGENTS.md §5: ErroDeNegocio, TransicaoNaoPermitida)
 ]
 
 [tool.ruff.lint.mccabe]
