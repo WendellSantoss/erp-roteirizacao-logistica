@@ -8,6 +8,7 @@ from nucleo.tests.fabricas import cliente_autenticado, criar_polo, criar_usuario
 
 # Uma rota de leitura e uma de escrita por módulo do MVP.
 ROTAS = {
+    "importacao": ("/api/v1/importacoes/", "/api/v1/importacoes/"),
     "pendencias": ("/api/v1/ordens-servico/", "/api/v1/ordens-servico/1/desconsiderar/"),
     "auditoria": ("/api/v1/auditoria/", None),
     "equipes": ("/api/v1/equipes/", None),
