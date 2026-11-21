@@ -435,6 +435,7 @@ Sim, esse é um dos objetivos centrais do projeto: centralizar em uma única pla
 
 ## 19. Licença
 
+
 Este projeto está licenciado sob os termos da licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
 
 ---
