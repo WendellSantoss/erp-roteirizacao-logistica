@@ -41,6 +41,7 @@ class UsuarioSaida(serializers.Serializer):
     pode_visualizar_todos = serializers.BooleanField()
     polos_autorizados = PoloSaida(many=True)
     modulos = serializers.ListField(child=serializers.CharField())
+    modulos_editaveis = serializers.ListField(child=serializers.CharField())
 
 
 class LoginSaida(serializers.Serializer):

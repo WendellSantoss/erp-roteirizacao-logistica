@@ -43,6 +43,11 @@ def modulos_visiveis(perfil: str | None) -> list[str]:
     return [modulo for modulo in MATRIZ_ACESSO if pode_acessar(perfil, modulo, escrita=False)]
 
 
+def modulos_editaveis(perfil: str | None) -> list[str]:
+    """Módulos em que o perfil pode gravar; a tela esconde as ações dos demais."""
+    return [modulo for modulo in MATRIZ_ACESSO if pode_acessar(perfil, modulo, escrita=True)]
+
+
 def exige_acesso(modulo: str) -> type[BasePermission]:
     """Cria a permissão DRF do módulo: GET exige "ver"; os demais métodos exigem "editar"."""
 

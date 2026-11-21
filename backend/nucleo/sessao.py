@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from nucleo import consultas
 from nucleo.autenticacao import token_expirado
 from nucleo.excecoes import CredenciaisInvalidas, LoginBloqueado
-from nucleo.permissoes import modulos_visiveis
+from nucleo.permissoes import modulos_editaveis, modulos_visiveis
 
 # HU-019 RN-L02: 5 tentativas erradas seguidas bloqueiam o usuário por 15 minutos.
 MAXIMO_TENTATIVAS = 5
@@ -76,4 +76,5 @@ def dados_do_usuario(usuario) -> dict:
         "pode_visualizar_todos": perfil.pode_visualizar_todos,
         "polos_autorizados": consultas.polos_do_usuario(usuario),
         "modulos": modulos_visiveis(perfil.perfil),
+        "modulos_editaveis": modulos_editaveis(perfil.perfil),
     }

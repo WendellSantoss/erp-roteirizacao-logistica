@@ -42,6 +42,7 @@ class LoginTest(TestCase):
         self.assertEqual(corpo["usuario"]["perfil"], Perfil.ANALISTA_OPERACOES)
         self.assertEqual(corpo["usuario"]["polos_autorizados"][0]["codigo"], "POLO_1")
         self.assertIn("pendencias", corpo["usuario"]["modulos"])
+        self.assertCountEqual(corpo["usuario"]["modulos_editaveis"], ["importacao", "pendencias"])
 
     def test_ca02_senha_errada_e_email_inexistente_tem_a_mesma_mensagem(self):
         senha_errada = self.entrar(senha="errada")

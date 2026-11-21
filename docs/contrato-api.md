@@ -84,7 +84,7 @@ Autentica um usuário individual e retorna seu token de acesso, perfil, permiss�
   * `400 Bad Request`: Campos `email` ou `senha` ausentes.
   * `401 Unauthorized`: Credenciais inválidas ou usuário inativo. Mensagem única `"E-mail ou senha inválidos"`, sem revelar se o e-mail existe (`HU-019 RN-L05`).
   * `429 Too Many Requests` (`LOGIN_BLOQUEADO`): 5 tentativas erradas seguidas bloqueiam o e-mail por 15 minutos (`HU-019 RN-L02`). *Acrescentado na Etapa 5.*
-* **Campo `usuario.modulos` (acrescentado na Etapa 5):** lista dos módulos que o perfil pode abrir (`importacao`, `pendencias`, `equipes`, `almoxarifado`, `auditoria`), derivada da matriz da `HU-020`. O frontend monta o menu com ela; o servidor continua checando cada rota.
+* **Campo `usuario.modulos` (acrescentado na Etapa 5):** lista dos módulos que o perfil pode abrir (`importacao`, `pendencias`, `equipes`, `almoxarifado`, `auditoria`), derivada da matriz da `HU-020`. O frontend monta o menu com ela; o servidor continua checando cada rota. `usuario.modulos_editaveis` lista os módulos em que o perfil pode gravar (a tela esconde as ações dos demais).
 
 ---
 
