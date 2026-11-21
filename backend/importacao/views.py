@@ -32,7 +32,11 @@ class ImportacoesView(APIView):
         importacao = services.importar_planilha(pedido)
         return Response(serializers.ImportacaoSaida(importacao).data, status.HTTP_201_CREATED)
 
-    @extend_schema(parameters=[serializers.FiltroImportacoesEntrada], responses=OpenApiTypes.OBJECT)
+    @extend_schema(
+        operation_id="listar_importacoes",
+        parameters=[serializers.FiltroImportacoesEntrada],
+        responses=OpenApiTypes.OBJECT,
+    )
     def get(self, request):
         dados = validar(serializers.FiltroImportacoesEntrada, request.query_params)
         polos_ids = selecao_de_polo(request).polos_ids

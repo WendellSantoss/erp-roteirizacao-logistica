@@ -82,7 +82,9 @@ Autentica um usuário individual e retorna seu token de acesso, perfil, permiss�
 ```
 * **Erros:**
   * `400 Bad Request`: Campos `email` ou `senha` ausentes.
-  * `401 Unauthorized`: Credenciais inválidas ou usuário inativo.
+  * `401 Unauthorized`: Credenciais inválidas ou usuário inativo. Mensagem única `"E-mail ou senha inválidos"`, sem revelar se o e-mail existe (`HU-019 RN-L05`).
+  * `429 Too Many Requests` (`LOGIN_BLOQUEADO`): 5 tentativas erradas seguidas bloqueiam o e-mail por 15 minutos (`HU-019 RN-L02`). *Acrescentado na Etapa 5.*
+* **Campo `usuario.modulos` (acrescentado na Etapa 5):** lista dos módulos que o perfil pode abrir (`importacao`, `pendencias`, `equipes`, `almoxarifado`, `auditoria`), derivada da matriz da `HU-020`. O frontend monta o menu com ela; o servidor continua checando cada rota.
 
 ---
 
@@ -91,7 +93,7 @@ Retorna os dados do usuário autenticado e seus polos permitidos para manter o e
 
 * **Cabeçalhos:** `Authorization: Bearer <token>`
 * **Entrada:** Nenhuma.
-* **Saída (`200 OK`):**
+* **Saída (`200 OK`):** mesmo objeto `usuario` do login, incluindo `modulos`.
 ```json
 {
   "id": 12,
@@ -107,7 +109,7 @@ Retorna os dados do usuário autenticado e seus polos permitidos para manter o e
 }
 ```
 * **Erros:**
-  * `401 Unauthorized`: Token ausente, inválido ou expirado.
+  * `401 Unauthorized`: Token ausente (`NAO_AUTENTICADO`), inválido ou com mais de 8 horas (`SESSAO_INVALIDA`).
 
 ---
 
@@ -116,7 +118,7 @@ Encerra a sessão ativa do usuário autenticado.
 
 * **Cabeçalhos:** `Authorization: Bearer <token>`
 * **Entrada:** Nenhuma.
-* **Saída (`204 No Content`):** Sem corpo de resposta.
+* **Saída (`204 No Content`):** Sem corpo de resposta. O token é apagado no servidor: reutilizá-lo devolve `401` (`HU-019 CA05`).
 * **Erros:**
   * `401 Unauthorized`: Token ausente ou inválido.
 
@@ -159,16 +161,21 @@ Recebe a planilha `.xlsx` do GSAN, valida extensão, tamanho e cabeçalho obriga
 * **Erros:**
   * `400 Bad Request`: `X-Polo-Id` igual a `TODOS` ou arquivo não enviado.
   * `403 Forbidden`: Perfil sem permissão de importação (`PodeImportar`) ou sem acesso ao polo.
+  * `400 Bad Request` (`MAIS_DE_UM_ARQUIVO`): mais de um arquivo no campo `arquivo` (`HU-001 CA08`).
   * `409 Conflict`: Já existe uma importação em andamento para o mesmo polo (`garantir_unica_em_andamento`).
-  * `413 Payload Too Large`: Arquivo excede 25 MB.
-  * `422 Unprocessable Entity` (Extensão inválida ou colunas obrigatórias ausentes — arquivo recusado integralmente sem gravar registros):
+  * `413 Payload Too Large` (`ARQUIVO_MUITO_GRANDE`): Arquivo excede 25 MiB (26.214.400 bytes). Nada é registrado.
+  * `422 Unprocessable Entity` (`FORMATO_NAO_ACEITO`): extensão diferente de `.xlsx`. Nada é registrado.
+  * `422 Unprocessable Entity` (`PLANILHA_ILEGIVEL`): o `.xlsx` não abre (arquivo truncado). A importação fica `RECUSADA`.
+  * `500 Internal Server Error` (`IMPORTACAO_FALHOU`): falha de banco durante o upsert; nada foi gravado (tudo ou nada) e a importação fica `FALHOU`, liberando o polo para novo envio.
+* **Layout da planilha (`HU-002`):** primeira aba; cabeçalho na linha 1; colunas obrigatórias `Ordem de Serviço`, `Especificação`, `Tipo`, `Nº do Imóvel`, `Unidade Atual`, `Cidade`, `Setor`, `Quadra`, `Prazo (h)` e `Abertura` (comparadas sem acento e sem caixa; ordem livre; colunas extras ignoradas). `Unidade Atual` pode trazer o código ou o nome da unidade. Linha inválida não interrompe a importação: vira item de `alertas`. Prazo vazio usa 48 h com alerta.
+  * `422 Unprocessable Entity` (Colunas obrigatórias ausentes — arquivo recusado integralmente sem gravar OSs; a importação fica `RECUSADA` com o motivo):
 ```json
 {
   "erro": {
     "codigo": "CABECALHO_PLANILHA_INVALIDO",
-    "mensagem": "A planilha enviada não possui todas as colunas obrigatórias do layout GSAN.",
+    "mensagem": "Colunas obrigatórias ausentes: Setor, Quadra",
     "detalhes": {
-      "colunas_faltantes": ["numero_os", "codigo_unidade", "data_abertura"]
+      "colunas_faltantes": ["Setor", "Quadra"]
     }
   }
 }
@@ -246,9 +253,11 @@ Lista as Ordens de Serviço filtradas pelo polo do cabeçalho, retornando contad
       "id": 901,
       "numero": "20260004512",
       "polo": { "id": 1, "nome": "Polo 1 - Central" },
-      "unidade": { "codigo": "UN-04", "nome": "ETA Central" },
+      "unidade": { "codigo": "UN-04", "nome": "ETA Central", "latitude": "-3.731900", "longitude": "-38.526700" },
       "tipo": "RELIGACAO_AGUA",
       "especificacao": "Religação no cavalete",
+      "numero_imovel": "1234",
+      "cidade": "Cidade Demo",
       "setor": "012",
       "quadra": "045",
       "estado": "PENDENTE",
@@ -264,6 +273,7 @@ Lista as Ordens de Serviço filtradas pelo polo do cabeçalho, retornando contad
   ]
 }
 ```
+* **Notas (Etapa 5):** `numero_imovel`, `cidade` e as coordenadas da unidade foram acrescentados para as colunas da `HU-007`. `atraso_horas` negativo indica quanto falta para vencer (faixa "vence em até 4 h" da `HU-008 RN-L03`); `em_atraso` só é `true` quando o atraso passa de zero. Ordenação: prioritárias primeiro, depois maior atraso (`HU-006 RN-L02`). `contadores_por_status` considera os polos selecionados, sem os demais filtros.
 * **Erros:**
   * `400 Bad Request`: Parâmetro de filtro ou paginação inválido.
   * `403 Forbidden`: Polo não autorizado.
@@ -349,6 +359,7 @@ Consulta os registros imutáveis da trilha de auditoria (`RF-PEN-05`, `HU-045`) 
       "valor_novo": "DESCONSIDERADA",
       "justificativa": "OS aberta em duplicidade no GSAN para o mesmo imóvel.",
       "autor": "Ana Beatriz",
+      "origem": "TELA",
       "registrado_em": "2026-11-16T09:15:00-03:00"
     }
   ]
@@ -403,6 +414,7 @@ Consulta o teto diário permitido para retirada de cada tipo de kit no polo sele
     {
       "kit_id": 3,
       "tipo_kit": "KIT_LIGACAO_NOVA_1_2",
+      "nome": "Kit Ligação Nova 1/2",
       "executado_dia_anterior": 25,
       "saidas_registradas_hoje": 15,
       "saldo_disponivel_hoje": 10
@@ -449,7 +461,7 @@ Registra a saída de kits para uma equipe de campo, aplicando no servidor a trav
 {
   "erro": {
     "codigo": "TRAVA_HISTORICO_KIT_EXCEDIDA",
-    "mensagem": "Saída bloqueada: o total solicitado para KIT_LIGACAO_NOVA_1_2 (27 kits) excede o limite executado ontem (25 kits).",
+    "mensagem": "Saída bloqueada: Kit Ligação Nova 1/2 · Solicitado hoje: 27 un. · Executado ontem: 25 un.",
     "detalhes": {
       "tipo_kit": "KIT_LIGACAO_NOVA_1_2",
       "quantidade_solicitada": 12,
@@ -477,7 +489,8 @@ Lista as saídas de kits registradas no(s) polo(s) selecionado(s).
       "equipe": "EQ-07 (João / Marcos)",
       "tipo_kit": "KIT_LIGACAO_NOVA_1_2",
       "quantidade": 12,
-      "data_saida": "2026-11-16T07:30:00-03:00"
+      "data_saida": "2026-11-16T07:30:00-03:00",
+      "registrado_por": "Carlos Almoxarife"
     }
   ]
 }
@@ -488,7 +501,21 @@ Lista as saídas de kits registradas no(s) polo(s) selecionado(s).
 
 ---
 
-## 7. Matriz de Rastreabilidade (Histórias x Endpoints)
+* **Regras implementadas (Etapa 5):** a soma do dia inclui a saída pedida (`RN-L01`); D-1 é o dia corrido anterior; sem execução em D-1 o limite é 0 (`RN-L02`); a linha de execução D-1 é travada com `SELECT ... FOR UPDATE` para que duas saídas simultâneas não passem do limite (`CA07`); a tentativa bloqueada é gravada na trilha de auditoria (`entidade = "SaidaKit"`, `campo = "tentativa_bloqueada"`, `CA08`). A equipe precisa ser do polo do cabeçalho (`403`) e estar ativa (`400`).
+
+---
+
+## 7. Documentação interativa (OpenAPI)
+
+O esquema OpenAPI é gerado a partir do código com `drf-spectacular`:
+* `GET /api/schema/` — esquema OpenAPI 3 (YAML).
+* `GET /api/docs/` — Swagger UI para explorar e testar os endpoints (use o botão *Authorize* com `Bearer <token>`).
+
+Este documento continua sendo o contrato de referência; o esquema gerado serve para conferir que o código o implementa.
+
+---
+
+## 8. Matriz de Rastreabilidade (Histórias x Endpoints)
 
 | História Priorizada | Requisitos | Endpoints Correspondentes |
 | :--- | :--- | :--- |

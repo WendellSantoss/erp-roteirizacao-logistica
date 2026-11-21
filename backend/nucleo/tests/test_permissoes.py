@@ -10,6 +10,7 @@ from nucleo.tests.fabricas import cliente_autenticado, criar_polo, criar_usuario
 ROTAS = {
     "importacao": ("/api/v1/importacoes/", "/api/v1/importacoes/"),
     "pendencias": ("/api/v1/ordens-servico/", "/api/v1/ordens-servico/1/desconsiderar/"),
+    "almoxarifado": ("/api/v1/almoxarifado/saidas-kits/", "/api/v1/almoxarifado/saidas-kits/"),
     "auditoria": ("/api/v1/auditoria/", None),
     "equipes": ("/api/v1/equipes/", None),
 }
@@ -52,7 +53,7 @@ class MatrizDeAcessoTest(TestCase):
         self.assertCountEqual(modulos, ["almoxarifado", "equipes"])
 
     def test_matriz_cobre_todos_os_modulos_do_mvp(self):
-        self.assertLessEqual(set(ROTAS), set(MATRIZ_ACESSO))
+        self.assertEqual(set(MATRIZ_ACESSO), set(ROTAS))
 
 
 class FiltroDePoloTest(TestCase):

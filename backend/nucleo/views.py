@@ -1,7 +1,7 @@
 """Rotas do núcleo: só traduzem HTTP e chamam os services (AGENTS.md §2)."""
 
 from django.utils import timezone
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiTypes, extend_schema
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -63,7 +63,7 @@ class LogoutView(APIView):
 class OrdensServicoView(APIView):
     permission_classes = [IsAuthenticated, exige_acesso("pendencias")]
 
-    @extend_schema(parameters=[serializers.FiltroOrdensEntrada])
+    @extend_schema(parameters=[serializers.FiltroOrdensEntrada], responses=OpenApiTypes.OBJECT)
     def get(self, request):
         dados = validar(serializers.FiltroOrdensEntrada, request.query_params)
         filtro = services.FiltroOrdens(

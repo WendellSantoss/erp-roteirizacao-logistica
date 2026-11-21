@@ -83,7 +83,7 @@ class SessaoTest(TestCase):
         self.assertCountEqual(resposta.json()["modulos"], ["almoxarifado", "equipes"])
 
     def test_ca06_sem_login_a_api_responde_401(self):
-        for url in (URL_ME, "/api/v1/ordens-servico/"):
+        for url in (URL_ME, "/api/v1/ordens-servico/", "/api/v1/almoxarifado/saidas-kits/"):
             resposta = APIClient().get(url)
             self.assertEqual(resposta.status_code, 401, url)
             self.assertEqual(resposta.json()["erro"]["codigo"], "NAO_AUTENTICADO")
