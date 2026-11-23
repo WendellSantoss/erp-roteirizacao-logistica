@@ -265,7 +265,7 @@ erp-roteirizacao-logistica/
 │   ├── adr/
 │   │   └── ADR-001-arquitetura-mvp.md
 │   ├── contrato-api.md          # Especificação dos endpoints REST
-│   ├── etapa-08-retrospectiva-uso-de-ia.pdf     # Retrospectiva do uso de IA (Etapa 8)
+│   ├── etapa-08-retrospectiva-uso-de-ia.pdf     # Relatório da retrospectiva do uso de IA (Etapa 8)
 │   ├── historias-priorizadas.md # Histórias de usuário do MVP
 │   ├── banco/                   # Modelo de dados e diagrama ER (Etapa 4)
 │   ├── processo/                # Template de prompt (Etapa 3) e relatório das Etapas 5 e 6
