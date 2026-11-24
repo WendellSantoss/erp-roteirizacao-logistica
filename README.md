@@ -269,6 +269,8 @@ erp-roteirizacao-logistica/
 │   ├── historias-priorizadas.md # Histórias de usuário do MVP
 │   ├── banco/                   # Modelo de dados e diagrama ER (Etapa 4)
 │   ├── processo/                # Template de prompt (Etapa 3) e relatório das Etapas 5 e 6
+│   ├── testes-e-integracao/     # Relatório de integração e testes (Etapa 7)
+│   │   └── relatorio-testes-etapa-7.md
 │   ├── registro-uso-ia.md       # Log obrigatório de uso de IA nas etapas
 │   └── diagramas-c4/            # Diagramas da arquitetura C4
 │
