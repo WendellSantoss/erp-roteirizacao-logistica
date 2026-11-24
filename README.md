@@ -421,7 +421,7 @@ A documentação é gerada a partir do código e pode ser consultada pelos segui
 O detalhamento dos testes, o mapeamento de história de usuário → endpoint → teste e as decisões técnicas estão documentados em:
 
 - [Etapas 5 e 6 — Implementação e testes](docs/processo/etapas-5-e-6.md)
-- [Relatório de testes da Etapa 7](docs/processo/relatorio-testes-etapa-7.md)
+- [Relatório de testes da Etapa 7](docs/testes-e-integracao/relatorio-testes-etapa-7.md)
 
 
 ## 14. Segurança e Conformidade
