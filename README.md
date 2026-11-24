@@ -451,7 +451,7 @@ O dashboard administrativo consolida os seguintes indicadores:
 - [x] Modelagem do banco de dados, migrations e seeds do MVP (Etapa 4)
 - [x] Backend das 5 histórias do MVP com testes e OpenAPI (Etapa 5)
 - [x] Frontend das 5 histórias do MVP consumindo a API (Etapa 6)
-- [ ] Integração, testes ponta a ponta e versão final (Etapa 7)
+- [x] Integração, testes ponta a ponta e versão final (Etapa 7 — CI, smoke test publicado e relatório de testes concluídos)
 - [x] Retrospectiva sobre o uso de IA (Etapa 8)
 - [ ] Roteirização, controle logístico completo, auditoria de contratos e dashboard de KPIs (pós-MVP)
 
