@@ -7,7 +7,7 @@
 
 ## 1. Objetivo
 
-Validar os critérios de aceite do MVP de ponta a ponta, registrar os resultados dos testes disponíveis e identificar eventuais pendências para a versão final.
+Validar os critérios de aceite do MVP de ponta a ponta, registrar os resultados dos testes disponíveis e identificar eventuais limitações das evidências da versão final.
 
 ## 2. Evidências automatizadas
 
@@ -60,18 +60,35 @@ O contrato do endpoint `GET /health` prevê:
 
 Os dois comportamentos possuem testes automatizados em `backend/nucleo/tests/test_health.py`.
 
-**Limitação das evidências:** a validação publicada foi feita por requisições HTTP automatizadas no runner do GitHub. Esse procedimento comprova a disponibilidade e o contrato do endpoint, mas não produz capturas visuais do navegador. Não foram anexadas imagens simuladas.
+**Limitação da evidência automatizada:** a validação publicada foi feita por requisições HTTP automatizadas no runner do GitHub. Esse procedimento comprova a disponibilidade e o contrato do endpoint, mas não substitui a inspeção visual manual da interface nem demonstra, por si só, todos os fluxos de usuário.
 
 URLs previstas no README do projeto:
 
 - Frontend: https://erp-roteirizacao-logistica-so5e.vercel.app
 - Health check da API: https://genios-api-kruh.onrender.com/health
 
-### Evidência visual complementar
+## 4. Evidências visuais anexadas
 
-**Status: pendente.** Não foi possível obter uma captura real do navegador neste ambiente. As evidências disponíveis são os logs verificáveis do GitHub Actions e o resultado do endpoint `/health`. Para complementar o relatório com imagens, devem ser anexadas capturas reais da interface em funcionamento e da resposta JSON do endpoint, sem substituir os resultados automatizados.
+<badge>104 arquivos PNG registrados</badge>
 
-## 4. Resultado consolidado
+O repositório contém **104 capturas PNG** organizadas por visão geral e perfil de acesso, no diretório [`docs/testes-e-integracao/evidencias/`](https://github.com/WendellSantoss/erp-roteirizacao-logistica/tree/main/docs/testes-e-integracao/evidencias). O inventário e os links individuais estão no [índice de evidências visuais](https://github.com/WendellSantoss/erp-roteirizacao-logistica/blob/main/docs/testes-e-integracao/evidencias/README.md).
+
+| Pasta | Perfil / conteúdo | Capturas |
+|---|---|---:|
+| `0-geral` | Visão geral do sistema | 6 |
+| `1-ana-analista` | Ana — Analista | 26 |
+| `2-bruno-analista-polo2` | Bruno — Analista do Polo 2 | 17 |
+| `3-carlos-almoxarife` | Carlos — Almoxarife | 9 |
+| `4-gabriela-gerente` | Gabriela — Gerente | 22 |
+| `5-alice-auditora` | Alice — Auditora | 7 |
+| `6-davi-admin` | Davi — Administrador | 17 |
+| **Total** | | **104** |
+
+As capturas catalogadas abrangem telas de login, navegação por perfil, permissões e restrições de acesso, pendências, importação, almoxarifado e auditoria. As descrições do índice foram elaboradas a partir dos nomes dos arquivos; por isso, devem ser interpretadas como identificação do assunto indicado pelo nome, não como validação independente de cada resultado visual.
+
+As imagens complementam os logs do CI e os testes automatizados. Não substituem os resultados de execução, nem comprovam isoladamente respostas HTTP ou cenários que não estejam representados na captura.
+
+## 5. Resultado consolidado
 
 | Critério | Situação | Evidência |
 |---|---|---|
@@ -82,12 +99,14 @@ URLs previstas no README do projeto:
 | Build de produção do frontend | **Aprovado** | TypeScript e Vite concluídos |
 | Health check com banco (teste automatizado) | **Aprovado** | Casos HTTP 200 e HTTP 503 cobertos |
 | Smoke test das URLs publicadas (Vercel e Render/Neon) | **Aprovado** | Execução #15: os dois passos do job `Smoke test dos serviços publicados` concluídos com sucesso |
-| Captura visual do frontend | **Não capturada** | Não há navegador/sessão visual disponível neste ambiente |
+| Capturas visuais organizadas no repositório | **Anexadas** | 104 arquivos PNG catalogados por perfil |
 
-## 5. Conclusão
+## 6. Conclusão
 
 A execução automatizada registrada no GitHub Actions comprova que a suíte existente passou: **101 testes de backend e 9 testes de frontend**, além das verificações de qualidade, migrations e build.
 
-A integração publicada foi validada com sucesso pelo job de smoke test na execução #15 do GitHub Actions. Os três jobs da execução final (backend, frontend e smoke test) terminaram com sucesso. A captura visual complementar permanece pendente e não é substituída por imagens fictícias.
+A integração publicada foi validada com sucesso pelo job de smoke test na execução #15 do GitHub Actions. Os três jobs da execução final (backend, frontend e smoke test) terminaram com sucesso.
 
-**Entregável desta etapa:** relatório atualizado na `main`, suíte de testes automatizados aprovada e smoke test dos serviços publicados aprovado. A evidência visual do navegador permanece como complemento ainda não anexado.
+Como complemento, o repositório contém **104 capturas PNG**, organizadas por perfil e acompanhadas de índice com links e descrições. As capturas ampliam a rastreabilidade visual dos fluxos documentados, enquanto os logs do CI permanecem como evidência dos testes automatizados e do smoke test.
+
+**Entregável desta etapa:** relatório de testes, resultados automatizados registrados, integração publicada verificada e acervo de evidências visuais anexado e catalogado na branch `main`.
