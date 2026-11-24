@@ -59,3 +59,30 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+
+  smoke-publicado:
+    name: Smoke test dos serviços publicados
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar frontend na Vercel
+        run: |
+          curl --fail --silent --show-error --location --retry 12 --retry-all-errors --retry-delay 10 --max-time 30 \
+            --output /tmp/frontend.html \
+            --write-out 'HTTP %{http_code} | content-type %{content_type}\n' \
+            https://erp-roteirizacao-logistica-so5e.vercel.app
+          grep -q 'id="root"' /tmp/frontend.html
+      - name: Verificar API e conexão com Neon pelo health check
+        run: |
+          curl --fail --silent --show-error --location --retry 12 --retry-all-errors --retry-delay 10 --max-time 30 \
+            --output /tmp/health.json \
+            --write-out 'HTTP %{http_code} | content-type %{content_type}\n' \
+            https://genios-api-kruh.onrender.com/health
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path("/tmp/health.json").read_text())
+          assert payload.get("status") == "API OK", payload
+          assert payload.get("database") == "Banco OK", payload
+          print(json.dumps(payload, ensure_ascii=False))
+          PY
