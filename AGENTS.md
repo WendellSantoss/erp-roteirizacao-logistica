@@ -145,12 +145,12 @@ restrições e formato de saída**.
 
 ## 11. Checklist de revisão do código gerado
 
-- [ ] Nomes do domínio, em português, revelando intenção
-- [ ] Funções curtas, até 4 parâmetros, linter sem erros
-- [ ] Nenhuma regra de negócio em `views.py`; nenhum ORM/SQL fora de `models.py`/`consultas.py`/`services.py`
-- [ ] Erros específicos, no formato do contrato, sem vazar detalhes internos
-- [ ] Polo e perfil verificados no servidor
-- [ ] Alteração manual grava auditoria na mesma transação
-- [ ] Testes cobrindo os CAs, rodando verde
-- [ ] Contrato da API e docs atualizados
-- [ ] Alguém do grupo consegue explicar cada linha
+- [x] Nomes do domínio, em português, revelando intenção
+- [x] Funções curtas, até 4 parâmetros, linter sem erros
+- [x] Nenhuma regra de negócio em `views.py`; nenhum ORM/SQL fora de `models.py`/`consultas.py`/`services.py`
+- [x] Erros específicos, no formato do contrato, sem vazar detalhes internos
+- [x] Polo e perfil verificados no servidor
+- [x] Alteração manual grava auditoria na mesma transação
+- [x] Testes cobrindo os CAs, rodando verde
+- [x] Contrato da API e docs atualizados
+- [x] Alguém do grupo consegue explicar cada linha
