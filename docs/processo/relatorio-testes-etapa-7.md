@@ -2,7 +2,7 @@
 
 **Projeto:** GeniOS — ERP Roteirização Logística  
 **Repositório:** [WendellSantoss/erp-roteirizacao-logistica](https://github.com/WendellSantoss/erp-roteirizacao-logistica)  
-**Branch desta entrega:** `docs/etapa-7-integracao-testes`  
+**Versão final:** integrada à branch `main` pela PR [#93](https://github.com/WendellSantoss/erp-roteirizacao-logistica/pull/93)  
 **Data da verificação:** 24/11/2026
 
 ## 1. Objetivo
@@ -11,12 +11,12 @@ Validar os critérios de aceite do MVP de ponta a ponta, registrar os resultados
 
 ## 2. Evidências automatizadas
 
-Foi consultada a execução mais recente do workflow **Qualidade** disponível na branch `main` antes desta entrega:
+A validação final foi executada no workflow **Qualidade** associado à PR #93:
 
-- **Execução:** [GitHub Actions — Qualidade #14](https://github.com/WendellSantoss/erp-roteirizacao-logistica/actions/runs/45166789298)
-- **Commit testado:** `38f08bcdf1aec322a8c84b04c5d274039878e8e0`
-- **Data da execução:** 23/11/2026
-- **Resultado geral:** sucesso — os jobs de backend e frontend foram concluídos.
+- **Execução:** [GitHub Actions — Qualidade #15](https://github.com/WendellSantoss/erp-roteirizacao-logistica/actions/runs/45378825497)
+- **Commit da entrega:** `7fbb169d97f0327d4b6aa81f3226544d358f26d3`
+- **Data:** 24/11/2026
+- **Resultado geral:** **sucesso — 3 de 3 jobs concluídos** (backend, frontend e smoke test dos serviços publicados).
 
 ### 2.1 Backend
 
@@ -51,7 +51,7 @@ O Vitest executou 2 arquivos de teste: 4 testes em `planilha.test.ts` e 5 em `fo
 
 ## 3. Verificação do health check e integração publicada
 
-Foi adicionada ao workflow `Qualidade` a etapa `smoke-publicado`, que verifica a resposta HTTP do frontend na Vercel e consulta `/health` no Render, exigindo `API OK` e `Banco OK`. A execução desta etapa na branch desta entrega é a evidência automatizada da integração publicada; o resultado será registrado após a conclusão do workflow.
+O job `Smoke test dos serviços publicados` foi executado e concluído com sucesso na execução #15. O passo `Verificar frontend na Vercel` foi aprovado e o passo `Verificar API e conexão com Neon pelo health check` também foi aprovado. Assim, o runner do GitHub confirmou a resposta do frontend publicado e o endpoint `/health` retornando os estados esperados da API e do banco.
 
 O contrato do endpoint `GET /health` prevê:
 
@@ -60,7 +60,7 @@ O contrato do endpoint `GET /health` prevê:
 
 Os dois comportamentos possuem testes automatizados em `backend/nucleo/tests/test_health.py`.
 
-**Limitação desta sessão:** o ambiente de execução desta tarefa não conseguiu resolver os domínios públicos por DNS. Para não depender desse acesso, a verificação foi incorporada ao GitHub Actions e será executada por um runner hospedado do GitHub. A captura visual da interface não é produzida pelo workflow; não serão anexadas imagens simuladas.
+**Limitação das evidências:** a validação publicada foi feita por requisições HTTP automatizadas no runner do GitHub. Esse procedimento comprova a disponibilidade e o contrato do endpoint, mas não produz capturas visuais do navegador. Não foram anexadas imagens simuladas.
 
 URLs previstas no README do projeto:
 
@@ -69,14 +69,7 @@ URLs previstas no README do projeto:
 
 ### Evidência visual complementar
 
-O workflow automatiza as verificações HTTP e do contrato de saúde. Uma captura visual do navegador pode ser anexada como evidência complementar, mas não será apresentada como realizada sem captura real.
-
-### Roteiro de confirmação manual pendente
-
-1. Abrir a URL do frontend e aguardar a inicialização da aplicação.
-2. Confirmar que a interface apresenta **“API OK · Banco OK”** (ou a indicação equivalente prevista na implementação).
-3. Abrir diretamente a URL `/health` do Render e confirmar HTTP 200 com `API OK` e `Banco OK`.
-4. Registrar captura de tela da interface e da resposta do health check, com data e hora, como evidência da integração publicada.
+**Status: pendente.** Não foi possível obter uma captura real do navegador neste ambiente. As evidências disponíveis são os logs verificáveis do GitHub Actions e o resultado do endpoint `/health`. Para complementar o relatório com imagens, devem ser anexadas capturas reais da interface em funcionamento e da resposta JSON do endpoint, sem substituir os resultados automatizados.
 
 ## 4. Resultado consolidado
 
@@ -88,13 +81,13 @@ O workflow automatiza as verificações HTTP e do contrato de saúde. Uma captur
 | Migrations sincronizadas | **Aprovado** | Etapa de CI concluída |
 | Build de produção do frontend | **Aprovado** | TypeScript e Vite concluídos |
 | Health check com banco (teste automatizado) | **Aprovado** | Casos HTTP 200 e HTTP 503 cobertos |
-| Smoke test das URLs publicadas (Vercel e Render/Neon) | **Aguardando CI da branch** | Job `smoke-publicado` adicionado ao workflow |
+| Smoke test das URLs publicadas (Vercel e Render/Neon) | **Aprovado** | Execução #15: os dois passos do job `Smoke test dos serviços publicados` concluídos com sucesso |
 | Captura visual do frontend | **Não capturada** | Não há navegador/sessão visual disponível neste ambiente |
 
 ## 5. Conclusão
 
 A execução automatizada registrada no GitHub Actions comprova que a suíte existente passou: **101 testes de backend e 9 testes de frontend**, além das verificações de qualidade, migrations e build.
 
-A etapa de integração publicada será avaliada pelo novo job `smoke-publicado` executado em runner externo do GitHub. Até o encerramento desse job, o resultado permanece aguardando. A captura visual complementar não foi realizada nesta sessão e não é substituída por imagens fictícias.
+A integração publicada foi validada com sucesso pelo job de smoke test na execução #15 do GitHub Actions. Os três jobs da execução final (backend, frontend e smoke test) terminaram com sucesso. A captura visual complementar permanece pendente e não é substituída por imagens fictícias.
 
-**Entregável desta etapa:** relatório de testes e workflow com smoke test dos serviços publicados, na branch de entrega. A branch principal não foi alterada.
+**Entregável desta etapa:** relatório atualizado na `main`, suíte de testes automatizados aprovada e smoke test dos serviços publicados aprovado. A evidência visual do navegador permanece como complemento ainda não anexado.
