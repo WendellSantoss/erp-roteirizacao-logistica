@@ -132,3 +132,20 @@ Como complemento, o repositório contém **104 capturas PNG feitas na aplicaçã
 A evidência visual publicada está, portanto, anexada e rastreada no repositório. A limitação remanescente é documental: não há neste relatório um log Playwright ou registro contínuo dos passos de cada fluxo; por isso, critérios que dependem de comportamento interno ou de sequência de ações devem continuar associados aos respectivos testes automatizados, sem serem atribuídos exclusivamente às capturas.
 
 **Entregável desta etapa:** relatório de testes, resultados automatizados registrados, integração publicada verificada e acervo de evidências visuais da Vercel anexado e catalogado na branch `main`.
+
+
+## 7. Rastreabilidade das capturas do perfil Analista
+
+Para evitar duplicação de evidências, esta revisão utiliza as 26 capturas já versionadas em `docs/testes-e-integracao/evidencias/1-ana-analista/`. O inventário existente identifica os seguintes estados:
+
+| Fluxo / critério visível | Capturas já existentes | O que a evidência visual pode sustentar |
+|---|---|---|
+| Acesso e perfil | `01-apos-login.png`, `26-logout.png` | Estado após login e saída da sessão. |
+| Consulta de pendências | `02-pendencias-todos-os-polos.png`, `03-pendencias-polo-1.png`, `04-pendencias-polo-1-colunas-finais.png` | Tela de pendências, filtro por polo e colunas apresentadas. |
+| Permissões do Analista | `07-almoxarifado-sem-acesso.png`, `08-auditoria-sem-acesso.png` | Restrições visuais de acesso aos módulos não permitidos ao perfil. |
+| Filtros e tratamento de pendências | `09-pendencias-aba-aptas.png` a `19-pendencias-os-desconsiderada.png` | Estados de abas, busca, atraso, prioridade e desconsideração com justificativa, conforme indicado pelos nomes do inventário. |
+| Importação | `05-importacao-todos-os-polos.png`, `06-importacao-polo-1.png`, `20-importacao-resultado-com-alertas.png` a `25-importacao-formato-invalido.png` | Tela de importação e estados de resultado, reimportação, upsert, escopo e validação de arquivo. |
+
+**Limite:** este mapeamento usa os nomes e a organização do inventário versionado; não constitui uma nova inspeção independente dos pixels nem comprova, sozinho, que a sequência completa foi executada nesta revisão. As capturas já existentes não precisam ser refeitas. Os comportamentos internos (por exemplo, transação, ausência de duplicatas e persistência) permanecem sustentados pelos testes automatizados descritos nas seções anteriores, e não apenas pelas imagens.
+
+Esta revisão não executou ações na aplicação publicada nem alterou dados do Neon.
