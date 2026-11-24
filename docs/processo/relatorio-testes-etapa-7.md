@@ -51,6 +51,8 @@ O Vitest executou 2 arquivos de teste: 4 testes em `planilha.test.ts` e 5 em `fo
 
 ## 3. Verificação do health check e integração publicada
 
+Foi adicionada ao workflow `Qualidade` a etapa `smoke-publicado`, que verifica a resposta HTTP do frontend na Vercel e consulta `/health` no Render, exigindo `API OK` e `Banco OK`. A execução desta etapa na branch desta entrega é a evidência automatizada da integração publicada; o resultado será registrado após a conclusão do workflow.
+
 O contrato do endpoint `GET /health` prevê:
 
 - HTTP 200 e resposta `{"status":"API OK","database":"Banco OK"}` quando a consulta ao PostgreSQL funciona;
@@ -58,12 +60,16 @@ O contrato do endpoint `GET /health` prevê:
 
 Os dois comportamentos possuem testes automatizados em `backend/nucleo/tests/test_health.py`.
 
-**Limitação desta execução:** tentei consultar as URLs públicas do Render e da Vercel a partir do ambiente de execução desta tarefa, mas a resolução DNS de saída falhou (`Temporary failure in name resolution`). Por isso, não foi possível confirmar nesta sessão o comportamento atual dos serviços publicados nem capturar evidência visual da tela. O teste automatizado do endpoint não substitui a confirmação da integração real Vercel → Render → Neon.
+**Limitação desta sessão:** o ambiente de execução desta tarefa não conseguiu resolver os domínios públicos por DNS. Para não depender desse acesso, a verificação foi incorporada ao GitHub Actions e será executada por um runner hospedado do GitHub. A captura visual da interface não é produzida pelo workflow; não serão anexadas imagens simuladas.
 
 URLs previstas no README do projeto:
 
 - Frontend: https://erp-roteirizacao-logistica-so5e.vercel.app
 - Health check da API: https://genios-api-kruh.onrender.com/health
+
+### Evidência visual complementar
+
+O workflow automatiza as verificações HTTP e do contrato de saúde. Uma captura visual do navegador pode ser anexada como evidência complementar, mas não será apresentada como realizada sem captura real.
 
 ### Roteiro de confirmação manual pendente
 
@@ -82,12 +88,13 @@ URLs previstas no README do projeto:
 | Migrations sincronizadas | **Aprovado** | Etapa de CI concluída |
 | Build de produção do frontend | **Aprovado** | TypeScript e Vite concluídos |
 | Health check com banco (teste automatizado) | **Aprovado** | Casos HTTP 200 e HTTP 503 cobertos |
-| Integração real das URLs publicadas (Vercel → Render → Neon) | **Pendente de confirmação** | Acesso externo indisponível por falha de DNS nesta sessão |
+| Smoke test das URLs publicadas (Vercel e Render/Neon) | **Aguardando CI da branch** | Job `smoke-publicado` adicionado ao workflow |
+| Captura visual do frontend | **Não capturada** | Não há navegador/sessão visual disponível neste ambiente |
 
 ## 5. Conclusão
 
 A execução automatizada registrada no GitHub Actions comprova que a suíte existente passou: **101 testes de backend e 9 testes de frontend**, além das verificações de qualidade, migrations e build.
 
-A etapa de integração publicada permanece **pendente de confirmação manual**, pois não foi possível acessar as URLs externas a partir deste ambiente. Portanto, este relatório não declara como aprovado um teste ponta a ponta que não pôde ser observado. Após a confirmação manual indicada na seção 3, devem ser anexadas as capturas reais da interface e do health check para completar a evidência de integração.
+A etapa de integração publicada será avaliada pelo novo job `smoke-publicado` executado em runner externo do GitHub. Até o encerramento desse job, o resultado permanece aguardando. A captura visual complementar não foi realizada nesta sessão e não é substituída por imagens fictícias.
 
-**Entregável desta etapa:** relatório de testes e branch com a documentação da verificação. A branch principal não foi alterada.
+**Entregável desta etapa:** relatório de testes e workflow com smoke test dos serviços publicados, na branch de entrega. A branch principal não foi alterada.
