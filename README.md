@@ -376,13 +376,53 @@ Utilize o padrão `tipo: descrição breve`, seguindo os tipos abaixo:
 
 Exemplo: `feat: adiciona endpoint de health check conectado ao Neon`
 
-## 13. Testes
+## 13. Testes e Validação
 
-- **Smoke Test / Health Check (Etapa 2):** Validação ponta a ponta entre Front-end (Vercel) $\rightarrow$ Back-end (Render) $\rightarrow$ Banco de Dados (Neon) via `GET /health` executando `SELECT 1;`.
-- **Backend (Etapa 5):** 101 testes em PostgreSQL (`python manage.py test`), um ou mais por critério de aceite das histórias do MVP: login e bloqueio (HU-019), matriz de acesso com `403` por célula (HU-020), ciclo de vida da OS com todas as transições (HU-F11), importação com layout, escopo e upsert tudo-ou-nada (HU-001 a HU-004), atraso e tratamento de pendências (HU-006 a HU-008) e trava de kits com teste de concorrência real (HU-016 CA07).
-- **Frontend (Etapa 6):** Vitest (`npm test`) para os formatos da HU-007 e a validação de envio da HU-001.
-- **Documentação da API:** Swagger UI em `/api/docs/` e esquema OpenAPI em `/api/schema/`, gerados do código.
-- Detalhes, mapa história → endpoint → teste e decisões: [`docs/processo/etapas-5-e-6.md`](docs/processo/etapas-5-e-6.md).
+A validação do MVP combina testes automatizados de back-end e front-end, verificação da integração com os serviços publicados e documentação da API.
+
+### 13.1 Teste de integração — Smoke Test (Etapa 2)
+
+- **Fluxo validado:** aplicação publicada na Vercel, API hospedada no Render e banco PostgreSQL no Neon.
+- **Verificação:** chamada ao endpoint `GET /health`, que executa `SELECT 1;` no banco de dados.
+- **Objetivo:** confirmar que a API está ativa e consegue estabelecer comunicação com o banco de dados.
+
+### 13.2 Testes automatizados do back-end (Etapa 5)
+
+- **Resultado:** 101 testes aprovados em PostgreSQL, executados com `python manage.py test`.
+- **Cobertura dos critérios de aceite do MVP:**
+  - **HU-019 — Autenticação:** login e bloqueio de acesso;
+  - **HU-020 — Controle de acesso:** matriz de permissões, incluindo respostas `403` por célula de acesso;
+  - **HU-F11 — Ciclo de vida da OS:** validação de todas as transições de estado;
+  - **HU-001 a HU-004 — Importação:** validação do layout, escopo por polo e operação de upsert com garantia de tudo-ou-nada;
+  - **HU-006 a HU-008 — Pendências:** cálculo de atraso e tratamento de pendências;
+  - **HU-016, CA07 — Kits:** bloqueio de operações com teste real de concorrência.
+
+### 13.3 Testes automatizados do front-end (Etapa 6)
+
+- **Ferramenta:** Vitest, executado por meio de `npm test`.
+- **Resultado:** 9 testes aprovados.
+- **Validações:** formatos e regras da HU-007 e validação do envio de dados da HU-001.
+
+### 13.4 Build e verificações de qualidade
+
+- Build de produção do front-end concluído com sucesso.
+- Verificações de formatação, lint e dependências entre módulos executadas no fluxo de CI.
+- Pipeline do GitHub Actions concluído com sucesso para os jobs de front-end, back-end e smoke test publicado.
+
+### 13.5 Documentação da API
+
+A documentação é gerada a partir do código e pode ser consultada pelos seguintes endpoints:
+
+- **Swagger UI:** `/api/docs/`
+- **Esquema OpenAPI:** `/api/schema/`
+
+### 13.6 Relatórios e rastreabilidade
+
+O detalhamento dos testes, o mapeamento de história de usuário → endpoint → teste e as decisões técnicas estão documentados em:
+
+- [Etapas 5 e 6 — Implementação e testes](docs/processo/etapas-5-e-6.md)
+- [Relatório de testes da Etapa 7](docs/processo/relatorio-testes-etapa-7.md)
+
 
 ## 14. Segurança e Conformidade
 
