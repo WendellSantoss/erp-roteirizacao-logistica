@@ -2,7 +2,7 @@
 
 Este arquivo é lido automaticamente por agentes de código (Claude Code, Cursor, Copilot, Codex).
 Em ferramentas de chat que não leem o repositório, **cole este arquivo no início de cada conversa**.
-Toda regra aqui é verificável: ou por linter (`ruff`, `lint-imports`, `eslint`), ou por teste, ou por
+Toda regra aqui é verificável: ou por linter (`ruff`, `lint-imports`, `eslint`), ou por testes, ou por
 revisão com o checklist do final.
 
 ## 1. Contexto obrigatório
