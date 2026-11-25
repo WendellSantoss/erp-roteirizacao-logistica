@@ -2,8 +2,8 @@
 
 **Sistema ERP Operacional para Roteirização, Controle Logístico e Auditoria de Contratos**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow.svg)](#16-roadmap)
+[![Sistema: ERP](https://img.shields.io/badge/Sistema-ERP-blue.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/status-%20finalizado-yellow.svg)](#16-roadmap)
 [![Versão](https://img.shields.io/badge/versão-1.0.0-informational)](#)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#12-padrão-de-contribuição)
 
@@ -45,13 +45,12 @@ Projeto desenvolvido por:
 10. [Estrutura do Repositório](#10-estrutura-do-repositório)
 11. [Instalação e Execução Local](#11-instalação-e-execução-local)
 12. [Padrão de Contribuição](#12-padrão-de-contribuição)
-13. [Testes](#13-testes)
+13. [Testes e Validação](#13-testes-e-validação)
 14. [Segurança e Conformidade](#14-segurança-e-conformidade)
 15. [Indicadores e Relatórios (KPIs)](#15-indicadores-e-relatórios-kpis)
 16. [Roadmap](#16-roadmap)
 17. [Perguntas Frequentes (FAQ)](#17-perguntas-frequentes-faq)
 18. [Glossário](#18-glossário)
-19. [Licença](#19-licença)
 
 ---
 
@@ -424,6 +423,9 @@ O detalhamento dos testes, o mapeamento de história de usuário → endpoint �
 
 - [Etapas 5 e 6 — Implementação e testes](docs/processo/etapas-5-e-6.md)
 - [Relatório de testes da Etapa 7](docs/testes-e-integracao/relatorio-testes-etapa-7.md)
+- [Roteiro de testes locais com Playwright — Etapa 7](docs/testes-e-integracao/roteiro-playwright-local.md)
+- [Índice de evidências da Etapa 7](docs/testes-e-integracao/evidencias/README.md)
+- [Workflow de qualidade — GitHub Actions](.github/workflows/qualidade.yml)
 
 
 ## 14. Segurança e Conformidade
@@ -455,7 +457,7 @@ O dashboard administrativo consolida os seguintes indicadores:
 - [x] Frontend das 5 histórias do MVP consumindo a API (Etapa 6)
 - [x] Integração, testes ponta a ponta e versão final (Etapa 7)
 - [x] Retrospectiva sobre o uso de IA (Etapa 8)
-- [ ] Roteirização, controle logístico completo, auditoria de contratos e dashboard de KPIs (pós-MVP)
+- [x] Roteirização, controle logístico completo, auditoria de contratos e dashboard de KPIs (pós-MVP)
 
 ## 17. Perguntas Frequentes (FAQ)
 
@@ -475,11 +477,6 @@ Sim, esse é um dos objetivos centrais do projeto: centralizar em uma única pla
 | RBAC             | Role-Based Access Control — controle de acesso baseado em papéis/perfis. |
 | OS               | Ordem de Serviço operacional vinculada a um polo e uma equipe.           |
 | Não conformidade | Situação em que uma cláusula contratual ou processo não é cumprido conforme o previsto. |
-
-## 19. Licença
-
-
-Este projeto está licenciado sob os termos da licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
 
 ---
 
