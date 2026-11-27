@@ -7,7 +7,7 @@
 **Ambiente:** execução local (navegador controlado via Playwright) + verificação complementar nas URLs publicadas
 
 > **Natureza deste documento**  
-> Este arquivo formaliza o roteiro de testes ponta a ponta executado localmente com Playwright durante a Etapa 6/7.  
+> Este arquivo formaliza o roteiro de testes ponta a ponta executados localmente com Playwright durante a Etapa 6/7.  
 > Não existe suíte automatizada de e2e versionada no repositório (apenas testes unitários com Vitest).  
 > O resultado **aprovado** foi relatado pela equipe no registro de uso de IA e é corroborado pelas **104 capturas de tela** já anexadas em `docs/testes-e-integracao/evidencias/`.
 
