@@ -80,7 +80,7 @@ O **GeniOS** propõe endereçar esses três problemas de forma integrada, elimin
 
 ### 3.1 Objetivo Geral
 
-Desenvolver um sistema ERP que integre roteirização, controle logístico e auditoria de contratos, oferecendo uma plataforma única para gestão operacional do setor de transporte e logística.
+Desenvolver um sistema ERP que integre roteirização, controle logístico e auditoria de contratos, oferecendo uma plataforma única para gestão operacional do setor de transporte e logísticas.
 
 ### 3.2 Objetivos Específicos
 
