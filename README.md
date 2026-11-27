@@ -56,7 +56,7 @@ Projeto desenvolvido por:
 
 ## 1. Visão Geral
 
-O **GeniOS (ERP Roteirização Logística)** é uma solução de gestão empresarial (ERP) voltada para empresas do setor de transporte, saneamento/serviços de campo e logística, integrando três frentes operacionais em uma única plataforma:
+O **GeniOS (ERP Roteirização Logística)** é uma solução de gestão empresarial (ERP) voltada para empresas do setor de transporte, saneamento/serviço de campo e logística, integrando três frentes operacionais em uma única plataforma:
 
 - **Roteirização**: planejamento e otimização de rotas de entrega, coleta e atendimento de Ordens de Serviço (OS);
 - **Controle Logístico**: gestão de frota, equipes/motoristas, kits de materiais, cargas e status de entregas em tempo real;
