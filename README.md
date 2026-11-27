@@ -64,7 +64,7 @@ O **GeniOS (ERP Roteirização Logística)** é uma solução de gestão empresa
 
 O sistema centraliza informações que tradicionalmente ficam dispersas entre planilhas, sistemas legados (como GSAN) e controles manuais, proporcionando maior visibilidade operacional, rastreabilidade de processos e apoio à tomada de decisão gerencial.
 
-Este projeto foi desenvolvido no contexto acadêmico/técnico da disciplina de Projeto de Software com apoio de IA, aplicando conceitos de engenharia de software, modelagem C4, arquitetura em camadas e boas práticas de desenvolvimento colaborativo.
+Este projeto foi desenvolvido no contexto acadêmico/técnico com apoio de IA, aplicando conceitos de engenharia de software, modelagem C4, arquitetura em camadas e boas práticas de desenvolvimento colaborativo.
 
 ## 2. Contexto e Justificativa
 
