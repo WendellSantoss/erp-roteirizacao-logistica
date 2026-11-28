@@ -8,7 +8,15 @@ from django.contrib.auth import get_user_model
 from django.db import DatabaseError, connection
 from django.db.models import Count, DateTimeField, DurationField, ExpressionWrapper, F, Q, Value
 
-from nucleo.models import Equipe, OrdemServico, PerfilUsuario, Polo, RegistroAuditoria, Unidade
+from nucleo.models import (
+    Equipe,
+    EstadoOS,
+    OrdemServico,
+    PerfilUsuario,
+    Polo,
+    RegistroAuditoria,
+    Unidade,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -148,3 +156,34 @@ def registros_de_auditoria(polos_ids: tuple[int, ...], entidade: str, entidade_i
     if entidade_id is not None:
         consulta = consulta.filter(entidade_id=entidade_id)
     return consulta.order_by("-registrado_em", "-id")[:MAXIMO_REGISTROS_AUDITORIA]
+
+
+def unidades_dos_polos(polos_ids: tuple[int, ...], sem_coordenada: bool | None):
+    consulta = Unidade.objects.select_related("polo").filter(polo_id__in=polos_ids)
+    if sem_coordenada is not None:
+        consulta = consulta.filter(latitude__isnull=sem_coordenada)
+    return consulta.annotate(total_ordens=Count("ordens_servico")).order_by("polo_id", "codigo")
+
+
+def unidade_para_alterar(unidade_id: int) -> Unidade | None:
+    return Unidade.objects.select_for_update().filter(pk=unidade_id).first()
+
+
+def ordens_para_alterar(ordens_ids: list[int]) -> list[OrdemServico]:
+    """Trava as OSs na ordem do id (evita deadlock entre duas rotas criadas ao mesmo tempo)."""
+    consulta = OrdemServico.objects.select_for_update(of=("self",)).select_related("unidade")
+    return list(consulta.filter(pk__in=ordens_ids).order_by("id"))
+
+
+def ordens_aptas_com_coordenada(polo_id: int):
+    """RN-04 e RN-08: o mapa só recebe OS apta cuja unidade tem latitude e longitude."""
+    return (
+        OrdemServico.objects.select_related("unidade")
+        .filter(
+            polo_id=polo_id,
+            estado=EstadoOS.APTA_A_ROTEIRIZAR,
+            unidade__latitude__isnull=False,
+            unidade__longitude__isnull=False,
+        )
+        .order_by("-prioridade", "abertura", "id")
+    )

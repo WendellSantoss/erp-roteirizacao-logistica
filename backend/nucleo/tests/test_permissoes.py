@@ -13,6 +13,8 @@ ROTAS = {
     "almoxarifado": ("/api/v1/almoxarifado/saidas-kits/", "/api/v1/almoxarifado/saidas-kits/"),
     "auditoria": ("/api/v1/auditoria/", None),
     "equipes": ("/api/v1/equipes/", None),
+    "webscraper": ("/api/v1/unidades/", "/api/v1/unidades/1/coordenada/"),
+    "roteirizador": ("/api/v1/roteirizacao/operacoes/", "/api/v1/roteirizacao/rotas/"),
 }
 
 

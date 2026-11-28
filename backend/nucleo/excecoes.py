@@ -68,3 +68,17 @@ class OrdemEmEstadoTerminal(ErroDeNegocio):
     status_http = 409
     codigo = "OS_EM_ESTADO_TERMINAL"
     mensagem_padrao = "A OS está em um estado que não permite alteração."
+
+
+class CoordenadaForaDaArea(ErroDeNegocio):
+    status_http = 422
+    codigo = "COORDENADA_FORA_DA_AREA"
+    # HU-024 CA03 / HU-005 RN-L02.
+    mensagem_padrao = "Coordenada fora da área de operação (Paraíba)"
+
+
+class OrdensInaptas(ErroDeNegocio):
+    """RN-08: só OS apta, com coordenada e não desconsiderada entra em rota."""
+
+    status_http = 422
+    codigo = "OS_INAPTA_PARA_ROTA"

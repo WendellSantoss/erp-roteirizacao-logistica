@@ -21,9 +21,13 @@ ADMIN = Perfil.ADMINISTRADOR
 # Matriz de acesso da HU-020 restrita aos módulos do MVP: quem vê (V) e quem edita (E).
 MATRIZ_ACESSO = {
     "importacao": {"ver": {GERENTE, COORDENADOR}, "editar": {ANALISTA, ADMIN}},
+    # Webscraper divide a linha da Importação na matriz: coordenadas das unidades (HU-024).
+    "webscraper": {"ver": {GERENTE, COORDENADOR}, "editar": {ANALISTA, ADMIN}},
     "pendencias": {"ver": {COORDENADOR, ADMIN}, "editar": {GERENTE, ANALISTA}},
     # O Almoxarife lê as equipes para preencher a saída de kit (contrato §6).
     "equipes": {"ver": {GERENTE, COORDENADOR, ALMOXARIFE}, "editar": {ADMIN}},
+    # Roteirizador e RPA: só o Coordenador de Campo monta rotas (ERS §2.2).
+    "roteirizador": {"ver": {GERENTE, ANALISTA, ADMIN}, "editar": {COORDENADOR}},
     "almoxarifado": {"ver": {GERENTE, COORDENADOR, ADMIN}, "editar": {ALMOXARIFE}},
     "auditoria": {"ver": {GERENTE, ADMIN}, "editar": {AUDITOR}},
 }

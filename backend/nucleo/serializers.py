@@ -1,10 +1,11 @@
 """Validação de entrada e formatação de saída do núcleo (contrato §3 e §5)."""
 
 from dataclasses import asdict
+from decimal import Decimal, InvalidOperation
 
 from rest_framework import serializers
 
-from nucleo.models import Equipe, EstadoOS, OrdemServico, Polo, RegistroAuditoria
+from nucleo.models import Equipe, EstadoOS, OrdemServico, Polo, RegistroAuditoria, Unidade
 
 TAMANHO_PADRAO_PAGINA = 50
 TAMANHO_MAXIMO_PAGINA = 200
@@ -168,4 +169,73 @@ class FiltroEquipesEntrada(serializers.Serializer):
 class EquipeSaida(serializers.ModelSerializer):
     class Meta:
         model = Equipe
-        fields = ["id", "codigo", "nome", "polo_id", "ativa"]
+        fields = ["id", "codigo", "nome", "polo_id", "ativa", "placa", "capacidade_diaria"]
+
+
+# ── Unidades e coordenada manual (HU-024) ─────────────────────────────────────
+
+CASAS_DECIMAIS_COORDENADA = Decimal("0.000001")
+
+
+class CoordenadaBrasileiraField(serializers.Field):
+    """Aceita "-7,0832" (vírgula) e "-7.0832" (ponto) — HU-024 CA04."""
+
+    default_error_messages = {"invalid": "Informe um número, como -7,0832."}
+
+    def to_internal_value(self, data) -> Decimal:
+        texto = str(data).strip().replace(",", ".")
+        try:
+            valor = Decimal(texto)
+        except InvalidOperation:
+            self.fail("invalid")
+        if not valor.is_finite():
+            self.fail("invalid")
+        return valor.quantize(CASAS_DECIMAIS_COORDENADA)
+
+    def to_representation(self, value):
+        return value
+
+
+class CoordenadaEntrada(serializers.Serializer):
+    latitude = CoordenadaBrasileiraField(error_messages={"required": "Informe a latitude."})
+    longitude = CoordenadaBrasileiraField(error_messages={"required": "Informe a longitude."})
+
+
+class FiltroUnidadesEntrada(serializers.Serializer):
+    sem_coordenada = serializers.BooleanField(required=False, allow_null=True, default=None)
+
+
+class UnidadeSaida(serializers.ModelSerializer):
+    polo = serializers.CharField(source="polo.nome")
+    total_ordens = serializers.IntegerField(read_only=True, default=0)
+
+    class Meta:
+        model = Unidade
+        fields = [
+            "id",
+            "codigo",
+            "nome",
+            "polo_id",
+            "polo",
+            "latitude",
+            "longitude",
+            "coordenada_manual",
+            "total_ordens",
+        ]
+
+
+# ── Liberação para roteirização (HU-060) ──────────────────────────────────────
+
+MAXIMO_OS_POR_LOTE = 500
+
+
+class LiberarOrdensEntrada(serializers.Serializer):
+    ordens_ids = serializers.ListField(
+        child=serializers.IntegerField(min_value=1),
+        min_length=1,
+        max_length=MAXIMO_OS_POR_LOTE,
+        error_messages={
+            "required": "Selecione ao menos uma OS.",
+            "min_length": "Selecione ao menos uma OS.",
+        },
+    )
