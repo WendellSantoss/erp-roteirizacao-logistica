@@ -160,8 +160,11 @@ def registros_de_auditoria(polos_ids: tuple[int, ...], entidade: str, entidade_i
 
 def unidades_dos_polos(polos_ids: tuple[int, ...], sem_coordenada: bool | None):
     consulta = Unidade.objects.select_related("polo").filter(polo_id__in=polos_ids)
-    if sem_coordenada is not None:
-        consulta = consulta.filter(latitude__isnull=sem_coordenada)
+    if sem_coordenada:
+        # Unidade fora do escopo não gera OS na carteira (HU-003): não há o que resolver nela.
+        consulta = consulta.filter(latitude__isnull=True, no_escopo=True)
+    elif sem_coordenada is False:
+        consulta = consulta.filter(latitude__isnull=False)
     return consulta.annotate(total_ordens=Count("ordens_servico")).order_by("polo_id", "codigo")
 
 
