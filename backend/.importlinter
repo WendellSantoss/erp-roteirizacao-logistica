@@ -7,6 +7,7 @@ root_packages =
     nucleo
     importacao
     almoxarifado
+    roteirizacao
     dados_demo
 
 [importlinter:contract:nucleo-independente]
@@ -17,6 +18,8 @@ source_modules =
 forbidden_modules =
     importacao
     almoxarifado
+    roteirizacao
+    roteirizacao
 
 [importlinter:contract:modulos-independentes]
 name = Módulos de negócio não importam um ao outro
@@ -24,6 +27,7 @@ type = independence
 modules =
     importacao
     almoxarifado
+    roteirizacao
 
 [importlinter:contract:seeds-isolados]
 name = Código de produção não depende dos dados de demonstração
@@ -33,5 +37,6 @@ source_modules =
     nucleo
     importacao
     almoxarifado
+    roteirizacao
 forbidden_modules =
     dados_demo

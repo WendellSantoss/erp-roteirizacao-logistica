@@ -10,6 +10,7 @@ urlpatterns = [
     path("api/v1/", include("nucleo.urls")),
     path("api/v1/importacoes/", include("importacao.urls")),
     path("api/v1/almoxarifado/", include("almoxarifado.urls")),
+    path("api/v1/roteirizacao/", include("roteirizacao.urls")),
     # Documentação OpenAPI gerada a partir do código (Etapa 5, item 4).
     path("api/schema/", SpectacularAPIView.as_view(), name="openapi-schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="openapi-schema"), name="api-docs"),
