@@ -1,6 +1,13 @@
 // Tipos que espelham docs/contrato-api.md. Mudou o contrato, muda aqui.
 
-export type Modulo = 'importacao' | 'pendencias' | 'equipes' | 'almoxarifado' | 'auditoria'
+export type Modulo =
+  | 'importacao'
+  | 'webscraper'
+  | 'pendencias'
+  | 'roteirizador'
+  | 'equipes'
+  | 'almoxarifado'
+  | 'auditoria'
 
 export type Polo = { id: number; codigo: string; nome: string }
 
@@ -98,7 +105,15 @@ export type ImportacaoResumo = {
   iniciada_em: string
 }
 
-export type Equipe = { id: number; codigo: string; nome: string; polo_id: number; ativa: boolean }
+export type Equipe = {
+  id: number
+  codigo: string
+  nome: string
+  polo_id: number
+  ativa: boolean
+  placa: string
+  capacidade_diaria: number
+}
 
 export type LimiteKit = {
   kit_id: number
@@ -138,3 +153,86 @@ export type RegistroAuditoria = {
 
 export type Lista<T> = { resultados: T[] }
 export type ListaPaginada<T> = { total: number; resultados: T[] }
+
+// ── Coordenadas (HU-024) e liberação (HU-060) ─────────────────────────────
+
+export type Unidade = {
+  id: number
+  codigo: string
+  nome: string
+  polo_id: number
+  polo: string
+  latitude: string | null
+  longitude: string | null
+  coordenada_manual: boolean
+  total_ordens: number
+}
+
+export type ResultadoLiberacao = {
+  liberadas: string[]
+  nao_liberadas: { numero: string; motivo: string }[]
+}
+
+// ── Roteirizador (HU-011, HU-012, HU-056, HU-013, HU-014) ────────────────
+
+export type Operacao = { id: number; codigo: string; nome: string }
+
+export type OrdemNoMapa = {
+  id: number
+  numero: string
+  tipo: string
+  especificacao: string
+  prioridade: boolean
+  unidade: { codigo: string; nome: string }
+  latitude: number
+  longitude: number
+}
+
+export type Rota = {
+  id: number
+  nome: string
+  cor: string
+  observacao: string
+  previsao_inicio: string
+  carregamento: string
+  equipe: { id: number; codigo: string; nome: string; placa: string; ativa: boolean }
+  ordens: OrdemNoMapa[]
+}
+
+export type StatusPlanejamento = 'ABERTO' | 'FINALIZADO' | 'DESPACHADO'
+
+export type ArquivoRpa = {
+  nome_arquivo: string
+  hash_sha256: string
+  total_ordens: number
+  gerado_por: string | null
+  gerado_em: string
+}
+
+export type Planejamento = {
+  operacao: Operacao
+  data: string
+  planejamento: {
+    id: number | null
+    status: StatusPlanejamento
+    somente_leitura: boolean
+    motivo_somente_leitura: string
+    finalizado_em: string | null
+    finalizado_por: string | null
+    arquivo_rpa: ArquivoRpa | null
+  }
+  rotas: Rota[]
+  ordens_aptas: OrdemNoMapa[]
+}
+
+export type ChavePlanejamento = { operacao_id: number; data: string }
+
+export type PedidoRota = ChavePlanejamento & {
+  nome: string
+  equipe_id: number
+  previsao_inicio: string
+  carregamento: string
+  cor: string
+  observacao: string
+  ordens_ids: number[]
+}

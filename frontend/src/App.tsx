@@ -6,9 +6,11 @@ import { useSessao } from './hooks/contextoSessao'
 import { navegar, useRota } from './hooks/useRota'
 import { PaginaAlmoxarifado } from './paginas/almoxarifado/PaginaAlmoxarifado'
 import { PaginaAuditoria } from './paginas/auditoria/PaginaAuditoria'
+import { PaginaCoordenadas } from './paginas/coordenadas/PaginaCoordenadas'
 import { PaginaImportacao } from './paginas/importacao/PaginaImportacao'
 import { PaginaLogin } from './paginas/login/PaginaLogin'
 import { PaginaPendencias } from './paginas/pendencias/PaginaPendencias'
+import { PaginaRoteirizador } from './paginas/roteirizador/PaginaRoteirizador'
 import { PaginaSemAcesso } from './paginas/PaginaSemAcesso'
 import { PaginaStatus } from './paginas/status/PaginaStatus'
 import { ITENS_MENU } from './utilitarios/menu'
@@ -16,6 +18,8 @@ import { ITENS_MENU } from './utilitarios/menu'
 const COMPONENTES: Record<string, ComponentType> = {
   '/pendencias': PaginaPendencias,
   '/importacao': PaginaImportacao,
+  '/coordenadas': PaginaCoordenadas,
+  '/roteirizador': PaginaRoteirizador,
   '/almoxarifado': PaginaAlmoxarifado,
   '/auditoria': PaginaAuditoria,
 }

@@ -29,6 +29,11 @@ export function TabelaOrdensServico({ ordens, acoes }: Propriedades) {
         <caption className="oculto-visualmente">Ordens de serviço do filtro selecionado</caption>
         <thead>
           <tr>
+            {acoes.marcacao && (
+              <th scope="col">
+                <span className="oculto-visualmente">Marcar</span>
+              </th>
+            )}
             <th scope="col" className="coluna-fixa">
               Ordem de Serviço
             </th>

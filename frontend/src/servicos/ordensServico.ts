@@ -1,4 +1,4 @@
-import type { FiltroOrdens, PaginaOrdens } from '../tipos/api'
+import type { FiltroOrdens, PaginaOrdens, ResultadoLiberacao } from '../tipos/api'
 import { requisitar } from './cliente'
 
 export const TAMANHO_PAGINA = 50
@@ -31,5 +31,13 @@ export function desconsiderarOrdem(
   return requisitar<ResumoAlteracao>(`/api/v1/ordens-servico/${ordemId}/desconsiderar/`, {
     metodo: 'POST',
     corpo: { justificativa },
+  })
+}
+
+/** HU-060: libera em lote; as OSs sem coordenada voltam em `nao_liberadas`. */
+export function liberarParaRoteirizacao(ordensIds: number[]): Promise<ResultadoLiberacao> {
+  return requisitar<ResultadoLiberacao>('/api/v1/ordens-servico/liberar/', {
+    metodo: 'POST',
+    corpo: { ordens_ids: ordensIds },
   })
 }

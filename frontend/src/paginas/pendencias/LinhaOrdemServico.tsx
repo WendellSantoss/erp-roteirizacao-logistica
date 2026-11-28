@@ -5,6 +5,8 @@ import { SeloAtraso } from './SeloAtraso'
 export type AcoesDaLinha = {
   podeTratar: boolean
   mostrarPolo: boolean
+  /** HU-060: marcação para liberar em lote; ausente quando o filtro não é "Pendente". */
+  marcacao?: { estaMarcada: (id: number) => boolean; aoAlternar: (id: number) => void }
   aoAlternarPrioridade: (ordem: OrdemServico) => void
   aoDesconsiderar: (ordem: OrdemServico) => void
 }
@@ -46,6 +48,16 @@ function BotoesDeTratamento({ ordem, acoes }: { ordem: OrdemServico; acoes: Acoe
 export function LinhaOrdemServico({ ordem, acoes }: { ordem: OrdemServico; acoes: AcoesDaLinha }) {
   return (
     <tr className={ordem.em_atraso ? 'linha-atrasada' : undefined}>
+      {acoes.marcacao && (
+        <td>
+          <input
+            type="checkbox"
+            aria-label={`Marcar OS ${ordem.numero}`}
+            checked={acoes.marcacao.estaMarcada(ordem.id)}
+            onChange={() => acoes.marcacao?.aoAlternar(ordem.id)}
+          />
+        </td>
+      )}
       <th scope="row" className="coluna-fixa mono">
         {ordem.numero}
       </th>
