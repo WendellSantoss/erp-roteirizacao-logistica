@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 from io import StringIO
 from unittest import mock
 
@@ -8,7 +9,17 @@ from django.test import TestCase
 from django.utils import timezone
 
 from almoxarifado.models import ExecucaoKit
-from nucleo.models import EstadoOS, OrdemServico, PerfilUsuario, Polo, RegistroAuditoria
+from nucleo.models import (
+    Equipe,
+    EstadoOS,
+    OrdemServico,
+    Perfil,
+    PerfilUsuario,
+    Polo,
+    RegistroAuditoria,
+    Unidade,
+)
+from nucleo.services_preparacao import Coordenada
 
 AMBIENTE = {"SENHA_USUARIOS_DEMO": "senha-de-teste"}
 
@@ -22,14 +33,14 @@ class PopularDadosDemoTest(TestCase):
     def test_popula_todas_as_tabelas_do_mvp(self):
         popular()
         self.assertEqual(Polo.objects.count(), 3)
-        self.assertEqual(PerfilUsuario.objects.count(), 6)
-        self.assertEqual(OrdemServico.objects.count(), 48)
+        self.assertEqual(PerfilUsuario.objects.count(), 7)
+        self.assertEqual(OrdemServico.objects.count(), 90)
         self.assertTrue(RegistroAuditoria.objects.exists())
 
     def test_rodar_duas_vezes_nao_duplica(self):
         popular()
         popular()
-        self.assertEqual(OrdemServico.objects.count(), 48)
+        self.assertEqual(OrdemServico.objects.count(), 90)
         self.assertEqual(
             RegistroAuditoria.objects.count(),
             OrdemServico.objects.filter(estado=EstadoOS.DESCONSIDERADA).count(),
@@ -58,3 +69,37 @@ class PopularDadosDemoSemSenhaTest(TestCase):
         with self.assertRaises(CommandError):
             popular()
         self.assertFalse(Polo.objects.exists())
+
+
+@mock.patch.dict("os.environ", AMBIENTE)
+class DadosDoRoteirizadorTest(TestCase):
+    def test_unidades_com_coordenada_ficam_na_area_de_operacao(self):
+        popular()
+        for unidade in Unidade.objects.filter(latitude__isnull=False):
+            coordenada = Coordenada(unidade.latitude, unidade.longitude)
+            self.assertTrue(coordenada.dentro_da_area, unidade.nome)
+
+    def test_ha_unidade_sem_coordenada_para_a_hu024(self):
+        popular()
+        self.assertTrue(Unidade.objects.filter(no_escopo=True, latitude__isnull=True).exists())
+
+    def test_coordenada_manual_nao_e_sobrescrita(self):
+        popular()
+        unidade = Unidade.objects.get(codigo="UN-108")
+        unidade.latitude, unidade.longitude = Decimal("-7.1"), Decimal("-34.9")
+        unidade.coordenada_manual = True
+        unidade.save()
+        popular()
+        unidade.refresh_from_db()
+        self.assertEqual(unidade.latitude, Decimal("-7.1"))
+
+    def test_existe_coordenador_e_equipes_com_capacidade(self):
+        popular()
+        self.assertTrue(PerfilUsuario.objects.filter(perfil=Perfil.COORDENADOR).exists())
+        self.assertFalse(Equipe.objects.filter(placa="").exists())
+
+    def test_toda_os_apta_tem_coordenada(self):
+        popular()
+        aptas = OrdemServico.objects.filter(estado=EstadoOS.APTA_A_ROTEIRIZAR)
+        self.assertTrue(aptas.exists())
+        self.assertFalse(aptas.filter(unidade__latitude__isnull=True).exists())
