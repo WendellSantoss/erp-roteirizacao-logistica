@@ -90,6 +90,13 @@ export async function requisitar<T>(caminho: string, opcoes: Opcoes = {}): Promi
   return (await resposta.json()) as T
 }
 
+/** Baixa um arquivo da API (ex.: RPA) e devolve o conteúdo como Blob. */
+export async function baixar(caminho: string, consulta: Consulta = {}): Promise<Blob> {
+  const resposta = await enviar(caminho, { consulta })
+  if (!resposta.ok) throw await lerErro(resposta)
+  return resposta.blob()
+}
+
 export function mensagemDeErro(erro: unknown): string {
   if (erro instanceof ErroApi) return erro.message
   return 'Ocorreu um erro inesperado. Tente novamente.'

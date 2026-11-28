@@ -1,0 +1,7 @@
+from django.apps import AppConfig
+
+
+class RoteirizacaoConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "roteirizacao"
+    verbose_name = "Roteirizador"

@@ -25,3 +25,9 @@ export const lerToken = () => ler(sessionStorage, CHAVE_TOKEN)
 export const gravarToken = (token: string | null) => gravar(sessionStorage, CHAVE_TOKEN, token)
 export const lerPolo = () => ler(localStorage, CHAVE_POLO)
 export const gravarPolo = (polo: string) => gravar(localStorage, CHAVE_POLO, polo)
+
+// HU-011 CA04: a operação e a data escolhidas no Roteirizador valem para a sessão inteira.
+const CHAVE_PLANEJAMENTO = 'genios.planejamento'
+export const lerPlanejamento = () => ler(sessionStorage, CHAVE_PLANEJAMENTO)
+export const gravarPlanejamento = (valor: string) =>
+  gravar(sessionStorage, CHAVE_PLANEJAMENTO, valor)

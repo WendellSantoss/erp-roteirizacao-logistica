@@ -18,6 +18,14 @@ erDiagram
     EQUIPE ||--o{ SAIDA_KIT : "recebe"
     TIPO_KIT ||--o{ SAIDA_KIT : "de"
     AUTH_USER ||--o{ SAIDA_KIT : "registrou"
+    POLO ||--o{ PLANEJAMENTO : "planeja"
+    OPERACAO ||--o{ PLANEJAMENTO : "de"
+    PLANEJAMENTO ||--o{ ROTA : "contém"
+    EQUIPE ||--o{ ROTA : "executa"
+    ROTA ||--o{ ITEM_ROTA : "visita"
+    ORDEM_SERVICO ||--o| ITEM_ROTA : "está em (no máx. 1)"
+    PLANEJAMENTO ||--o| ARQUIVO_DESPACHO : "gera"
+    AUTH_USER ||--o{ ROTA : "criou"
 
     POLO {
         bigint id PK
@@ -45,8 +53,9 @@ erDiagram
         varchar codigo
         varchar nome
         bool no_escopo
-        decimal latitude "nullable"
+        decimal latitude "nullable, CHECK lat+long juntas"
         decimal longitude "nullable"
+        bool coordenada_manual "HU-024"
     }
     EQUIPE {
         bigint id PK
@@ -54,6 +63,8 @@ erDiagram
         varchar codigo
         varchar nome
         bool ativa
+        varchar placa "HU-009"
+        smallint capacidade_diaria "CHECK 1..99"
     }
     ORDEM_SERVICO {
         bigint id PK
@@ -135,4 +146,45 @@ erDiagram
         date data
         timestamptz registrado_em
         int registrado_por_id FK
+    }
+    OPERACAO {
+        bigint id PK
+        varchar codigo UK "PSS, XPT_EXPRESS, LITORAL"
+        varchar nome UK
+        bool ativa
+    }
+    PLANEJAMENTO {
+        bigint id PK
+        bigint polo_id FK "UK(polo,operacao,data)"
+        bigint operacao_id FK
+        date data
+        varchar status "CHECK ABERTO/FINALIZADO/DESPACHADO"
+        timestamptz finalizado_em "nullable"
+        int finalizado_por_id FK "nullable"
+    }
+    ROTA {
+        bigint id PK
+        bigint planejamento_id FK
+        bigint equipe_id FK
+        varchar nome
+        time previsao_inicio
+        time carregamento
+        varchar cor
+        varchar observacao
+        int criada_por_id FK
+    }
+    ITEM_ROTA {
+        bigint id PK
+        bigint rota_id FK "UK(rota,sequencia)"
+        bigint ordem_servico_id FK,UK "RN-L02"
+        smallint sequencia
+    }
+    ARQUIVO_DESPACHO {
+        bigint id PK
+        bigint planejamento_id FK,UK
+        varchar nome_arquivo
+        text conteudo "CSV guardado (baixar de novo)"
+        varchar hash_sha256
+        int total_ordens
+        int gerado_por_id FK
     }

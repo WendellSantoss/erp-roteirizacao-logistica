@@ -7,7 +7,7 @@ epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › barra "N OSs selecionadas · Limpar"
 fase: 2
 prioridade: MVP
-status: rascunho
+status: concluída
 requisitos: [RF-ROT-08]
 regras: []
 nao_funcionais: []
@@ -40,3 +40,6 @@ CA04 — Sem seleção
 Dado nenhuma OS selecionada
 Quando olho a tela
 Então "Criar Rota" e "Atribuir equipe" estão desabilitados.
+
+## Decisões do Incremento 2 (28/11/2026)
+- "Atribuir equipe" (HU-057) ainda não existe; a barra mostra "Limpar" e "Criar Rota".

@@ -221,11 +221,11 @@ Gerada por `python3 scripts/historias.py` a partir do `depende_de` — não edit
 | 17 | [HU-021](HU-021-exibir-progresso-da-importacao.md) | Acompanhar o progresso da importação | 1 | MVP | rascunho | RF-IMP-05 | HU-001, HU-F08 |
 | 30 | [HU-022](HU-022-exibir-progresso-da-captura.md) | Ver o progresso da captura no cabeçalho | 1 | MVP | rascunho | RF-WEB-02 | HU-005 |
 | 31 | [HU-023](HU-023-reprocessar-falhas-de-captura.md) | Ver e reprocessar as unidades cuja captura falhou | 1 | MVP | rascunho | RF-WEB-03 | HU-005, HU-022 |
-| 32 | [HU-024](HU-024-preencher-coordenadas-manualmente.md) | Informar a coordenada de uma unidade manualmente | 1 | MVP | rascunho | RF-WEB-04 | HU-023 |
+| 32 | [HU-024](HU-024-preencher-coordenadas-manualmente.md) | Informar a coordenada de uma unidade manualmente | 1 | MVP | concluída | RF-WEB-04 | HU-023 |
 | 33 | [HU-025](HU-025-filtrar-oss-por-status.md) | Filtrar as pendências por situação com contador | 1 | MVP | rascunho | RF-PEN-02 | HU-006, HU-008 |
 | 34 | [HU-026](HU-026-desconsiderar-os.md) | Desconsiderar uma OS | 1 | MVP | rascunho | RF-PEN-05 | HU-006, HU-020, HU-F11 |
 | 35 | [HU-046](HU-046-reaproveitar-coordenadas-capturadas.md) | Reaproveitar coordenadas já capturadas | 1 | MVP | rascunho | RF-WEB-05 | HU-005 |
-| 36 | [HU-060](HU-060-concluir-tratamento-da-pendencia.md) | Liberar OSs tratadas para roteirização | 1 | MVP | proposta | RF-PEN-06 (proposto) | HU-006, HU-F11 |
+| 36 | [HU-060](HU-060-concluir-tratamento-da-pendencia.md) | Liberar OSs tratadas para roteirização | 1 | MVP | concluída | RF-PEN-06 (proposto) | HU-006, HU-F11 |
 
 ### EP-B Planejamento e despacho (15)
 
@@ -233,16 +233,16 @@ Gerada por `python3 scripts/historias.py` a partir do `depende_de` — não edit
 |---|---|---|---|---|---|---|---|
 | 40 | [HU-009](HU-009-cadastrar-equipes.md) | Cadastrar, editar e inativar equipes | 2 | MVP | rascunho | RF-EQP-01 | HU-028, HU-020, HU-045 |
 | 41 | [HU-010](HU-010-vincular-equipe-ao-polo.md) | Restringir cada equipe ao seu polo | 2 | MVP | rascunho | RF-EQP-03 | HU-009 |
-| 37 | [HU-011](HU-011-selecionar-operacao-e-data.md) | Escolher a operação e a data do planejamento | 2 | MVP | rascunho | RF-ROT-01 | HU-054, HU-066 |
-| 38 | [HU-012](HU-012-selecionar-oss-por-poligono.md) | Selecionar OSs por polígono no mapa | 2 | MVP | rascunho | RF-ROT-07 | HU-005, HU-011, HU-060 |
-| 48 | [HU-013](HU-013-finalizar-planejamento.md) | Finalizar o planejamento do dia | 2 | MVP | rascunho | RF-ROT-16 | HU-056, HU-057 |
-| 49 | [HU-014](HU-014-gerar-arquivo-rpa.md) | Gerar o arquivo de despacho para o RPA | 2 | MVP | rascunho | RF-ROT-17 | HU-013, HU-F11 |
+| 37 | [HU-011](HU-011-selecionar-operacao-e-data.md) | Escolher a operação e a data do planejamento | 2 | MVP | concluída | RF-ROT-01 | HU-054, HU-066 |
+| 38 | [HU-012](HU-012-selecionar-oss-por-poligono.md) | Selecionar OSs por polígono no mapa | 2 | MVP | concluída | RF-ROT-07 | HU-005, HU-011, HU-060 |
+| 48 | [HU-013](HU-013-finalizar-planejamento.md) | Finalizar o planejamento do dia | 2 | MVP | concluída | RF-ROT-16 | HU-056, HU-057 |
+| 49 | [HU-014](HU-014-gerar-arquivo-rpa.md) | Gerar o arquivo de despacho para o RPA | 2 | MVP | concluída | RF-ROT-17 | HU-013, HU-F11 |
 | 42 | [HU-027](HU-027-exibir-equipes-ativas.md) | Ver quantas equipes estão disponíveis no polo | 2 | MVP | rascunho | RF-EQP-02 | HU-009, HU-054 |
 | 39 | [HU-028](HU-028-cadastrar-profissionais-e-ajudantes.md) | Cadastrar profissionais e ajudantes | 2 | MVP | rascunho | RF-EQP-04 | HU-020 |
 | 46 | [HU-029](HU-029-impedir-inativacao-com-rota-aberta.md) | Impedir a inativação de equipe com rota em aberto | 2 | MVP | rascunho | RF-EQP-05 | HU-009, HU-056 |
 | 43 | [HU-030](HU-030-alternar-lista-e-card.md) | Alternar entre visualização em lista e em cartões | 2 | MVP | rascunho | RF-ROT-02 | HU-011 |
-| 44 | [HU-031](HU-031-contador-e-limpar-selecao.md) | Ver o contador de OSs selecionadas e limpar a seleção | 2 | MVP | rascunho | RF-ROT-08 | HU-012 |
-| 45 | [HU-056](HU-056-criar-rota.md) | Criar rota a partir das OSs selecionadas | 2 | MVP | proposta | RF-ROT-03 (proposto) | HU-009, HU-012, HU-028 |
+| 44 | [HU-031](HU-031-contador-e-limpar-selecao.md) | Ver o contador de OSs selecionadas e limpar a seleção | 2 | MVP | concluída | RF-ROT-08 | HU-012 |
+| 45 | [HU-056](HU-056-criar-rota.md) | Criar rota a partir das OSs selecionadas | 2 | MVP | concluída | RF-ROT-03 (proposto) | HU-009, HU-012, HU-028 |
 | 47 | [HU-057](HU-057-atribuir-despacho.md) | Atribuir rapidamente as OSs selecionadas a uma equipe | 2 | MVP | proposta | RF-ROT-04 (proposto) | HU-056 |
 | 50 | [HU-058](HU-058-marcar-os-como-prioridade.md) | Marcar uma OS como prioridade | 2 | MVP | proposta | RF-ROT-05 (proposto) | HU-012 |
 | 51 | [HU-059](HU-059-trocar-servico-ou-equipe.md) | Trocar a equipe ou retirar uma OS da rota antes do despacho | 2 | MVP | proposta | RF-ROT-06 (proposto) | HU-056 |

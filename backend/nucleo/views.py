@@ -1,5 +1,7 @@
 """Rotas do núcleo: só traduzem HTTP e chamam os services (AGENTS.md §2)."""
 
+from dataclasses import asdict
+
 from django.utils import timezone
 from drf_spectacular.utils import OpenApiTypes, extend_schema
 from rest_framework import status
@@ -8,7 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from nucleo import serializers, services, sessao
+from nucleo import serializers, services, services_preparacao, sessao
 from nucleo.consultas import banco_disponivel
 from nucleo.permissoes import exige_acesso, selecao_de_polo
 from nucleo.serializers import validar
@@ -149,3 +151,48 @@ class EquipesView(APIView):
         dados = validar(serializers.FiltroEquipesEntrada, request.query_params)
         equipes = services.listar_equipes(selecao_de_polo(request).polos_ids, dados["ativa"])
         return Response({"resultados": serializers.EquipeSaida(equipes, many=True).data})
+
+
+# ── Coordenadas (HU-024) e liberação para roteirização (HU-060) ───────────────
+
+
+class UnidadesView(APIView):
+    permission_classes = [IsAuthenticated, exige_acesso("webscraper")]
+
+    @extend_schema(
+        parameters=[serializers.FiltroUnidadesEntrada],
+        responses=serializers.UnidadeSaida(many=True),
+    )
+    def get(self, request):
+        dados = validar(serializers.FiltroUnidadesEntrada, request.query_params)
+        polos_ids = selecao_de_polo(request).polos_ids
+        unidades = services_preparacao.listar_unidades(polos_ids, dados["sem_coordenada"])
+        return Response({"resultados": serializers.UnidadeSaida(unidades, many=True).data})
+
+
+class CoordenadaUnidadeView(APIView):
+    permission_classes = [IsAuthenticated, exige_acesso("webscraper")]
+
+    @extend_schema(request=serializers.CoordenadaEntrada, responses=serializers.UnidadeSaida)
+    def patch(self, request, unidade_id: int):
+        polo = selecao_de_polo(request, escrita=True)
+        coordenada = services_preparacao.Coordenada(
+            **validar(serializers.CoordenadaEntrada, request.data)
+        )
+        autoria = services.Autoria(request.user, "Coordenada informada manualmente")
+        unidade = services_preparacao.informar_coordenada(
+            unidade_id, polo.polo_id, coordenada, autoria
+        )
+        return Response(serializers.UnidadeSaida(unidade).data)
+
+
+class LiberarOrdensView(APIView):
+    permission_classes = [IsAuthenticated, exige_acesso("pendencias")]
+
+    @extend_schema(request=serializers.LiberarOrdensEntrada, responses=dict)
+    def post(self, request):
+        polo = selecao_de_polo(request, escrita=True)
+        ordens_ids = validar(serializers.LiberarOrdensEntrada, request.data)["ordens_ids"]
+        autoria = services.Autoria(request.user, "Liberada para roteirização")
+        resultado = services_preparacao.liberar_para_roteirizacao(ordens_ids, polo.polo_id, autoria)
+        return Response(asdict(resultado))

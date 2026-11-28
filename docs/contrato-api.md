@@ -1,6 +1,6 @@
-# Contrato da API REST — GeniOS (Escopo MVP)
+# Contrato da API REST — GeniOS (MVP + Incremento 2: roteirização)
 
-Este documento define os endpoints, cabeçalhos globais, estruturas de entrada, respostas de sucesso e códigos de erro da API do **GeniOS** (Django + Django REST Framework), alinhados às 5 histórias de usuário priorizadas em `docs/historias-priorizadas.md` e aos diagramas C4 em `docs/diagramas-c4/`.
+Este documento define os endpoints, cabeçalhos globais, estruturas de entrada, respostas de sucesso e códigos de erro da API do **GeniOS** (Django + Django REST Framework), alinhados às histórias priorizadas em `docs/historias-priorizadas.md` (as 5 do MVP e as 8 do Incremento 2, seções 7 e 8) e aos diagramas C4 em `docs/diagramas-c4/`.
 
 ---
 
@@ -389,11 +389,15 @@ Lista as equipes ativas vinculadas ao(s) polo(s) selecionado(s) para preenchimen
       "codigo": "EQ-07",
       "nome": "João / Marcos",
       "polo_id": 1,
-      "ativa": true
+      "ativa": true,
+      "placa": "QRT2A11",
+      "capacidade_diaria": 25
     }
   ]
 }
 ```
+> **Incremento 2:** `placa` e `capacidade_diaria` (HU-009 RN-L01/L03) alimentam o modal "Criar Rota"
+> e o aviso de capacidade (HU-031 CA03). O Coordenador de Campo também lê esta lista.
 * **Erros:**
   * `401 Unauthorized`: Não autenticado.
   * `403 Forbidden`: Polo não autorizado.
@@ -505,7 +509,165 @@ Lista as saídas de kits registradas no(s) polo(s) selecionado(s).
 
 ---
 
-## 7. Documentação interativa (OpenAPI)
+## 7. Coordenadas e liberação para roteirização (`HU-024`, `HU-060`) — Incremento 2
+
+Módulo da matriz HU-020: `webscraper` (vê: Gerente, Coordenador; edita: Analista, Admin). A
+liberação usa o módulo `pendencias`.
+
+### `GET /api/v1/unidades/`
+Unidades dos polos selecionados, com a quantidade de OSs.
+
+* **Entrada (Query opcional):** `?sem_coordenada=true` (só unidades **no escopo** sem coordenada) ou `false`
+* **Saída (`200 OK`):**
+```json
+{
+  "resultados": [
+    {
+      "id": 15, "codigo": "UN-208", "nome": "João Agripino", "polo_id": 2, "polo": "Polo 2 - Norte",
+      "latitude": null, "longitude": null, "coordenada_manual": false, "total_ordens": 4
+    }
+  ]
+}
+```
+
+### `PATCH /api/v1/unidades/{id}/coordenada/`
+Informa a coordenada manualmente (HU-024). Aceita `"-7,0832"` ou `"-7.0832"` (CA04). A coordenada
+fica marcada como manual e não é sobrescrita pela captura automática (RN-L02).
+
+* **Cabeçalhos:** `X-Polo-Id` de um polo específico (`TODOS` → 400)
+* **Entrada:** `{"latitude": "-7,0832", "longitude": "-34,8336"}`
+* **Saída (`200 OK`):** a unidade no formato de `GET /unidades/`, com `coordenada_manual: true`.
+  A trilha grava `{"latitude", "longitude"}` anterior e novo (RN-L03).
+* **Erros:**
+  * `400 ENTRADA_INVALIDA`: número inválido ou campo ausente.
+  * `403 POLO_NAO_AUTORIZADO`: a unidade é de outro polo.
+  * `404 NAO_ENCONTRADO`: unidade inexistente.
+  * `422 COORDENADA_FORA_DA_AREA`: "Coordenada fora da área de operação (Paraíba)" — latitude fora de
+    −8,5…−6,0 ou longitude fora de −38,8…−34,7 (HU-005 RN-L02). Nada é gravado.
+
+### `POST /api/v1/ordens-servico/liberar/`
+Leva as OSs marcadas de "Pendente" a "Apta a roteirizar" (HU-060). As sem coordenada ou fora de
+"Pendente" são puladas e informadas (RN-L02); as demais são liberadas, cada uma com registro na trilha.
+
+* **Entrada:** `{"ordens_ids": [101, 102, 103]}` (1 a 500)
+* **Saída (`200 OK`):**
+```json
+{
+  "liberadas": ["20262000020", "20262000010"],
+  "nao_liberadas": [{"numero": "20262000013", "motivo": "sem coordenada"}]
+}
+```
+* **Erros:** `400` (lista vazia, `TODOS`), `403` (OS de outro polo), `404` (id inexistente).
+
+---
+
+## 8. Roteirizador (`HU-011`, `HU-012`, `HU-031`, `HU-056`, `HU-013`, `HU-014`) — Incremento 2
+
+Módulo da matriz HU-020: `roteirizador` (vê: Gerente, Analista, Admin; edita: **Coordenador**). Todas
+as rotas exigem `X-Polo-Id` de um polo específico, inclusive a leitura: com `TODOS` a tela mostra
+"Selecione um polo para montar rotas" (HU-012 CA08) e a API responde `400 POLO_OBRIGATORIO`.
+O planejamento é identificado por **polo + `operacao_id` + `data`** (HU-013 RN-L01).
+
+### `GET /api/v1/roteirizacao/operacoes/`
+Operações ativas: `{"resultados": [{"id": 1, "codigo": "PSS", "nome": "PSS"}]}`.
+
+### `GET /api/v1/roteirizacao/planejamento/?operacao_id=1&data=2026-11-29`
+Painel do Roteirizador: OSs aptas do polo (pins) e rotas já criadas da operação e data (HU-011 CA01).
+
+* **Saída (`200 OK`):**
+```json
+{
+  "operacao": {"id": 1, "codigo": "PSS", "nome": "PSS"},
+  "data": "2026-11-29",
+  "planejamento": {
+    "id": 4, "status": "ABERTO",
+    "somente_leitura": false, "motivo_somente_leitura": "",
+    "finalizado_em": null, "finalizado_por": null, "arquivo_rpa": null
+  },
+  "rotas": [
+    {
+      "id": 9, "nome": "Bessa manhã", "cor": "#7c3aed", "observacao": "",
+      "previsao_inicio": "07:30", "carregamento": "07:00",
+      "equipe": {"id": 4, "codigo": "EQ-201", "nome": "João / Marcos", "placa": "QRT2A12", "ativa": true},
+      "ordens": [{"id": 101, "numero": "20262000025", "...": "mesmo formato de ordens_aptas"}]
+    }
+  ],
+  "ordens_aptas": [
+    {
+      "id": 102, "numero": "20262000017", "tipo": "LIGACAO_NOVA", "especificacao": "Ligação nova de água 1/2",
+      "prioridade": false, "unidade": {"codigo": "UN-204", "nome": "Cabo Branco"},
+      "latitude": -7.125, "longitude": -34.824
+    }
+  ]
+}
+```
+* `ordens_aptas` só traz OS "Apta a roteirizar" com coordenada (RN-04, RN-08 — HU-012 CA03).
+* `somente_leitura` é `true` com `motivo_somente_leitura` "Planejamento de data passada é somente
+  leitura" (HU-011 CA02) ou "Planejamento finalizado" (HU-013 CA03).
+* **Erros:** `400` "Escolha a operação." (HU-011 CA03), `404` operação inexistente.
+
+### `POST /api/v1/roteirizacao/rotas/`
+Cria a rota com as OSs selecionadas no mapa (HU-056). As OSs passam a "Roteirizada" na mesma transação
+e a criação vai para a trilha com autor, rota e OSs (CA07).
+
+* **Entrada:**
+```json
+{
+  "operacao_id": 1, "data": "2026-11-29", "nome": "Bessa manhã", "equipe_id": 4,
+  "previsao_inicio": "07:30", "carregamento": "07:00", "cor": "#7c3aed", "observacao": "",
+  "ordens_ids": [101, 103, 107]
+}
+```
+* **Saída (`201 Created`):** a rota no formato de `rotas[]` acima.
+* **Erros:**
+  * `400 ENTRADA_INVALIDA`: campo obrigatório ausente, ex.: "Informe a previsão de início." (CA02).
+  * `404 NAO_ENCONTRADO`: equipe ou OS inexistente.
+  * `409 PLANEJAMENTO_FINALIZADO`: "Planejamento finalizado" (HU-013 CA03).
+  * `422 ROTA_INVALIDA`: equipe de outro polo ou inativa (CA03, RN-09); "Equipe A: 28 OSs no dia excede
+    a capacidade de 25" (CA04, RN-L03); "A data da rota não pode ser anterior a hoje" (CA06).
+  * `422 OS_JA_EM_ROTA`: "OS 20262000025 já está na rota Bessa manhã" (CA05).
+  * `422 OS_INAPTA_PARA_ROTA`: OS que não está apta ou sem coordenada (RN-08). Nada é gravado.
+
+### `POST /api/v1/roteirizacao/planejamento/finalizar/`
+Fecha o planejamento (HU-013). **Entrada:** `{"operacao_id": 1, "data": "2026-11-29"}`.
+
+* **Saída (`200 OK`):** `{"id": 4, "status": "FINALIZADO", "finalizado_em": "2026-11-28T12:19:00Z"}`
+* **Erros:**
+  * `422 PLANEJAMENTO_INCONSISTENTE`: "Não há rotas para finalizar" (CA04) ou, com a lista em
+    `detalhes.inconsistencias` (CA02): `[{"rota": "Bessa manhã", "motivo": "João / Marcos foi inativada"}]`.
+    Motivos: rota sem OS, equipe inativa ou de outro polo, OS que não está mais roteirizada, capacidade
+    do dia excedida. Nada muda.
+  * `409 PLANEJAMENTO_FINALIZADO`: já finalizado.
+
+### `POST /api/v1/roteirizacao/planejamento/arquivo-rpa/`
+Gera o arquivo de despacho (HU-014) e leva as OSs a "Despachada" (RN-10), tudo ou nada (RN-L03).
+Chamar de novo devolve o mesmo arquivo, sem mudar nenhuma OS (RN-L02).
+
+* **Entrada:** `{"operacao_id": 1, "data": "2026-11-29"}`
+* **Saída (`201 Created` na geração, `200 OK` se já existia):**
+```json
+{
+  "nome_arquivo": "rpa_POLO_2_PSS_20261129.csv", "hash_sha256": "427b25c540b5…",
+  "total_ordens": 9, "gerado_por": "Caio Coordenador", "gerado_em": "2026-11-28T12:19:05Z"
+}
+```
+* **Erros:** `422 PLANEJAMENTO_NAO_FINALIZADO` "Finalize o planejamento antes de gerar o RPA" (CA02).
+
+### `GET /api/v1/roteirizacao/planejamento/arquivo-rpa/?operacao_id=1&data=2026-11-29`
+Baixa o arquivo (`text/csv; charset=utf-8`, `Content-Disposition: attachment`) com o cabeçalho
+`X-Hash-Sha256` (CA03/CA04). `404` se ainda não foi gerado.
+
+**Layout proposto** (dúvida bloqueante da HU-014 ainda aberta — ADR-002 §2.4): CSV separado por `;`,
+UTF-8, fim de linha CRLF, uma linha por OS na ordem da rota:
+
+```
+NUMERO_OS;POLO;OPERACAO;DATA_ROTA;ROTA;SEQUENCIA;EQUIPE;PLACA;PREVISAO_INICIO;CARREGAMENTO;TIPO_SERVICO;UNIDADE;LATITUDE;LONGITUDE
+20262000025;POLO_2;PSS;2026-11-29;Bessa manhã;1;EQ-201;QRT2A12;07:30;07:00;LIGACAO_NOVA;UN-205;-7.092000;-34.840000
+```
+
+---
+
+## 9. Documentação interativa (OpenAPI)
 
 O esquema OpenAPI é gerado a partir do código com `drf-spectacular`:
 * `GET /api/schema/` — esquema OpenAPI 3 (YAML).
@@ -515,7 +677,7 @@ Este documento continua sendo o contrato de referência; o esquema gerado serve 
 
 ---
 
-## 8. Matriz de Rastreabilidade (Histórias x Endpoints)
+## 10. Matriz de Rastreabilidade (Histórias x Endpoints)
 
 | História Priorizada | Requisitos | Endpoints Correspondentes |
 | :--- | :--- | :--- |
@@ -524,3 +686,6 @@ Este documento continua sendo o contrato de referência; o esquema gerado serve 
 | **3. Importação Transacional Sem Amnésia (`HU-004`)** | `RF-IMP-04`, `05`, `CA01-09` | `POST /api/v1/importacoes/`, `GET /api/v1/importacoes/{id}/`, `GET /api/v1/importacoes/` |
 | **4. Listagem e Tratamento de Pendências (`HU-006` a `HU-008`)** | `RF-PEN-01` a `05` | `GET /api/v1/ordens-servico/`, `PATCH /api/v1/ordens-servico/{id}/prioridade/`, `POST /api/v1/ordens-servico/{id}/desconsiderar/`, `GET /api/v1/auditoria/` |
 | **5. Bloqueio de Saída de Kit (`HU-016`)** | `RF-ALM-01`, `03`, `04` | `GET /api/v1/equipes/`, `GET /api/v1/almoxarifado/limites-kits/`, `POST /api/v1/almoxarifado/saidas-kits/`, `GET /api/v1/almoxarifado/saidas-kits/` |
+| **6. Coordenadas e liberação (`HU-024`, `HU-060`)** — Incremento 2 | `RF-WEB-04`, `RF-PEN-06` (proposto) | `GET /api/v1/unidades/`, `PATCH /api/v1/unidades/{id}/coordenada/`, `POST /api/v1/ordens-servico/liberar/` |
+| **7. Mapa e roteirização (`HU-011`, `HU-012`, `HU-031`, `HU-056`)** — Incremento 2 | `RF-ROT-01`, `07`, `08`, `03` (proposto) | `GET /api/v1/roteirizacao/operacoes/`, `GET /api/v1/roteirizacao/planejamento/`, `POST /api/v1/roteirizacao/rotas/` |
+| **8. Finalização e despacho (`HU-013`, `HU-014`)** — Incremento 2 | `RF-ROT-16`, `17` | `POST /api/v1/roteirizacao/planejamento/finalizar/`, `POST` e `GET /api/v1/roteirizacao/planejamento/arquivo-rpa/` |

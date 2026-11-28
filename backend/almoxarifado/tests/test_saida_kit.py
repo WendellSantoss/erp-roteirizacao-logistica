@@ -117,7 +117,7 @@ class TravaDeHistoricoTest(TestCase):
         self.sair(3)
         resultados = self.cliente.get(URL_SAIDAS).json()["resultados"]
         self.assertEqual(len(resultados), 1)
-        self.assertEqual(resultados[0]["equipe"], "EQ-A (Equipe de teste)")
+        self.assertEqual(resultados[0]["equipe"], "EQ-A (Equipe EQ-A)")
 
 
 class ConcorrenciaTest(TransactionTestCase):

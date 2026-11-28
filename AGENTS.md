@@ -11,9 +11,10 @@ Antes de gerar código, leia:
 
 | Documento | Para quê |
 |---|---|
-| `docs/historias-priorizadas.md` | Escopo do MVP (5 histórias) |
+| `docs/historias-priorizadas.md` | Escopo do MVP (5 histórias) e do Incremento 2 (roteirização, 8 histórias) |
 | `docs/contrato-api.md` | Endpoints, payloads e erros — **o contrato manda** |
 | `docs/adr/ADR-001-arquitetura-mvp.md` | Monólito modular, stack |
+| `docs/adr/ADR-002-mapa-e-roteirizacao.md` | Leaflet/OSM, polígono no navegador, layout RPA |
 | `docs/diagramas-c4/README.md` | Regras de dependência entre módulos |
 | `docs/banco/modelo-dados.md` | Tabelas, restrições e o que cada história lê/grava |
 | `docs/historias/HU-xxx-*.md` | Critérios de aceite completos de cada história |
@@ -30,6 +31,7 @@ backend/
   nucleo/          compartilhado: Polo, Unidade, Equipe, Perfil, OrdemServico, Auditoria
   importacao/      HU-001..004: planilha GSAN e upsert
   almoxarifado/    HU-016: tipos de kit, execução D-1, saídas
+  roteirizacao/    HU-011..014, HU-056: operações, planejamento, rotas, arquivo RPA
 ```
 
 Dentro de cada app:
@@ -38,18 +40,18 @@ Dentro de cada app:
 |---|---|---|---|
 | Rota | `views.py` | ler request, chamar serializer e service, devolver Response | regra de negócio, `Model.objects`, SQL, `transaction` |
 | Validação de entrada/saída | `serializers.py` | validar formato e tipos, formatar resposta | regra de negócio, gravar no banco |
-| Regra de negócio | `services.py` | regras, transações (`transaction.atomic`), chamar consultas e auditoria | conhecer `request`/`Response`/HTTP |
+| Regra de negócio | `services.py` (ou `services_<assunto>.py` quando passaria de 300 linhas) | regras, transações (`transaction.atomic`), chamar consultas e auditoria | conhecer `request`/`Response`/HTTP |
 | Acesso a dados | `models.py`, `consultas.py` | ORM, `select_for_update`, agregações | regra de negócio |
 | Permissões | `permissoes.py` | checar perfil e polo | regra de negócio |
 
 Regras de dependência (verificadas por `lint-imports`, ver `backend/.importlinter`):
 
 1. `views.py` não importa `django.db` (nada de ORM ou transação na rota).
-2. `nucleo` não importa nenhum módulo de negócio (`importacao`, `almoxarifado`).
+2. `nucleo` não importa nenhum módulo de negócio (`importacao`, `almoxarifado`, `roteirizacao`).
 3. Módulos de negócio não importam um ao outro; um módulo não grava nas tabelas de outro — chama o
    `services.py` do módulo dono.
 4. O estado da OS só muda por `nucleo.services.CicloDeVidaOS.transicionar` (HU-F11). Nunca
-   `os.estado = ...` fora dele.
+   `os.estado = ...` fora dele. Outros módulos pedem a transição a `nucleo.services_preparacao`.
 5. Toda alteração manual de dado operacional grava `RegistroAuditoria` **na mesma transação**.
    A tabela é append-only (trigger no PostgreSQL bloqueia UPDATE/DELETE).
 6. Toda consulta filtra por polo (`X-Polo-Id`) no servidor. Escrita exige polo específico (`TODOS` → 400).

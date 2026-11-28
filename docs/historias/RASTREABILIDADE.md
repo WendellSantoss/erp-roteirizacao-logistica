@@ -2,7 +2,7 @@
 
 > Gerado por `scripts/historias.py` a partir dos cabeçalhos das histórias. Não editar à mão.
 
-- Histórias: 81 (13 propostas, 13 de fundação)
+- Histórias: 81 (11 propostas, 13 de fundação)
 - RFs da ERS cobertos: 55 de 55
 - RNs da ERS citadas: 21 de 21
 - RNFs da ERS verificados por alguma história: 28 de 28

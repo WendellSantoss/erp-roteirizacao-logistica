@@ -7,7 +7,7 @@ epico: EP-A Ingestão e preparação de dados
 tela: — (sem tela no protótipo)
 fase: 1
 prioridade: MVP
-status: rascunho
+status: concluída
 requisitos: [RF-WEB-04]
 regras: [RN-04]
 nao_funcionais: [RNF-15]
@@ -52,3 +52,7 @@ CA05 — Manual prevalece
 Dado uma unidade com coordenada manual
 Quando a captura automática roda de novo
 Então a coordenada manual não é alterada.
+
+## Decisões do Incremento 2 (28/11/2026)
+- Implementada na tela **Coordenadas** (`/coordenadas`) e em `PATCH /api/v1/unidades/{id}/coordenada/`.
+- A HU-023 (lista de falhas da captura) não existe ainda: a tela lista as unidades **no escopo** sem coordenada.

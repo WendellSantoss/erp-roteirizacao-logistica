@@ -7,7 +7,7 @@ epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › Operação e Data da Rota
 fase: 2
 prioridade: MVP
-status: rascunho
+status: concluída
 requisitos: [RF-ROT-01]
 regras: [RN-08]
 nao_funcionais: []
@@ -52,3 +52,7 @@ Então a escolha continua.
 ## Dúvidas em aberto
 - O que diferencia as operações (PSS, XPT Express, Litoral)? Tipos de serviço diferentes,
   contratos diferentes ou regiões diferentes? Isso define se a OS "pertence" a uma operação.
+
+## Decisões do Incremento 2 (28/11/2026)
+- **Dúvida respondida (provisória):** a OS não pertence a uma operação; o mapa mostra todas as OSs aptas do polo e a operação agrupa as **rotas**. Revisar quando o contrato diferenciar as operações.
+- Operações PSS, XPT Express e Litoral criadas por migration (`roteirizacao/0002`).

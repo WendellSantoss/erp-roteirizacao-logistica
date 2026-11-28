@@ -7,7 +7,7 @@ epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › botão "Finalizar"
 fase: 2
 prioridade: MVP
-status: rascunho
+status: concluída
 requisitos: [RF-ROT-16]
 regras: [RN-08, RN-09]
 nao_funcionais: [RNF-15, RNF-17]
@@ -53,3 +53,6 @@ Então aparece "Não há rotas para finalizar".
 ## Dúvidas em aberto
 - É possível reabrir um planejamento finalizado antes de gerar o RPA? Proposta: sim, pelo
   Coordenador, com registro na trilha.
+
+## Decisões do Incremento 2 (28/11/2026)
+- **Dúvida respondida:** reabrir planejamento finalizado fica fora deste incremento.

@@ -143,6 +143,7 @@ Desenvolver um sistema ERP que integre roteirização, controle logístico e aud
 ### 6.1 Módulo de Roteirização
 
 - Importação e validação de planilhas operacionais (GSAN) com upsert transacional;
+- **No protótipo (Incremento 2):** mapa OpenStreetMap com as OSs aptas, seleção por polígono, criação de rota por equipe com controle de capacidade, finalização do planejamento e arquivo de despacho RPA com hash;
 - Cadastro de rotas, pontos de entrega/coleta e regiões/polos de atendimento;
 - Cálculo de rotas otimizadas (menor distância/tempo);
 - Visualização de rotas e reprogramação dinâmica em caso de imprevistos;
@@ -389,20 +390,23 @@ A validação do MVP combina testes automatizados de back-end e front-end, verif
 
 ### 13.2 Testes automatizados do back-end (Etapa 5)
 
-- **Resultado:** 101 testes aprovados em PostgreSQL, executados com `python manage.py test`.
+- **Resultado:** 143 testes aprovados em PostgreSQL (101 do MVP + 42 do Incremento 2), executados com `python manage.py test`.
 - **Cobertura dos critérios de aceite do MVP:**
   - **HU-019 — Autenticação:** login e bloqueio de acesso;
   - **HU-020 — Controle de acesso:** matriz de permissões, incluindo respostas `403` por célula de acesso;
   - **HU-F11 — Ciclo de vida da OS:** validação de todas as transições de estado;
   - **HU-001 a HU-004 — Importação:** validação do layout, escopo por polo e operação de upsert com garantia de tudo-ou-nada;
   - **HU-006 a HU-008 — Pendências:** cálculo de atraso e tratamento de pendências;
-  - **HU-016, CA07 — Kits:** bloqueio de operações com teste real de concorrência.
+  - **HU-016, CA07 — Kits:** bloqueio de operações com teste real de concorrência;
+  - **HU-024 e HU-060 — Coordenadas e liberação:** área de operação, vírgula/ponto, trilha, lote parcial;
+  - **HU-011, HU-012, HU-056 — Roteirizador:** painel, OS inapta fora do mapa, capacidade, OS já em rota, data passada;
+  - **HU-013 e HU-014 — Despacho:** inconsistências, planejamento fechado, RPA tudo-ou-nada, mesmo hash ao baixar de novo, layout.
 
 ### 13.3 Testes automatizados do front-end (Etapa 6)
 
 - **Ferramenta:** Vitest, executado por meio de `npm test`.
-- **Resultado:** 9 testes aprovados.
-- **Validações:** formatos e regras da HU-007 e validação do envio de dados da HU-001.
+- **Resultado:** 17 testes aprovados.
+- **Validações:** formatos e regras da HU-007, validação do envio de dados da HU-001 e, no Incremento 2, seleção por polígono (borda, polígono côncavo, 2.000 pontos em menos de 1 s) e agrupamento de pins por unidade.
 
 ### 13.4 Build e verificações de qualidade
 
@@ -457,7 +461,9 @@ O dashboard administrativo consolida os seguintes indicadores:
 - [x] Frontend das 5 histórias do MVP consumindo a API (Etapa 6)
 - [x] Integração, testes ponta a ponta e versão final (Etapa 7)
 - [x] Retrospectiva sobre o uso de IA (Etapa 8)
-- [x] Roteirização, controle logístico completo, auditoria de contratos e dashboard de KPIs (pós-MVP)
+- [x] **Incremento 2:** coordenada manual, liberação para roteirização, mapa com seleção por polígono, criação de rota, finalização e arquivo RPA (HU-024, 060, 011, 012, 031, 056, 013, 014 — ADR-002)
+- [ ] Webscraper de coordenadas, cadastro de equipes pela tela, troca de equipe/retirada de OS da rota (HU-005, 009, 059)
+- [ ] Controle logístico completo, auditoria de contratos e dashboard de KPIs (pós-MVP)
 
 ## 17. Perguntas Frequentes (FAQ)
 

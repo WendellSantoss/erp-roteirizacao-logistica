@@ -8,6 +8,11 @@ urlpatterns = [
     path("auth/logout/", views.LogoutView.as_view(), name="auth-logout"),
     path("ordens-servico/", views.OrdensServicoView.as_view(), name="ordens-servico"),
     path(
+        "ordens-servico/liberar/",
+        views.LiberarOrdensView.as_view(),
+        name="ordens-liberar",
+    ),
+    path(
         "ordens-servico/<int:ordem_id>/prioridade/",
         views.PrioridadeView.as_view(),
         name="ordem-prioridade",
@@ -19,4 +24,10 @@ urlpatterns = [
     ),
     path("auditoria/", views.AuditoriaView.as_view(), name="auditoria"),
     path("equipes/", views.EquipesView.as_view(), name="equipes"),
+    path("unidades/", views.UnidadesView.as_view(), name="unidades"),
+    path(
+        "unidades/<int:unidade_id>/coordenada/",
+        views.CoordenadaUnidadeView.as_view(),
+        name="unidade-coordenada",
+    ),
 ]

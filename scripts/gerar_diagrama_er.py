@@ -18,7 +18,7 @@ django.setup()
 from django.apps import apps  # noqa: E402
 from django.db import connection  # noqa: E402
 
-APPS_DO_MVP = ("nucleo", "importacao", "almoxarifado")
+APPS_DO_MVP = ("nucleo", "importacao", "almoxarifado", "roteirizacao")
 CAMPOS_DO_USUARIO = ("id", "username", "email", "first_name", "password", "is_active")
 
 

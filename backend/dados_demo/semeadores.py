@@ -73,24 +73,30 @@ def _criar_usuario(email: str, nome: str, sobrenome: str, senha: str):
 
 def semear_unidades(polo: Polo) -> None:
     numero_polo = polo.codigo[-1]
-    for sufixo, nome, no_escopo, latitude, longitude in catalogo.UNIDADES:
-        Unidade.objects.update_or_create(
+    for sufixo, nome, no_escopo, latitude, longitude in catalogo.UNIDADES[polo.codigo]:
+        unidade, _ = Unidade.objects.update_or_create(
             polo=polo,
             codigo=f"UN-{numero_polo}{sufixo}",
-            defaults={
-                "nome": f"{nome} {polo.nome.split(' - ')[-1]}",
-                "no_escopo": no_escopo,
-                "latitude": latitude,
-                "longitude": longitude,
-            },
+            defaults={"nome": nome, "no_escopo": no_escopo},
         )
+        # HU-024 RN-L02: coordenada informada à mão não é sobrescrita nem pelo seed.
+        if not unidade.coordenada_manual:
+            unidade.latitude, unidade.longitude = latitude, longitude
+            unidade.save(update_fields=["latitude", "longitude"])
 
 
 def semear_equipes(polo: Polo) -> None:
     numero_polo = polo.codigo[-1]
-    for sufixo, nome, ativa in catalogo.EQUIPES:
+    for sufixo, nome, ativa, prefixo_placa, capacidade in catalogo.EQUIPES:
         Equipe.objects.update_or_create(
-            polo=polo, codigo=f"EQ-{numero_polo}{sufixo}", defaults={"nome": nome, "ativa": ativa}
+            polo=polo,
+            codigo=f"EQ-{numero_polo}{sufixo}",
+            defaults={
+                "nome": nome,
+                "ativa": ativa,
+                "placa": f"{prefixo_placa}{numero_polo}",
+                "capacidade_diaria": capacidade,
+            },
         )
 
 
@@ -120,16 +126,21 @@ def semear_ordens_servico(polos: dict[str, Polo]) -> None:
         unidades = list(polo.unidades.filter(no_escopo=True))
         for indice in range(catalogo.OS_POR_POLO):
             ordem = _gravar_os(polo, unidades[indice % len(unidades)], indice, agora)
-            if ordem.estado == EstadoOS.DESCONSIDERADA:
+            if ordem and ordem.estado == EstadoOS.DESCONSIDERADA:
                 _auditar_desconsideracao(ordem)
 
 
-def _gravar_os(polo: Polo, unidade: Unidade, indice: int, agora) -> OrdemServico:
+def _gravar_os(polo: Polo, unidade: Unidade, indice: int, agora) -> OrdemServico | None:
+    numero = f"2026{polo.codigo[-1]}{indice:06d}"
+    # Rodar o seed de novo reinicia a carteira de demonstração, menos as OSs que já entraram em
+    # rota: voltar o estado delas deixaria rota e OS inconsistentes.
+    if OrdemServico.objects.filter(numero=numero, polo=polo, itens_rota__isnull=False).exists():
+        return None
     tipo, especificacao, prazo = catalogo.TIPOS_SERVICO[indice % len(catalogo.TIPOS_SERVICO)]
-    # Aberturas espalhadas entre 2h e 4 dias atrás: parte das OSs fica em atraso (RN-06).
+    # Aberturas espalhadas entre 2h e ~7 dias atrás: parte das OSs fica em atraso (RN-06).
     horas_atras = 2 + indice * 6
     ordem, _ = OrdemServico.objects.update_or_create(
-        numero=f"2026{polo.codigo[-1]}{indice:06d}",
+        numero=numero,
         polo=polo,
         defaults={
             "unidade": unidade,
@@ -141,11 +152,19 @@ def _gravar_os(polo: Polo, unidade: Unidade, indice: int, agora) -> OrdemServico
             "quadra": f"{indice * 3 + 10:03d}",
             "abertura": agora - timedelta(hours=horas_atras),
             "prazo_horas": prazo,
-            "estado": catalogo.ESTADOS_OS[indice % len(catalogo.ESTADOS_OS)],
+            "estado": _estado_inicial(unidade, indice),
             "prioridade": indice % 5 == 0,
         },
     )
     return ordem
+
+
+def _estado_inicial(unidade: Unidade, indice: int) -> str:
+    estado = catalogo.ESTADOS_OS[indice % len(catalogo.ESTADOS_OS)]
+    # ERS §3: "Apta a roteirizar" exige coordenada; sem ela a OS fica pendente (RN-04).
+    if estado == EstadoOS.APTA_A_ROTEIRIZAR and not unidade.tem_coordenada:
+        return EstadoOS.PENDENTE
+    return estado
 
 
 def _auditar_desconsideracao(ordem: OrdemServico) -> None:

@@ -19,12 +19,21 @@ def criar_usuario(email: str = "teste@genios.test"):
     return get_user_model().objects.create_user(username=email, email=email, password="x")
 
 
-def criar_unidade(polo: Polo, codigo: str = "UN-01") -> Unidade:
-    return Unidade.objects.create(polo=polo, codigo=codigo, nome="Unidade de teste")
+# Bessa, João Pessoa (HU-024 CA01): dentro da área de operação.
+LATITUDE_BESSA, LONGITUDE_BESSA = "-7.083200", "-34.833600"
 
 
-def criar_equipe(polo: Polo, codigo: str = "EQ-01") -> Equipe:
-    return Equipe.objects.create(polo=polo, codigo=codigo, nome="Equipe de teste")
+def criar_unidade(polo: Polo, codigo: str = "UN-01", com_coordenada: bool = False) -> Unidade:
+    coordenada = (
+        {"latitude": LATITUDE_BESSA, "longitude": LONGITUDE_BESSA} if com_coordenada else {}
+    )
+    return Unidade.objects.create(polo=polo, codigo=codigo, nome="Unidade de teste", **coordenada)
+
+
+def criar_equipe(polo: Polo, codigo: str = "EQ-01", capacidade: int = 25) -> Equipe:
+    return Equipe.objects.create(
+        polo=polo, codigo=codigo, nome=f"Equipe {codigo}", capacidade_diaria=capacidade
+    )
 
 
 def criar_os(unidade: Unidade, numero: str = "100") -> OrdemServico:

@@ -71,29 +71,56 @@ class Unidade(models.Model):
     # Sem PostGIS no MVP (Render gratuito); lat/long simples bastam para exibir pins.
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    # HU-024 RN-L02: coordenada digitada não é sobrescrita por captura automática.
+    coordenada_manual = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["polo_id", "codigo"]
         constraints = [
             models.UniqueConstraint(fields=["polo", "codigo"], name="unidade_unica_por_polo"),
+            # Lat e long andam juntas: ou as duas existem, ou nenhuma (RN-04).
+            models.CheckConstraint(
+                condition=models.Q(latitude__isnull=True, longitude__isnull=True)
+                | models.Q(latitude__isnull=False, longitude__isnull=False),
+                name="unidade_coordenada_completa",
+            ),
         ]
 
     def __str__(self) -> str:
         return f"{self.codigo} - {self.nome}"
 
+    @property
+    def tem_coordenada(self) -> bool:
+        return self.latitude is not None and self.longitude is not None
+
+
+CAPACIDADE_PADRAO_EQUIPE = 25
+CAPACIDADE_MAXIMA_EQUIPE = 99
+
 
 class Equipe(models.Model):
-    """Equipe de campo vinculada a um único polo (RF-EQP-03)."""
+    """Equipe de campo vinculada a um único polo (RF-EQP-03).
+
+    Placa e capacidade diária vêm da HU-009 (RN-L01/RN-L03); o cadastro pela tela ainda não faz
+    parte do escopo, então os valores chegam pelo seed ou pelo admin do Django.
+    """
 
     polo = models.ForeignKey(Polo, on_delete=models.PROTECT, related_name="equipes")
     codigo = models.CharField(max_length=20)
     nome = models.CharField(max_length=120)
     ativa = models.BooleanField(default=True)
+    placa = models.CharField(max_length=8, blank=True)
+    capacidade_diaria = models.PositiveSmallIntegerField(default=CAPACIDADE_PADRAO_EQUIPE)
 
     class Meta:
         ordering = ["polo_id", "codigo"]
         constraints = [
             models.UniqueConstraint(fields=["polo", "codigo"], name="equipe_unica_por_polo"),
+            models.CheckConstraint(
+                condition=models.Q(capacidade_diaria__gte=1)
+                & models.Q(capacidade_diaria__lte=CAPACIDADE_MAXIMA_EQUIPE),
+                name="equipe_capacidade_entre_1_e_99",
+            ),
         ]
         indexes = [models.Index(fields=["polo", "ativa"], name="equipe_polo_ativa_idx")]
 

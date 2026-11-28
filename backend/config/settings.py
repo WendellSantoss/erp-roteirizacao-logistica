@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "nucleo",
     "importacao",
     "almoxarifado",
+    "roteirizacao",
     "dados_demo",
 ]
 
@@ -90,6 +91,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173").split(",")
 # O filtro global de polo viaja no cabeçalho X-Polo-Id (contrato §1).
 CORS_ALLOW_HEADERS = (*default_headers, "x-polo-id")
+# O frontend lê o nome e o hash do arquivo RPA baixado (HU-014 CA03/CA04).
+CORS_EXPOSE_HEADERS = ["Content-Disposition", "X-Hash-Sha256"]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["nucleo.autenticacao.TokenBearerComValidade"],

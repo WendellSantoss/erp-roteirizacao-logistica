@@ -55,3 +55,14 @@ export function iniciais(nome: string): string {
   const partes = nome.trim().split(/\s+/)
   return (partes[0][0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase()
 }
+
+export function dataDeAmanha(): string {
+  const amanha = new Date(Date.now() + 24 * 60 * 60 * 1000)
+  return new Intl.DateTimeFormat('en-CA', { timeZone: FUSO_OPERACAO }).format(amanha)
+}
+
+/** "2026-07-12" → "12/07/2026", sem passar por Date (evita deslocar o dia pelo fuso). */
+export function formatarData(iso: string): string {
+  const [ano, mes, dia] = iso.split('-')
+  return `${dia}/${mes}/${ano}`
+}

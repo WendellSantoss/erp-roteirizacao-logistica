@@ -7,7 +7,7 @@ epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador" › "Gerar arquivo RPA"
 fase: 2
 prioridade: MVP
-status: rascunho
+status: concluída
 requisitos: [RF-ROT-17]
 regras: [RN-10]
 nao_funcionais: [RNF-17, RNF-25]
@@ -63,3 +63,7 @@ Então colunas, ordem, separador e codificação são idênticos (teste automati
 ## Dúvidas em aberto
 - **Bloqueante:** precisamos do layout do arquivo RPA (formato, colunas, separador, codificação)
   e de um arquivo de exemplo aceito pela automação.
+
+## Decisões do Incremento 2 (28/11/2026)
+- **Dúvida bloqueante contornada:** layout **proposto** (CSV `;`, UTF-8, CRLF) isolado em `backend/roteirizacao/arquivo_rpa.py`; o CA06 testa esse layout. Trocar quando a automação enviar o exemplo oficial.
+- Não há tela de "histórico de despachos": o painel do planejamento mostra arquivo, total e hash; a trilha registra autor e data.
