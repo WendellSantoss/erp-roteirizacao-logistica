@@ -152,3 +152,33 @@ Código gerado pelo agente: ~100% das linhas. Dentro disso, ~80% ficou como saiu
 ~20% foi ajustado pelo próprio agente após lint, testes ou revisão contra o AGENTS.md. Reescrito à mão
 pelo grupo: 0% até aqui — **a revisão humana (Felipe e grupo) ainda precisa acontecer e atualizar
 esta estimativa**.
+
+---
+
+## Incremento 2 — Mapa e roteirização (28/11/2026)
+
+Ferramenta: **Claude Code (Claude Opus, plano Pro pago)**, agente com acesso ao repositório, ao
+`AGENTS.md` e ao navegador (Claude in Chrome) para o teste ponta a ponta local. Detalhes do processo em
+`docs/processo/incremento-2-roteirizacao.md`.
+
+| Data | Ferramenta (plano) | Etapa | Prompt (resumo) | Resultado e verificação | Ajustes |
+|---|---|---|---|---|---|
+| 28/11 | Claude Code (Pro) | 1. Contexto | "Analise o backlog, escolha as HUs necessárias para termos o mapa e a roteirização e altere o escopo nas etapas anteriores" | Escolheu HU-024, 060, 011, 012, 031, 056, 013, 014; ADR-002; contrato §7–8 | O board do GitHub Project não pôde ser lido (token sem `read:project`); a escolha usou `docs/historias/` e as issues, que espelham o board |
+| 28/11 | Claude Code (Pro) | 4. Banco | Modelar planejamento/rota/item/arquivo e campos de equipe e unidade | 3 migrations; `makemigrations --check` limpo | Ordem dos métodos do model corrigida após `ruff` (DJ012) |
+| 28/11 | Claude Code (Pro) | 5. Backend | Uma história por vez, testes citando os CAs | 143 testes verdes (42 novos); `ruff`, `lint-imports` OK | Ver erros 9–12 abaixo |
+| 28/11 | Claude Code (Pro) | 6. Frontend | Telas Coordenadas, Roteirizador e liberação em lote, Leaflet | ESLint, Prettier, 17 testes Vitest, build OK | 4 funções divididas por `max-lines-per-function` |
+| 28/11 | Claude Code (Pro) | 7. Integração | Percorrer o fluxo no navegador local | Polígono → rota → finalizar → RPA; coordenada fora da área recusada; liberação em lote | Aviso antigo do polígono ficava na tela; download do RPA revogava a URL cedo demais — corrigidos |
+
+### Erros e alucinações detectados neste incremento
+
+| # | O que a IA fez | Como percebemos | Correção |
+|---|---|---|---|
+| 9 | Seeds herdados com coordenadas de Fortaleza (−3,73; −38,52) para unidades da Paraíba | Teste novo que valida a área de operação (HU-005 RN-L02) falharia | Bairros de João Pessoa com coordenadas aproximadas |
+| 10 | Campo extra sem uso (`complementos`) no `PedidoRota` | Revisão do diff | Removido |
+| 11 | Teste de matriz de acesso quebrou: o Analista passou a editar o módulo `webscraper` | `python manage.py test` | Expectativa do teste atualizada (mudança intencional da matriz) |
+| 12 | Diálogo modal ficaria atrás do mapa (Leaflet usa `z-index` até 1000; o diálogo tinha 10) | Antecipado na revisão do CSS e confirmado no navegador | `z-index: 2000` no fundo do diálogo |
+| 13 | Download do RPA via `URL.revokeObjectURL` logo após o clique | Arquivo não apareceu no teste do navegador | Link anexado ao DOM e revogação adiada; **o salvamento no disco não pôde ser confirmado no navegador automatizado** — conferir manualmente |
+
+### Proporção aproximada (Incremento 2)
+Código gerado pelo agente: ~100% das linhas novas; ~85% aceito na primeira versão, ~15% ajustado
+após linter, testes ou teste no navegador. Reescrito à mão: 0% até a revisão humana do PR.

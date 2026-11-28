@@ -7,7 +7,7 @@ epico: EP-A Ingestão e preparação de dados
 tela: "Gerenciar Pendências" (ação ainda não desenhada no protótipo)
 fase: 1
 prioridade: MVP
-status: proposta
+status: concluída
 requisitos: [RF-PEN-06 (proposto)]
 regras: [RN-04, RN-08]
 nao_funcionais: [RNF-15]
@@ -48,3 +48,7 @@ Então cada OS tem a transição com autor e data/hora.
 - O tratamento exige mais alguma coisa além de coordenada (ex.: prioridade definida, tipo de
   equipe definido)? Se não exigir, a liberação pode ser **automática** quando a OS tem
   coordenada — e esta história vira só a regra.
+
+## Decisões do Incremento 2 (28/11/2026)
+- **Dúvida respondida:** a liberação é **manual** (botão na lista de Pendências, filtro "Pendente"); só a coordenada é exigida.
+- Endpoint `POST /api/v1/ordens-servico/liberar/` (até 500 OSs por lote).

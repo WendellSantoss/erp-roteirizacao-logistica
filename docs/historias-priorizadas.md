@@ -1,4 +1,4 @@
-# Histórias de Usuário Priorizadas — Escopo do Protótipo (MVP)
+# Histórias de Usuário Priorizadas — Escopo do Protótipo (MVP + Incremento 2)
 
 Em alinhamento com a **Fase 1 (Fundação)** da Especificação de Requisitos (ERS) e com os atributos de qualidade prioritários do **ADR-001** (integridade dos dados, segurança das regras e auditabilidade), foram selecionadas **5 histórias de usuário prioritárias ("must have")** para o protótipo funcional do **GeniOS**.
 
@@ -63,3 +63,47 @@ Em alinhamento com a **Fase 1 (Fundação)** da Especificação de Requisitos (E
 * **Critérios de Aceite principais:**
   * Bloquear no servidor qualquer saída em que `quantidade_saida(kit, D) > quantidade_executada(kit, D-1)` no mesmo polo.
   * Retornar mensagem explicativa informando o tipo de kit, a quantidade solicitada e o limite executado no dia anterior.
+
+---
+
+# Incremento 2 — Mapa e roteirização (após a publicação do MVP)
+
+> **Por que ampliar o escopo.** Com o MVP em produção, o sistema tratava as OSs mas parava antes do
+> **mapa**, que é o centro do produto (ERS §1: "roteirização"). O grupo priorizou as histórias do
+> **EP-B Planejamento e despacho** necessárias para o ciclo `Pendente → Apta → Roteirizada →
+> Despachada` rodar de ponta a ponta. Decisões técnicas em `docs/adr/ADR-002-mapa-e-roteirizacao.md`.
+
+## 6. Coordenada manual da unidade e liberação para roteirização (`HU-024` e `HU-060`)
+* **Arquivos de referência:** `docs/historias/HU-024-preencher-coordenadas-manualmente.md` e `docs/historias/HU-060-concluir-tratamento-da-pendencia.md`
+* **Requisitos relacionados:** `RF-WEB-04`, `RF-PEN-06` (proposto), `RN-04`, `RNF-15`
+* **Descrição:** Como Analista de Operações, quero informar a coordenada das unidades que a captura não resolveu e liberar em lote as OSs tratadas, para que elas apareçam no mapa do Coordenador de Campo.
+* **Critérios de Aceite principais:**
+  * Coordenada digitada com vírgula ou ponto, ou marcada com clique no mapa; fora da Paraíba é recusada com "Coordenada fora da área de operação (Paraíba)".
+  * Coordenada manual não é sobrescrita por captura automática; a trilha guarda valor anterior e novo.
+  * Liberação em lote: OSs sem coordenada são puladas e informadas pelo número; cada transição vai para a trilha.
+* **Substitui, no protótipo:** a captura automática pelo portal GSAN (`HU-005`), bloqueada por falta de acesso ao portal.
+
+## 7. Mapa, seleção por polígono e criação de rota (`HU-011`, `HU-012`, `HU-031` e `HU-056`)
+* **Arquivos de referência:** `HU-011-selecionar-operacao-e-data.md`, `HU-012-selecionar-oss-por-poligono.md`, `HU-031-contador-e-limpar-selecao.md`, `HU-056-criar-rota.md`
+* **Requisitos relacionados:** `RF-ROT-01`, `RF-ROT-07`, `RF-ROT-08`, `RF-ROT-03` (proposto), `RN-08`, `RN-09`, `RNF-03`
+* **Descrição:** Como Coordenador de Campo, quero escolher operação e data, desenhar um polígono no mapa para selecionar as OSs aptas e criar uma rota com equipe e horários, para que cada equipe saia com um roteiro fechado.
+* **Critérios de Aceite principais:**
+  * Data padrão amanhã; data passada abre só para consulta; a escolha é lembrada na sessão.
+  * Só OSs aptas, com coordenada, aparecem no mapa; borda do polígono conta como dentro; novo polígono soma à seleção.
+  * Contador "N OSs selecionadas", "Limpar" e aviso de capacidade máxima das equipes.
+  * A rota exige nome, equipe ativa do polo, início e carregamento; bloqueia capacidade do dia excedida, OS já em outra rota e data passada; registra a criação na trilha.
+
+## 8. Finalização do planejamento e arquivo RPA (`HU-013` e `HU-014`)
+* **Arquivos de referência:** `HU-013-finalizar-planejamento.md`, `HU-014-gerar-arquivo-rpa.md`
+* **Requisitos relacionados:** `RF-ROT-16`, `RF-ROT-17`, `RN-10`, `RNF-17`
+* **Descrição:** Como Coordenador de Campo, quero finalizar o planejamento depois de conferir as rotas e gerar o arquivo de despacho, para que o despacho chegue à concessionária sem digitação.
+* **Critérios de Aceite principais:**
+  * Finalizar recusa com a lista de inconsistências (rota sem OS, equipe inativa, capacidade, OS fora de "Roteirizada"); finalizado não aceita novas rotas.
+  * O RPA só é gerado com o planejamento finalizado, leva as OSs a "Despachada" (tudo ou nada) e guarda hash SHA-256; baixar de novo devolve o mesmo arquivo.
+  * **Layout do arquivo é proposta do grupo** (CSV `;`), até a automação definir o oficial.
+
+## Fora do Incremento 2 (continuam no backlog)
+`HU-005/022/023/046` (webscraper), `HU-009/028` como telas de cadastro (placa e capacidade entram só
+como campos da equipe, pelo seed/admin), `HU-057` (atribuir sem rota), `HU-058` (prioridade no mapa),
+`HU-059` (trocar equipe ou retirar OS da rota), `HU-030` (lista × cartões) e `HU-066` como tela (as
+operações vêm de migration).

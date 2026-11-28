@@ -7,7 +7,7 @@ epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador"
 fase: 2
 prioridade: MVP
-status: rascunho
+status: concluída
 requisitos: [RF-ROT-07]
 regras: [RN-04, RN-08]
 nao_funcionais: [RNF-03]
@@ -82,3 +82,8 @@ automática de sequência de visita.
 ## Dúvidas em aberto
 - RNF-03 diz "sem degradação perceptível"; o limite de 1 s do CA07 é proposta (ver lacunas.md).
 - A seleção precisa sobreviver a uma troca de tela ou recarga da página?
+
+## Decisões do Incremento 2 (28/11/2026)
+- Seleção calculada no navegador (ADR-002 §2.2); o servidor revalida cada OS na criação da rota.
+- **Dúvida respondida:** a seleção **não** sobrevive à recarga da página.
+- OSs da mesma unidade dividem a coordenada: um pin por unidade, com a contagem. A lista ao lado do mapa permite selecionar e remover OS pelo teclado (CA05).

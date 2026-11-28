@@ -7,7 +7,7 @@ epico: EP-B Planejamento e despacho
 tela: "Despacho & Rotas › Roteirizador", modal "Criar Rota"
 fase: 2
 prioridade: MVP
-status: proposta
+status: concluída
 requisitos: [RF-ROT-03 (proposto)]
 regras: [RN-08, RN-09]
 nao_funcionais: [RNF-12, RNF-15]
@@ -86,3 +86,7 @@ Atribuição de despacho sem rota (HU-057), sequência ótima de visita, ediçã
 - O que significa "carregamento" — horário de retirada do material no almoxarifado?
 - Profissional e ajudante são obrigatórios? O protótipo não marca com asterisco.
 - Rota pode ser editada ou excluída antes da finalização? Precisa de história própria.
+
+## Decisões do Incremento 2 (28/11/2026)
+- **Dúvidas respondidas:** "carregamento" é o horário de retirada no almoxarifado; profissional e ajudante ficam fora até a HU-028; edição/exclusão de rota fica para a HU-059.
+- A OS pertence a no máximo uma rota (UNIQUE no banco).

@@ -132,3 +132,28 @@ Como complemento, o repositório contém **104 capturas PNG feitas na aplicaçã
 A evidência visual publicada está, portanto, anexada e rastreada no repositório. A limitação remanescente é documental: não há neste relatório um log Playwright ou registro contínuo dos passos de cada fluxo; por isso, critérios que dependem de comportamento interno ou de sequência de ações devem continuar associados aos respectivos testes automatizados, sem serem atribuídos exclusivamente às capturas.
 
 **Entregável desta etapa:** relatório de testes, resultados automatizados registrados, integração publicada verificada e acervo de evidências visuais da Vercel anexado e catalogado na branch `main`.
+
+---
+
+## 7. Incremento 2 — Mapa e roteirização (28/11/2026)
+
+| Critério | Situação | Evidência |
+|---|---|---|
+| Testes do backend | **Aprovado localmente** (PostgreSQL 18) — 143 testes, 42 novos | `nucleo/tests/test_preparacao.py`, `roteirizacao/tests/test_rotas.py`, `test_despacho.py`, `dados_demo/tests` |
+| Testes do frontend | **Aprovado** — 17 testes Vitest (8 novos) | `utilitarios/geometria.test.ts` (borda, côncavo, 2.000 pontos < 1 s), `agrupamento.test.ts` |
+| Ruff, import-linter, ESLint, Prettier, build | **Aprovado** | Comandos do `AGENTS.md` §9 |
+| CI no GitHub Actions | A conferir no PR | Job `Qualidade` |
+| Fluxo no navegador (ambiente local, dados fictícios) | **Aprovado** | Capturas abaixo |
+| Publicação (Vercel/Render/Neon) | **Pendente** | Depende do merge, `migrate` e seed (ver `docs/processo/incremento-2-roteirizacao.md` §5) |
+
+| História | Cenário percorrido | Captura |
+|---|---|---|
+| HU-011/012/031 | Coordenador no Polo 2, PSS, amanhã; polígono sobre Bessa/Manaíra seleciona 9 OSs; contador atualizado | [polígono](evidencias/incremento-2/01-poligono-selecao.jpg) |
+| HU-056 | Modal "Criar Rota" com equipe, placa e capacidade; rota criada, pins na cor da rota, seleção limpa | [modal](evidencias/incremento-2/02-criar-rota.jpg), [rota criada](evidencias/incremento-2/03-rota-criada.jpg) |
+| HU-013/014 | Finalizar → somente leitura; gerar RPA → 9 OSs despachadas, nome do arquivo e hash exibidos | [finalizado e RPA](evidencias/incremento-2/04-finalizado-rpa.jpg) |
+| HU-024 | Analista: −23,5 recusado com "Coordenada fora da área de operação (Paraíba)"; clique no mapa preenche; unidade sai da lista | [coordenada](evidencias/incremento-2/05-coordenada-manual.jpg) |
+| HU-060 | 3 OSs marcadas e liberadas; contador "Apta a roteirizar" sobe | [liberação](evidencias/incremento-2/06-liberar-lote.jpg) |
+
+**Limite:** o conteúdo do CSV foi conferido pela API e pelos testes (CA03, CA04, CA06), mas o
+salvamento do arquivo no disco não pôde ser confirmado no navegador automatizado; conferir
+manualmente na demonstração.
